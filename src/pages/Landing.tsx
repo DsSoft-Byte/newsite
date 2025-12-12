@@ -9,57 +9,31 @@ const Index = () => {
         <svg viewBox="0 0 1600 900" preserveAspectRatio="none" className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="g" x1="0" x2="1">
-              <stop offset="0" stopColor="#fff" stopOpacity="0.04"/>
-              <stop offset="1" stopColor="#fff" stopOpacity="0.02"/>
+              <stop offset="0" stopColor="#fff" stopOpacity="0.04" />
+              <stop offset="1" stopColor="#fff" stopOpacity="0.02" />
             </linearGradient>
           </defs>
           <g stroke="url(#g)" strokeWidth="1">
             <g>
-              <path d="M100 0 L100 900"/>
-              <path d="M300 0 L300 900"/>
-              <path d="M500 0 L500 900"/>
-              <path d="M700 0 L700 900"/>
-              <path d="M900 0 L900 900"/>
-              <path d="M1100 0 L1100 900"/>
-              <path d="M1300 0 L1300 900"/>
+              <path d="M100 0 L100 900" />
+              <path d="M300 0 L300 900" />
+              <path d="M500 0 L500 900" />
+              <path d="M700 0 L700 900" />
+              <path d="M900 0 L900 900" />
+              <path d="M1100 0 L1100 900" />
+              <path d="M1300 0 L1300 900" />
             </g>
             <g>
-              <path d="M0 120 L1600 120"/>
-              <path d="M0 300 L1600 300"/>
-              <path d="M0 480 L1600 480"/>
-              <path d="M0 660 L1600 660"/>
+              <path d="M0 120 L1600 120" />
+              <path d="M0 300 L1600 300" />
+              <path d="M0 480 L1600 480" />
+              <path d="M0 660 L1600 660" />
             </g>
           </g>
         </svg>
       </div>
 
-      <div className="max-w-[1100px] mx-auto px-5 pt-12">
-        {/* Header */}
-        <header className="flex items-center justify-between mb-14 flex-col md:flex-row gap-4 md:gap-0">
-          <div className="flex items-center gap-3.5">
-            <span className="w-11 h-11 rounded-lg inline-grid place-items-center bg-gradient-to-b from-white/[0.03] to-white/[0.01] shadow-[0_6px_18px_rgba(2,6,23,0.6)] border border-white/[0.03]">
-              <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
-                <rect x="3" y="3" width="18" height="18" rx="3" stroke="white" strokeOpacity="0.06"/>
-                <path d="M6 15 L10 9 L14 13 L18 8" stroke="white" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" opacity="0.9"/>
-              </svg>
-            </span>
-            <h1 className="font-normal text-base tracking-[0.06em] m-0">DsSoft</h1>
-          </div>
-          <nav className="flex gap-5 items-center">
-            <a href="#capabilities" className="text-muted-foreground no-underline text-[13px] hover:text-foreground transition-colors">
-              Capabilities
-            </a>
-            <a href="#work" className="text-muted-foreground no-underline text-[13px] hover:text-foreground transition-colors">
-              Work
-            </a>
-            <Link to="/contract" className="text-muted-foreground no-underline text-[13px] hover:text-foreground transition-colors">
-              Contract
-            </Link>
-            <Button variant="ghost" size="sm" className="bg-transparent text-muted-foreground border-white/[0.03] hover:text-foreground hover:bg-white/[0.02]">
-              Sign in
-            </Button>
-          </nav>
-        </header>
+      <div className="max-w-[1100px] mx-auto px-5">
 
         {/* Hero */}
         <section className="grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-12 items-center mb-16">
@@ -77,13 +51,13 @@ const Index = () => {
             </p>
 
             <div className="flex gap-3">
-              <Button 
+              <Button
                 className="bg-gradient-to-b from-primary/[0.12] to-primary/[0.06] border-primary/25 text-foreground hover:from-primary/[0.18] hover:to-primary/[0.10]"
               >
                 Explore capabilities
               </Button>
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 className="bg-transparent text-muted-foreground border-white/[0.03] hover:text-foreground hover:bg-white/[0.02]"
               >
                 iOSBridge

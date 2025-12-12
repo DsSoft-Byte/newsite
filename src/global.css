@@ -60,7 +60,7 @@ All colors MUST be HSL.
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     letter-spacing: -0.01em;
-    background: 
+    background:
       radial-gradient(1200px 600px at 10% 10%, hsl(216 89% 63% / 0.02), transparent),
       radial-gradient(900px 400px at 90% 90%, hsl(0 0% 100% / 0.01), transparent),
       hsl(var(--background));
