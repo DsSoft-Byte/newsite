@@ -233,7 +233,7 @@ body.menu-open { overflow: hidden; }
 }
 .hero__glass--1 { top: 25%; left: 8%; }
 .hero__glass--2 { bottom: 30%; right: 10%; }
-@media (max-width: 768px) { .hero__glass { display: none; } }
+@media (max-width: 1280px) { .hero__glass { display: none; } }
 @keyframes fade-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
 /* Metrics strip */
