@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom tooling & products — DsSoft</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header class="navbar" id="navbar" role="banner">
+    <a href="index.html" class="navbar__brand">DsSoft</a>
+    <nav aria-label="Main">
+      <ul class="navbar__links">
+        <li><a href="index.html#capabilities">What I do</a></li>
+        <li><a href="index.html#tiktok">TikTok</a></li>
+        <li><a href="hyperscooters.html">Hyperscooters</a></li>
+        <li><a href="reverse-engineering.html">Reverse engineering</a></li>
+        <li><a href="https://t.me/the_hackintosh" target="_blank" rel="noopener noreferrer">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="page-content">
+    <a href="index.html" class="back-link">← Back to home</a>
+    <h1>Custom tooling & products</h1>
+    <p>High-reliability systems and proprietary tooling built for production use: OTA with intelligent rollback, DRM, device management, and autonomous trading systems. Each product is designed to be maintainable and documentable.</p>
+
+    <div class="glass-panel">
+      <h2>FastOTA™</h2>
+      <p>Intelligent over-the-air update system with rollback. Updates are validated before commit; on failure or regression, the system reverts to the last known good image. Designed for embedded and mobile deployments where brick risk is unacceptable.</p>
+    </div>
+
+    <div class="glass-panel">
+      <h2>LayerOne™</h2>
+      <p>Custom DRM and license enforcement for software and digital assets. Multi-layer protection suitable for commercial products; designed with audit and updateability in mind so license logic can evolve without breaking existing deployments.</p>
+    </div>
+
+    <div class="glass-panel">
+      <h2>iOSBridge</h2>
+      <p>Unlocking and device management for iOS hardware. Tied to security research and reverse engineering work — used in authorized contexts for device recovery, testing, and research. Not for circumvention of legitimate ownership controls.</p>
+    </div>
+
+    <div class="glass-panel">
+      <h2>AI trading bot</h2>
+      <p>Autonomous trading system with integrated risk assessment. Strategy logic, position sizing, and risk limits are configurable; the system is built for backtesting and live operation with clear logging and kill switches. For personal and authorized use only.</p>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__inner">
+      <p class="footer__copy">© DsSoft</p>
+      <ul class="footer__links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="reverse-engineering.html">Reverse engineering</a></li>
+        <li><a href="embedded-systems.html">Embedded</a></li>
+      </ul>
+    </div>
+  </footer>
+  <script>
+    (function(){var n=document.getElementById('navbar');function u(){n.classList.toggle('is-solid',window.scrollY>60);}window.addEventListener('scroll',u,{passive:true});u();})();
+  </script>
+</body>
+</html>

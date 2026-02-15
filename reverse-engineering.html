@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reverse engineering & security — DsSoft</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header class="navbar" id="navbar" role="banner">
+    <a href="index.html" class="navbar__brand">DsSoft</a>
+    <nav aria-label="Main">
+      <ul class="navbar__links">
+        <li><a href="index.html#capabilities">What I do</a></li>
+        <li><a href="index.html#tiktok">TikTok</a></li>
+        <li><a href="hyperscooters.html">Hyperscooters</a></li>
+        <li><a href="reverse-engineering.html">Reverse engineering</a></li>
+        <li><a href="https://t.me/the_hackintosh" target="_blank" rel="noopener noreferrer">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="page-content">
+    <a href="index.html" class="back-link">← Back to home</a>
+    <h1>Reverse engineering & security</h1>
+    <p>Independent security researcher and systems engineer specializing in reverse engineering, exploit research, and binary analysis. 5000+ hours in IDA Pro defeating multi-layer commercial encryption and protection systems — from bootrom and firmware to runtime and DRM.</p>
+
+    <div class="glass-panel">
+      <h2>Binary & crypto analysis</h2>
+      <ul>
+        <li>Deep binary analysis in IDA Pro and Ghidra: control flow, data structures, and protocol mapping.</li>
+        <li>Multi-layer obfuscation and commercial DRM teardown: Lua VM decryption, plugin architecture mapping, and key extraction.</li>
+        <li>Notable: SASL v3 for X-Plane — 5-layer crypto bypass and activation break on protected commercial flight simulator addons.</li>
+      </ul>
+    </div>
+
+    <div class="glass-panel">
+      <h2>iOS & mobile exploitation</h2>
+      <ul>
+        <li>Bootrom analysis and firmware reverse engineering.</li>
+        <li>Runtime instrumentation with Frida: dylib injection, jailbreak detection bypass, real-time app interception and manipulation.</li>
+        <li>iCloud lock mitigation: iOS 7–9.3.6 on legacy A5 (iPhone 4S, iPad 2); custom ramdisks for iCloud mitigation on iPhone 5S through iPhone X.</li>
+      </ul>
+    </div>
+
+    <div class="glass-panel">
+      <h2>Penetration testing & assessments</h2>
+      <p>Full-scope security assessments, vulnerability discovery, exploit development, secure boot bypass research, and threat modeling. Work is conducted under clear scope and confidentiality — suitable for product security teams and authorized engagements.</p>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__inner">
+      <p class="footer__copy">© DSSoft</p>
+      <ul class="footer__links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="pcb-design.html">PCB design</a></li>
+        <li><a href="custom-tooling.html">Tooling</a></li>
+      </ul>
+    </div>
+  </footer>
+  <script>
+    (function(){var n=document.getElementById('navbar');function u(){n.classList.toggle('is-solid',window.scrollY>60);}window.addEventListener('scroll',u,{passive:true});u();})();
+  </script>
+</body>
+</html>
