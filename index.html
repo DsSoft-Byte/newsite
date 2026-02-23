@@ -8,156 +8,477 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/style.css">
-  <script src="assets/nav.js" defer></script>
+  <style>
+    /* ============================================
+       DSSoft — Ultra-Premium Liquid Glass Edition
+       ============================================ */
+    :root {
+      --bg-deep: #000000;
+      --bg-elevated: #111111;
+      --bg-glass: rgba(20, 20, 22, 0.4);
+      --bg-glass-hover: rgba(30, 30, 34, 0.5);
+      
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.16);
+      --glass-edge: inset 0 1px 1px rgba(255, 255, 255, 0.15);
+      
+      --text-primary: #F5F5F7;
+      --text-secondary: #86868B;
+      --text-muted: #515154;
+      
+      --accent: #0A84FF;
+      --accent-glow: rgba(10, 132, 255, 0.4);
+      
+      --btn-bg: #F5F5F7;
+      --btn-text: #000000;
+      --btn-bg-dark: rgba(255, 255, 255, 0.08);
+      
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --duration-fast: 250ms;
+      --duration-normal: 400ms;
+      --duration-slow: 700ms;
+      
+      --space-xs: 0.25rem; --space-sm: 0.5rem; --space-md: 1rem;
+      --space-lg: 1.5rem; --space-xl: 2rem; --space-2xl: 3rem;
+      --space-3xl: 4rem; --space-4xl: 6rem; --space-5xl: 8rem;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; overflow-x: hidden; background: var(--bg-deep); }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Typography */
+    h1 { font-size: clamp(2.5rem, 6vw + 1rem, 4.5rem); font-weight: 700; letter-spacing: -0.04em; line-height: 1.1; }
+    h2 { font-size: clamp(1.75rem, 4vw + 0.5rem, 3rem); font-weight: 600; letter-spacing: -0.03em; }
+    h3 { font-size: clamp(1.25rem, 2vw + 0.25rem, 1.5rem); font-weight: 600; letter-spacing: -0.02em; }
+    p { font-size: clamp(1rem, 1.2vw + 0.5rem, 1.125rem); color: var(--text-secondary); }
+    a { color: inherit; text-decoration: none; }
+
+    .text-gradient {
+      background: linear-gradient(180deg, #FFFFFF 0%, #86868B 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Navbar */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      padding: var(--space-md) var(--space-xl);
+      display: flex; align-items: center; justify-content: space-between;
+      min-height: 64px;
+      background: rgba(0, 0, 0, 0.2);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid transparent;
+      transition: all var(--duration-normal) var(--ease-out-expo);
+    }
+    .navbar.is-solid {
+      background: rgba(10, 10, 12, 0.65);
+      border-bottom: 1px solid var(--border-subtle);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    }
+    .navbar__brand { font-weight: 600; font-size: 1.125rem; letter-spacing: -0.02em; color: var(--text-primary); z-index: 1100; }
+    
+    .navbar__nav { display: flex; align-items: center; }
+
+    /* Hamburger Logic */
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 10px;
+      z-index: 1200;
+      position: relative;
+    }
+
+    .hamburger {
+      display: block; width: 24px; height: 2px;
+      background: var(--text-primary);
+      position: relative; transition: background 0.3s;
+    }
+
+    .hamburger::before, .hamburger::after {
+      content: ''; position: absolute; width: 24px; height: 2px;
+      background: var(--text-primary); transition: all 0.3s;
+    }
+    .hamburger::before { top: -8px; }
+    .hamburger::after { bottom: -8px; }
+
+    /* X Animation */
+    .menu-toggle.is-active .hamburger { background: transparent; }
+    .menu-toggle.is-active .hamburger::before { transform: rotate(45deg); top: 0; }
+    .menu-toggle.is-active .hamburger::after { transform: rotate(-45deg); bottom: 0; }
+
+    .navbar__links { display: flex; gap: var(--space-xl); list-style: none; }
+    .navbar__links a { font-size: 0.875rem; font-weight: 500; color: var(--text-secondary); transition: color var(--duration-fast); }
+    .navbar__links a:hover { color: var(--text-primary); }
+
+    /* Mobile Menu Responsive */
+    @media (max-width: 768px) {
+      .menu-toggle { display: block; }
+
+      .navbar__links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 100%;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.98);
+        backdrop-filter: blur(40px);
+        -webkit-backdrop-filter: blur(40px);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-3xl);
+        transition: right 0.5s var(--ease-out-expo);
+        z-index: 1050;
+      }
+
+      .navbar__links.is-open { right: 0; }
+      .navbar__links a { font-size: 1.5rem; color: var(--text-primary); }
+    }
+
+    /* Hero */
+    .hero {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      position: relative; padding: var(--space-5xl) var(--space-xl) var(--space-4xl);
+      overflow: hidden;
+    }
+    .hero__bg { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+    
+    .hero__orb {
+      position: absolute; border-radius: 50%;
+      filter: blur(120px); opacity: 0.6;
+      animation: orb-float 20s var(--ease-in-out) infinite alternate;
+    }
+    .hero__orb--1 { 
+      width: 60vw; height: 60vw; max-width: 800px; max-height: 800px;
+      background: radial-gradient(circle, #094074, #3B82F6, #8B5CF6);
+      top: -20%; left: -10%; 
+    }
+    .hero__orb--2 { 
+      width: 50vw; height: 50vw; max-width: 600px; max-height: 600px;
+      background: radial-gradient(circle, #7C3AED, #EC4899, #F43F5E);
+      bottom: -10%; right: -5%; animation-delay: -5s; 
+    }
+    
+    @keyframes orb-float { 
+      0% { transform: translate(0, 0) scale(1); } 
+      100% { transform: translate(5%, -5%) scale(1.1); } 
+    }
+
+    .hero__content { position: relative; z-index: 2; text-align: center; max-width: 800px; margin: 0 auto; }
+    
+    .hero__badge {
+      display: inline-flex; align-items: center; gap: var(--space-sm);
+      padding: 6px 16px; margin-bottom: var(--space-xl);
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: saturate(180%) blur(30px);
+      -webkit-backdrop-filter: saturate(180%) blur(30px);
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--glass-edge);
+      border-radius: 999px; font-size: 0.8125rem; font-weight: 500; color: #D1D1D6;
+      opacity: 0; animation: fade-up 1s var(--ease-out-expo) 0.2s forwards;
+    }
+    .hero__headline { margin-bottom: var(--space-lg); opacity: 0; animation: fade-up 1s var(--ease-out-expo) 0.3s forwards; }
+    .hero__subtitle { max-width: 640px; margin: 0 auto var(--space-2xl); opacity: 0; animation: fade-up 1s var(--ease-out-expo) 0.4s forwards; }
+    
+    .hero__cta {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 16px 32px; background: var(--btn-bg); color: var(--btn-text);
+      font-weight: 600; font-size: 1rem; letter-spacing: -0.01em;
+      border-radius: 999px; cursor: pointer;
+      transition: all var(--duration-fast) var(--ease-out-expo);
+      opacity: 0; animation: fade-up 1s var(--ease-out-expo) 0.5s forwards;
+    }
+    .hero__cta:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(255,255,255,0.2); }
+
+    .hero__glass {
+      position: absolute; background: var(--bg-glass);
+      backdrop-filter: saturate(180%) blur(40px);
+      -webkit-backdrop-filter: saturate(180%) blur(40px);
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.6), var(--glass-edge);
+      border-radius: 20px; padding: var(--space-lg) var(--space-xl);
+      font-size: 0.875rem; font-weight: 500; color: var(--text-primary);
+      opacity: 0; animation: fade-up 1.2s var(--ease-out-expo) 0.8s forwards;
+      z-index: 1;
+    }
+    .hero__glass--1 { top: 20%; left: 5%; transform: rotate(-3deg); }
+    .hero__glass--2 { bottom: 20%; right: 5%; transform: rotate(3deg); }
+    @media (max-width: 1280px) { .hero__glass { display: none; } }
+
+    @keyframes fade-up { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Metrics */
+    .metrics { position: relative; z-index: 2; padding: var(--space-xl) var(--space-xl) var(--space-4xl); border-bottom: 1px solid var(--border-subtle); }
+    .metrics__inner { max-width: 1000px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-around; gap: var(--space-xl); }
+    .metrics__item { text-align: center; }
+    .metrics__value { font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; color: var(--text-primary); letter-spacing: -0.04em; display: block; margin-bottom: 4px; }
+    .metrics__label { font-size: 0.8125rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.1em; }
+
+    /* Section & Grid */
+    .section { padding: var(--space-5xl) var(--space-xl); max-width: 1200px; margin: 0 auto; position: relative; z-index: 2; }
+    .section__header { text-align: center; margin-bottom: var(--space-4xl); max-width: 600px; margin-left: auto; margin-right: auto; }
+    
+    .capabilities__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--space-lg); }
+    
+    .capability-card {
+      display: flex; flex-direction: column;
+      background: var(--bg-glass);
+      backdrop-filter: saturate(180%) blur(40px);
+      -webkit-backdrop-filter: saturate(180%) blur(40px);
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3), var(--glass-edge);
+      border-radius: 24px; padding: var(--space-2xl);
+      transition: all var(--duration-normal) var(--ease-out-expo);
+      position: relative; overflow: hidden;
+    }
+    .capability-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.06), transparent 40%);
+      opacity: 0; transition: opacity var(--duration-normal); pointer-events: none;
+    }
+    .capability-card:hover {
+      transform: translateY(-8px) scale(1.01);
+      border-color: var(--border-strong);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.6), var(--glass-edge);
+      background: var(--bg-glass-hover);
+    }
+    .capability-card:hover::before { opacity: 1; }
+    
+    .capability-card__icon {
+      width: 56px; height: 56px; display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border-subtle);
+      border-radius: 16px; margin-bottom: var(--space-xl); font-size: 1.5rem;
+      box-shadow: var(--glass-edge);
+    }
+    .capability-card__title { margin-bottom: var(--space-sm); color: var(--text-primary); }
+    .capability-card__desc { font-size: 1rem; line-height: 1.6; flex-grow: 1; }
+    .capability-card__arrow { margin-top: var(--space-xl); font-size: 0.875rem; font-weight: 500; color: var(--text-secondary); transition: all var(--duration-fast); display: flex; align-items: center; gap: 8px; }
+    .capability-card:hover .capability-card__arrow { color: var(--text-primary); gap: 12px; }
+
+    /* CTA Panel */
+    .cta-panel {
+      max-width: 800px; margin: 0 auto; padding: var(--space-4xl) var(--space-2xl);
+      background: linear-gradient(180deg, rgba(20,20,22,0.8) 0%, rgba(10,10,12,0.9) 100%);
+      backdrop-filter: saturate(180%) blur(40px);
+      -webkit-backdrop-filter: saturate(180%) blur(40px);
+      border: 1px solid var(--border-subtle); border-radius: 32px;
+      text-align: center; position: relative; overflow: hidden;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.5), var(--glass-edge);
+    }
+    .cta-panel__title { margin-bottom: var(--space-md); }
+    .cta-panel__text { margin-bottom: var(--space-2xl); font-size: 1.125rem; max-width: 500px; margin-left: auto; margin-right: auto; }
+    .cta-panel__btn {
+      display: inline-flex; align-items: center; padding: 14px 28px;
+      background: var(--btn-bg-dark); color: var(--text-primary);
+      font-weight: 600; font-size: 0.9375rem; border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      transition: all var(--duration-fast); backdrop-filter: blur(10px);
+    }
+    .cta-panel__btn:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.3); transform: scale(1.02); }
+
+    /* Scroll Reveals */
+    .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s var(--ease-out-expo); }
+    .reveal.is-visible { opacity: 1; transform: translateY(0); }
+    .reveal--stagger-1 { transition-delay: 0.05s; } .reveal--stagger-2 { transition-delay: 0.1s; }
+    .reveal--stagger-3 { transition-delay: 0.15s; } .reveal--stagger-4 { transition-delay: 0.2s; }
+
+    /* Footer */
+    .footer { padding: var(--space-2xl) var(--space-xl); border-top: 1px solid var(--border-subtle); background: var(--bg-deep); }
+    .footer__inner { max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-md); }
+    .footer__copy, .footer__links a { font-size: 0.875rem; color: var(--text-muted); font-weight: 500; }
+    .footer__links { display: flex; gap: var(--space-lg); list-style: none; }
+    .footer__links a:hover { color: var(--text-primary); }
+    
+    @media (max-width: 768px) {
+      .hero__orb { opacity: 0.4; }
+      .capabilities__grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-  <header class="navbar" id="navbar" role="banner">
+  <header class="navbar" id="navbar">
     <a href="index.html" class="navbar__brand">DsSoft</a>
-    <button type="button" class="navbar__toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-    <nav class="navbar__nav" aria-label="Main">
-      <ul class="navbar__links">
-        <li><a href="index.html#capabilities">What I do</a></li>
-        <li><a href="index.html#tiktok">TikTok</a></li>
+    <nav class="navbar__nav">
+      <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu">
+        <span class="hamburger"></span>
+      </button>
+
+      <ul class="navbar__links" id="navbar-links">
+        <li><a href="#capabilities">Capabilities</a></li>
+        <li><a href="#tiktok">TikTok</a></li>
         <li><a href="hyperscooters.html">Hyperscooters</a></li>
-        <li><a href="reverse-engineering.html">Reverse engineering</a></li>
-        <li><a href="https://t.me/the_hackintosh" target="_blank" rel="noopener noreferrer">Contact</a></li>
+        <li><a href="https://t.me/the_hackintosh" target="_blank">Contact</a></li>
       </ul>
     </nav>
   </header>
 
   <main>
-    <section class="hero" aria-labelledby="hero-heading">
-      <div class="hero__bg" aria-hidden="true">
+    <section class="hero">
+      <div class="hero__bg">
         <div class="hero__orb hero__orb--1"></div>
         <div class="hero__orb hero__orb--2"></div>
       </div>
-      <div class="hero__glass hero__glass--1">Silicon → firmware → runtime</div>
-      <div class="hero__glass hero__glass--2">Hardware + software in one stack</div>
+      
+      <div class="hero__glass hero__glass--1">Silicon → Firmware → Runtime</div>
+      <div class="hero__glass hero__glass--2">Hardware + Software Mastery</div>
+      
       <div class="hero__content">
-        <p class="hero__badge">Solo operator · Full-stack hardware & software</p>
-        <h1 id="hero-heading" class="hero__headline">From silicon to firmware to runtime — complete system mastery.</h1>
-        <p class="hero__subtitle">Battery building, VESC ESC mods to 450A & 100V, hyperscooters on small frames to 140km/h, reverse engineering, PCB design, and embedded development. Independent security research and systems engineering.</p>
-        <a href="#capabilities" class="hero__cta">Explore what I do</a>
+        <div class="hero__badge">Solo Operator</div>
+        <h1 class="hero__headline text-gradient">From silicon to runtime. Complete system mastery.</h1>
+        <p class="hero__subtitle">Battery building, VESC mods to 450A, hyperscooters to 140km/h, reverse engineering, and embedded development.</p>
+        <a href="#capabilities" class="hero__cta">Explore Capabilities</a>
       </div>
     </section>
 
-    <section id="metrics" class="metrics" aria-label="Live metrics">
+    <section class="metrics">
       <div class="metrics__inner">
-        <div class="metrics__item">
-          <span class="metrics__value">5000+ hrs</span>
-          <span class="metrics__label">IDA Pro mastery</span>
-        </div>
-        <div class="metrics__item">
-          <span class="metrics__value">18yo</span>
-          <span class="metrics__label">Solo operator</span>
-        </div>
-        <div class="metrics__item">
-          <span class="metrics__value">450A / 100V</span>
-          <span class="metrics__label">VESC builds</span>
-        </div>
-        <div class="metrics__item">
-          <span class="metrics__value">140 km/h</span>
-          <span class="metrics__label">Hyperscooter builds</span>
-        </div>
+        <div class="metrics__item reveal"><span class="metrics__value">5000+</span><span class="metrics__label">Hours IDA Pro</span></div>
+        <div class="metrics__item reveal reveal--stagger-1"><span class="metrics__value">18yo</span><span class="metrics__label">Solo operator</span></div>
+        <div class="metrics__item reveal reveal--stagger-2"><span class="metrics__value">450A</span><span class="metrics__label">VESC builds</span></div>
+        <div class="metrics__item reveal reveal--stagger-3"><span class="metrics__value">140 km/h</span><span class="metrics__label">Hyperscooters</span></div>
       </div>
     </section>
 
-    <section id="capabilities" class="section" aria-labelledby="capabilities-title">
+    <section id="capabilities" class="section">
       <header class="section__header reveal">
-        <h2 id="capabilities-title" class="section__title">What I do</h2>
-        <p class="section__subtitle">Systems engineering, security analysis, tooling, and embedded development. Click through for the full picture.</p>
+        <h2 class="text-gradient">Core Capabilities</h2>
+        <p>Systems engineering, security analysis, tooling, and embedded development.</p>
       </header>
       <div class="capabilities__grid">
         <a href="battery.html" class="capability-card reveal reveal--stagger-1">
-          <div class="capability-card__icon" aria-hidden="true">⚡</div>
+          <div class="capability-card__icon">⚡</div>
           <h3 class="capability-card__title">Battery building</h3>
-          <p class="capability-card__desc">Custom packs for EVs and high-power applications. Cell selection, BMS integration, spot welding, and safe assembly for hyperscooters and DIY vehicles.</p>
-          <span class="capability-card__arrow">Read more →</span>
+          <p class="capability-card__desc">Custom packs for EVs and high-power applications. Cell selection, BMS integration, and spot welding.</p>
+          <span class="capability-card__arrow">Read more &rarr;</span>
         </a>
         <a href="vesc.html" class="capability-card reveal reveal--stagger-2">
-          <div class="capability-card__icon" aria-hidden="true">🔧</div>
-          <h3 class="capability-card__title">VESC & high-power ESCs</h3>
-          <p class="capability-card__desc">Modifying VESC-based ESCs up to 450A and 100V. Firmware tuning, thermal design, and integration for extreme performance builds.</p>
-          <span class="capability-card__arrow">Read more →</span>
+          <div class="capability-card__icon">🔧</div>
+          <h3 class="capability-card__title">High-power ESCs</h3>
+          <p class="capability-card__desc">Modifying VESC-based ESCs up to 450A and 100V. Firmware tuning and thermal design.</p>
+          <span class="capability-card__arrow">Read more &rarr;</span>
         </a>
         <a href="hyperscooters.html" class="capability-card reveal reveal--stagger-3">
-          <div class="capability-card__icon" aria-hidden="true">🛴</div>
+          <div class="capability-card__icon">🛴</div>
           <h3 class="capability-card__title">Hyperscooters</h3>
-          <p class="capability-card__desc">Building hyperscooters on small frames (Xiaomi, Ninebot) that reach up to 140km/h. Full custom electronics, batteries, and firmware.</p>
-          <span class="capability-card__arrow">Read more →</span>
+          <p class="capability-card__desc">Building hyperscooters on small frames that reach 140km/h with custom electronics.</p>
+          <span class="capability-card__arrow">Read more &rarr;</span>
         </a>
         <a href="reverse-engineering.html" class="capability-card reveal reveal--stagger-4">
-          <div class="capability-card__icon" aria-hidden="true">🔍</div>
-          <h3 class="capability-card__title">Reverse engineering & security</h3>
-          <p class="capability-card__desc">5000+ hours in IDA Pro. Multi-layer encryption defeat, DRM teardown, bootrom analysis, Frida runtime injection, jailbreak detection bypass.</p>
-          <span class="capability-card__arrow">Read more →</span>
+          <div class="capability-card__icon">🔍</div>
+          <h3 class="capability-card__title">Security Analysis</h3>
+          <p class="capability-card__desc">Multi-layer encryption defeat, DRM teardown, bootrom analysis, and runtime injection.</p>
+          <span class="capability-card__arrow">Read more &rarr;</span>
         </a>
-        <a href="pcb-design.html" class="capability-card reveal reveal--stagger-5">
-          <div class="capability-card__icon" aria-hidden="true">📐</div>
+        <a href="pcb-design.html" class="capability-card reveal reveal--stagger-4">
+          <div class="capability-card__icon">📐</div>
           <h3 class="capability-card__title">PCB design & microsoldering</h3>
-          <p class="capability-card__desc">Production-grade board repair and custom PCB design. 0603 components, GPU VRAM replacement, QFP64 STM32, full fabrication pipeline.</p>
-          <span class="capability-card__arrow">Read more →</span>
+          <p class="capability-card__desc">Production-grade board repair and PCB design., GPU repair, full fabrication pipeline.</p>
+          <span class="capability-card__arrow">Read more &rarr;</span>
         </a>
-        <a href="embedded-systems.html" class="capability-card reveal reveal--stagger-6">
-          <div class="capability-card__icon" aria-hidden="true">⚙️</div>
+        <a href="embedded-systems.html" class="capability-card reveal reveal--stagger-4">
+          <div class="capability-card__icon">⚙️</div>
           <h3 class="capability-card__title">Embedded systems</h3>
-          <p class="capability-card__desc">Full hardware–firmware–software stacks. MCU programming, custom protocols, device recovery, low-level debugging and optimization.</p>
-          <span class="capability-card__arrow">Read more →</span>
+          <p class="capability-card__desc">Full hardware–firmware–software stacks. MCU programming, device recovery, low-level debugging and optimization.</p>
+          <span class="capability-card__arrow">Read more &rarr;</span>
         </a>
-        <a href="custom-tooling.html" class="capability-card reveal reveal--stagger-7">
-          <div class="capability-card__icon" aria-hidden="true">🛠️</div>
+        <a href="embedded-tooling.html" class="capability-card reveal reveal--stagger-4">
+          <div class="capability-card__icon">🛠️</div>
           <h3 class="capability-card__title">Custom tooling & products</h3>
-          <p class="capability-card__desc">FastOTA™ intelligent rollback, LayerOne™ DRM, iOSBridge unlocking & device mgmt, AI trading bots with autonomous risk systems.</p>
-          <span class="capability-card__arrow">Read more →</span>
+          <p class="capability-card__desc">FastOTA rollback, LayerOne™ DRM, iOSBridge unlocking & device management, AI trading bots.</p>
+          <span class="capability-card__arrow">Read more &rarr;</span>
+        </a>
+        <a href="hackitnosh.html" class="capability-card reveal reveal--stagger-4">
+          <div class="capability-card__icon">🖥️</div>
+          <h3 class="capability-card__title">Hackintosh EFI creation</h3>
+          <p class="capability-card__desc">From simple EFI compilation to development of own Kexts (Kernel Drivers) where needed.</p>
+          <span class="capability-card__arrow">Read more &rarr;</span>
+        </a>
+        <a href=".html" class="capability-card reveal reveal--stagger-4">
+          <div class="capability-card__icon">🐇</div>
+          <h3 class="capability-card__title">Custom Coreboot</h3>
+          <p class="capability-card__desc">I modify Coreboot to your exact needs, from removing blobs to different payloads (SeaBIOS, Grub).</p>
+          <span class="capability-card__arrow">Coming soon! &rarr;</span>
         </a>
       </div>
     </section>
 
     <section id="tiktok" class="section">
       <div class="cta-panel reveal">
-        <h2 class="cta-panel__title">Hyperscooter builds on TikTok</h2>
-        <p class="cta-panel__text">Watch high-speed builds, VESC tuning, and small-frame hyperscooter runs. Follow for build logs and teardowns.</p>
-        <a href="https://www.tiktok.com/@whos_.daniel" class="cta-panel__btn" target="_blank" rel="noopener noreferrer">Check out on TikTok</a>
+        <h2 class="cta-panel__title text-gradient">Hyperscooter Builds</h2>
+        <p class="cta-panel__text">Watch high-speed builds, VESC tuning, and small-frame runs on TikTok.</p>
+        <a href="https://www.tiktok.com/@whos_.daniel" target="_blank" class="cta-panel__btn">Follow the build logs</a>
       </div>
     </section>
   </main>
 
-  <footer class="footer" role="contentinfo">
+  <footer class="footer">
     <div class="footer__inner">
       <p class="footer__copy">© DsSoft. All rights reserved.</p>
       <ul class="footer__links">
-        <li><a href="battery.html">Battery</a></li>
-        <li><a href="vesc.html">VESC</a></li>
-        <li><a href="hyperscooters.html">Hyperscooters</a></li>
         <li><a href="reverse-engineering.html">Reverse engineering</a></li>
-        <li><a href="pcb-design.html">PCB design</a></li>
         <li><a href="custom-tooling.html">Tooling</a></li>
       </ul>
     </div>
   </footer>
 
   <script>
-    (function () {
-      var navbar = document.getElementById('navbar');
-      var threshold = 60;
-      function updateNavbar() {
-        navbar.classList.toggle('is-solid', window.scrollY > threshold);
-      }
-      window.addEventListener('scroll', updateNavbar, { passive: true });
-      updateNavbar();
-    })();
-    (function () {
-      var revealEls = document.querySelectorAll('.reveal');
-      var observer = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) entry.target.classList.add('is-visible');
-        });
-      }, { rootMargin: '0px 0px -80px 0px', threshold: 0.05 });
-      revealEls.forEach(function (el) { observer.observe(el); });
-    })();
+    // Navigation & Hamburger Toggle
+    const navbar = document.getElementById('navbar');
+    const menuToggle = document.getElementById('menu-toggle');
+    const navbarLinks = document.getElementById('navbar-links');
+
+    // Sticky Nav Effect
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('is-solid', window.scrollY > 50);
+    });
+
+    // Toggle Menu
+    menuToggle.addEventListener('click', () => {
+      menuToggle.classList.toggle('is-active');
+      navbarLinks.classList.toggle('is-open');
+      // Prevent body scroll when menu is open
+      document.body.style.overflow = navbarLinks.classList.contains('is-open') ? 'hidden' : '';
+    });
+
+    // Close menu when clicking a link
+    document.querySelectorAll('.navbar__links a').forEach(link => {
+      link.addEventListener('click', () => {
+        menuToggle.classList.remove('is-active');
+        navbarLinks.classList.remove('is-open');
+        document.body.style.overflow = '';
+      });
+    });
+
+    // Reveal animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('is-visible');
+      });
+    }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    
+    // Mouse spotlight effect on cards
+    document.querySelectorAll('.capability-card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+        card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+      });
+    });
   </script>
 </body>
 </html>

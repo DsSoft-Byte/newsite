@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Embedded systems — DsSoft</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/nav.js" defer></script>
+</head>
+<body>
+  <header class="navbar" id="navbar" role="banner">
+    <a href="index.html" class="navbar__brand">DsSoft</a>
+    <button type="button" class="navbar__toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="navbar__nav" aria-label="Main">
+      <ul class="navbar__links">
+        <li><a href="index.html#capabilities">What I do</a></li>
+        <li><a href="index.html#tiktok">TikTok</a></li>
+        <li><a href="hyperscooters.html">Hyperscooters</a></li>
+        <li><a href="reverse-engineering.html">Reverse engineering</a></li>
+        <li><a href="https://t.me/the_hackintosh" target="_blank" rel="noopener noreferrer">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="page-content">
+    <a href="index.html" class="back-link">← Back to home</a>
+    <h1>Embedded systems engineering</h1>
+    <p>Complete hardware–firmware–software stacks from concept to production. MCU programming, custom protocol design, device recovery, and low-level debugging. When the problem spans silicon, firmware, and runtime, the stack is handled end-to-end.</p>
+
+    <div class="glass-panel">
+      <h2>What I do</h2>
+      <ul>
+        <li><strong>MCU development:</strong> C/C++ on ARM Cortex-M, ESP32, STM32, and similar. Bare metal and RTOS; power and timing constraints are first-class.</li>
+        <li><strong>Custom protocols:</strong> Design and implementation of UART, SPI, I2C, and CAN-based protocols for sensors, BMS, and motor controllers. Documentation and interoperability with existing tooling.</li>
+        <li><strong>Device recovery & bring-up:</strong> Brick recovery, bootloader repair, and firmware restoration on consumer and custom hardware. Often paired with reverse engineering when specs are missing.</li>
+        <li><strong>Low-level debugging:</strong> Logic analysis, oscilloscope, and JTAG/SWD for race conditions, timing issues, and hardware–firmware boundary bugs.</li>
+      </ul>
+    </div>
+
+    <div class="glass-panel">
+      <h2>Overlap with other work</h2>
+      <p>Embedded work ties directly into battery management (BMS firmware and comms), VESC tuning and custom ESC logic, hyperscooter dashboards and telemetry, and reverse engineering of firmware and bootloaders. Same discipline: clear requirements, reproducible builds, and documentation that others can follow.</p>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__inner">
+      <p class="footer__copy">© DSSoft</p>
+      <ul class="footer__links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="pcb-design.html">PCB design</a></li>
+        <li><a href="custom-tooling.html">Tooling</a></li>
+      </ul>
+    </div>
+  </footer>
+  <script>
+    (function(){var n=document.getElementById('navbar');function u(){n.classList.toggle('is-solid',window.scrollY>60);}window.addEventListener('scroll',u,{passive:true});u();})();
+  </script>
+</body>
+</html>

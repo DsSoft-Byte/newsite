@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reverse Engineering & Security — DsSoft</title>
-  <meta name="description" content="Independent security researcher specializing in binary analysis, exploit research, and DRM teardown.">
+  <title>Hackintosh Development — DsSoft</title>
+  <meta name="description" content="Advanced Hackintosh EFI creation and custom Kext (Kernel Driver) development for complex hardware integration.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -100,7 +100,7 @@
     }
     .back-link:hover { color: var(--text-primary); }
 
-    /* Hero — Terminal Green/Blue Theme */
+    /* Hero — Slate / Blue Theme */
     .hero {
       min-height: 100vh; 
       display: flex; align-items: center; justify-content: center;
@@ -116,12 +116,12 @@
     }
     .hero__orb--1 { 
       width: 60vw; height: 60vw; max-width: 800px;
-      background: radial-gradient(circle, #10B981, #059669, #064E3B);
+      background: radial-gradient(circle, #2563EB, #1E40AF, #000000);
       top: -20%; left: -10%; 
     }
     .hero__orb--2 { 
       width: 50vw; height: 50vw; max-width: 600px;
-      background: radial-gradient(circle, #3B82F6, #1D4ED8, #000000);
+      background: radial-gradient(circle, #0F172A, #1E293B, #000000);
       bottom: -10%; right: -5%; animation-delay: -5s; 
     }
     
@@ -142,7 +142,7 @@
       opacity: 0; animation: fade-up 1s var(--ease-out-expo) 0.2s forwards;
     }
     .hero__headline { margin-bottom: var(--space-lg); opacity: 0; animation: fade-up 1s var(--ease-out-expo) 0.3s forwards; }
-    .hero__subtitle { max-width: 700px; margin: 0 auto var(--space-2xl); opacity: 0; animation: fade-up 1s var(--ease-out-expo) 0.4s forwards; }
+    .hero__subtitle { max-width: 750px; margin: 0 auto var(--space-2xl); opacity: 0; animation: fade-up 1s var(--ease-out-expo) 0.4s forwards; }
 
     .hero__glass {
       position: absolute; background: var(--bg-glass);
@@ -195,19 +195,10 @@
     .capability-list { list-style: none; margin-top: var(--space-md); }
     .capability-list li { 
         position: relative; padding-left: 20px; font-size: 0.9375rem; 
-        color: var(--text-secondary); margin-bottom: 10px; 
+        color: var(--text-secondary); margin-bottom: 12px; 
     }
     .capability-list li::before { 
-        content: '→'; position: absolute; left: 0; color: #10B981; 
-    }
-
-    .cta-panel {
-      max-width: 900px; margin: 0 auto; padding: var(--space-4xl) var(--space-2xl);
-      background: linear-gradient(180deg, rgba(20,20,22,0.8) 0%, rgba(10,10,12,0.9) 100%);
-      backdrop-filter: blur(40px);
-      border: 1px solid var(--border-subtle); border-radius: 32px;
-      text-align: center; position: relative; overflow: hidden;
-      box-shadow: 0 40px 80px rgba(0,0,0,0.5), var(--glass-edge);
+        content: '→'; position: absolute; left: 0; color: #2563EB; 
     }
 
     .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s var(--ease-out-expo); }
@@ -219,8 +210,7 @@
     .footer__links { display: flex; gap: var(--space-lg); list-style: none; }
     .footer__links a:hover { color: var(--text-primary); }
 
-    /* Hamburger Logic */
-.menu-toggle {
+    .menu-toggle {
   display: none;
   background: none;
   border: none;
@@ -305,56 +295,49 @@
         <div class="hero__orb hero__orb--2"></div>
       </div>
 
-      <div class="hero__glass hero__glass--1">IDA Pro / Ghidra</div>
-      <div class="hero__glass hero__glass--2">5-Layer Crypto Bypass</div>
+      <div class="hero__glass hero__glass--1">XNU Kernel Drivers</div>
+      <div class="hero__glass hero__glass--2">ACPI Patching</div>
       
       <div class="hero__content">
         <a href="index.html" class="back-link">&larr; Back to home</a>
-        <div class="hero__badge">Security Research</div>
-        <h1 class="hero__headline text-gradient">Reverse engineering & security</h1>
-        <p class="hero__subtitle">Specializing in binary analysis and exploit research. 5000+ hours defeating multi-layer commercial encryption and DRM systems — from bootrom to runtime.</p>
+        <div class="hero__badge">Hardcore Development</div>
+        <h1 class="hero__headline text-gradient">Hackintosh & kernel development</h1>
+        <p class="hero__subtitle">Beyond simple EFI compilation. Creating custom Kexts (Kernel Drivers), complex ACPI hot-patching, and production-grade bootloader configurations for unsupported hardware.</p>
       </div>
     </section>
 
     <section id="capabilities" class="section">
       <div class="capabilities__grid">
         <div class="capability-card reveal">
-          <div class="capability-card__icon">🔍</div>
-          <h3 class="capability-card__title">Binary & Crypto Analysis</h3>
+          <div class="capability-card__icon">💻</div>
+          <h3 class="capability-card__title">Advanced EFI Creation</h3>
           <ul class="capability-list">
-            <li>Deep analysis in IDA Pro and Ghidra: control flow and protocol mapping.</li>
-            <li>Multi-layer obfuscation and commercial DRM teardown (Lua VM decryption).</li>
-            <li>SASL v3 for X-Plane: 5-layer crypto bypass and activation break.</li>
+            <li><strong>OpenCore Mastery:</strong> Clean-sheet EFI builds for Intel, AMD, and mobile chipsets.</li>
+            <li><strong>ACPI Engineering:</strong> Custom SSDT creation and DSDT hot-patching for perfect power management and hardware sleep/wake.</li>
+            <li><strong>Device Properties:</strong> Precise framebuffer patching and hardware ID spoofing for native-feel GPU acceleration.</li>
           </ul>
         </div>
         
         <div class="capability-card reveal">
-          <div class="capability-card__icon">📱</div>
-          <h3 class="capability-card__title">iOS & Mobile Exploitation</h3>
+          <div class="capability-card__icon">⚙️</div>
+          <h3 class="capability-card__title">Kernel & Driver Development</h3>
           <ul class="capability-list">
-            <li>Bootrom analysis and firmware reverse engineering.</li>
-            <li>Runtime instrumentation with Frida: dylib injection and JB bypass.</li>
-            <li>iCloud lock mitigation research on legacy A5 and custom ramdisks for A7-A11.</li>
+            <li><strong>Custom Kexts:</strong> Writing and maintaining bespoke kernel extensions for non-native peripherals.</li>
+            <li><strong>Kernel Debugging:</strong> Low-level troubleshooting of kernel panics and driver conflicts.</li>
+            <li><strong>Security Bypasses:</strong> Implementing SIP-compliant modifications and secure boot configurations for customized macOS environments.</li>
           </ul>
         </div>
-      </div>
-    </section>
-
-    <section id="assessments" class="section">
-      <div class="cta-panel reveal">
-        <h2 class="cta-panel__title text-gradient">Penetration testing & assessments</h2>
-        <p class="cta-panel__text">Full-scope security assessments, vulnerability discovery, exploit development, and secure boot bypass research. Work is conducted under clear scope and confidentiality — suitable for product security teams and authorized engagements.</p>
       </div>
     </section>
   </main>
 
   <footer class="footer">
     <div class="footer__inner">
-      <p class="footer__copy">© DSSoft</p>
+      <p class="footer__copy">© DsSoft</p>
       <ul class="footer__links">
         <li><a href="index.html">Home</a></li>
-        <li><a href="pcb-design.html">PCB design</a></li>
-        <li><a href="custom-tooling.html">Tooling</a></li>
+        <li><a href="reverse-engineering.html">Reverse engineering</a></li>
+        <li><a href="embedded-systems.html">Embedded</a></li>
       </ul>
     </div>
   </footer>

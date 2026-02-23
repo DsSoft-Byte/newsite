@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PCB design & microsoldering — DsSoft</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/nav.js" defer></script>
+</head>
+<body>
+  <header class="navbar" id="navbar" role="banner">
+    <a href="index.html" class="navbar__brand">DsSoft</a>
+    <button type="button" class="navbar__toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="navbar__nav" aria-label="Main">
+      <ul class="navbar__links">
+        <li><a href="index.html#capabilities">What I do</a></li>
+        <li><a href="index.html#tiktok">TikTok</a></li>
+        <li><a href="hyperscooters.html">Hyperscooters</a></li>
+        <li><a href="reverse-engineering.html">Reverse engineering</a></li>
+        <li><a href="https://t.me/the_hackintosh" target="_blank" rel="noopener noreferrer">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="page-content">
+    <a href="index.html" class="back-link">← Back to home</a>
+    <h1>PCB design & microsoldering</h1>
+    <p>Production-grade board repair, modification, and custom PCB design. From 0603 components and QFP64 STM32 packages to GPU VRAM replacement and full fabrication pipeline — hardware that has to work at scale.</p>
+
+    <div class="glass-panel">
+      <h2>Advanced microsoldering</h2>
+      <ul>
+        <li><strong>Component scale:</strong> 0603 resistors and smaller; precise placement and rework under magnification.</li>
+        <li><strong>GPU work:</strong> VRAM replacement, GPU core rework, and BGA reballing where applicable. Thermal and mechanical care to avoid collateral damage.</li>
+        <li><strong>MCU and packages:</strong> QFP64 STM32 and similar packages: removal, replacement, and trace repair. Hot air and soldering station discipline.</li>
+        <li><strong>Board-level debugging:</strong> Schematic recovery, continuity, and fault isolation on consumer and custom boards.</li>
+      </ul>
+    </div>
+
+    <div class="glass-panel">
+      <h2>Custom PCB design</h2>
+      <p>Full design pipeline from concept to fabrication: schematic capture, layout (including high-current and thermal considerations for power boards), and DFM for assembly. Boards are designed for hyperscooter BMS, custom controllers, and one-off instruments — with clear documentation and revision control.</p>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__inner">
+      <p class="footer__copy">© DSSoft</p>
+      <ul class="footer__links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="embedded-systems.html">Embedded</a></li>
+        <li><a href="reverse-engineering.html">Reverse engineering</a></li>
+      </ul>
+    </div>
+  </footer>
+  <script>
+    (function(){var n=document.getElementById('navbar');function u(){n.classList.toggle('is-solid',window.scrollY>60);}window.addEventListener('scroll',u,{passive:true});u();})();
+  </script>
+</body>
+</html>

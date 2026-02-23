@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VESC & high-power ESCs — DSSoft</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/nav.js" defer></script>
+</head>
+<body>
+  <header class="navbar" id="navbar" role="banner">
+    <a href="index.html" class="navbar__brand">DsSoft</a>
+    <button type="button" class="navbar__toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="navbar__nav" aria-label="Main">
+      <ul class="navbar__links">
+        <li><a href="index.html#capabilities">What I do</a></li>
+        <li><a href="index.html#tiktok">TikTok</a></li>
+        <li><a href="hyperscooters.html">Hyperscooters</a></li>
+        <li><a href="reverse-engineering.html">Reverse engineering</a></li>
+        <li><a href="https://t.me/the_hackintosh" target="_blank" rel="noopener noreferrer">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="page-content">
+    <a href="index.html" class="back-link">← Back to home</a>
+    <h1>VESC & high-power ESCs</h1>
+    <p>Modifying and tuning VESC-based electronic speed controllers for extreme performance. Builds that push 450A phase current and 100V nominal are standard for high-speed hyperscooter and DIY EV applications — with proper firmware configuration, thermal design, and integration.</p>
+
+    <div class="glass-panel">
+      <h2>Capabilities</h2>
+      <ul>
+        <li><strong>Current and voltage:</strong> Mods and configurations for 450A+ phase current and up to 100V nominal, matching high-power motors and batteries.</li>
+        <li><strong>Firmware:</strong> VESC Tool tuning — current limits, FOC parameters, braking curves, and thermal rollback so hardware stays within safe operating range.</li>
+        <li><strong>Thermal:</strong> Heatsinking, thermal pads, and airflow considerations so sustained high current doesn’t cook the FETs or PCB.</li>
+        <li><strong>Integration:</strong> Wiring, connectors, and placement in tight frames (Xiaomi, Ninebot, custom) with clean cable runs and strain relief.</li>
+      </ul>
+    </div>
+
+    <div class="glass-panel">
+      <h2>Why VESC</h2>
+      <p>VESC is open, configurable, and well-suited to custom builds. Unlike locked-down stock ESCs, you get full control over current limits, timing, and regen. That makes it the go-to platform for hyperscooters and high-performance builds where stock hardware isn’t enough.</p>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__inner">
+      <p class="footer__copy">© DSSoft</p>
+      <ul class="footer__links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="hyperscooters.html">Hyperscooters</a></li>
+        <li><a href="battery.html">Battery</a></li>
+      </ul>
+    </div>
+  </footer>
+  <script>
+    (function(){var n=document.getElementById('navbar');function u(){n.classList.toggle('is-solid',window.scrollY>60);}window.addEventListener('scroll',u,{passive:true});u();})();
+  </script>
+</body>
+</html>

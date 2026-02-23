@@ -4,63 +4,419 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hyperscooters — DsSoft</title>
+  <meta name="description" content="Building 140km/h small-frame electric scooters with custom electronics.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/style.css">
-  <script src="assets/nav.js" defer></script>
+  <style>
+    /* ============================================
+       DSSoft — Ultra-Premium Liquid Glass Edition
+       ============================================ */
+    :root {
+      --bg-deep: #000000;
+      --bg-elevated: #111111;
+      --bg-glass: rgba(20, 20, 22, 0.4);
+      --bg-glass-hover: rgba(30, 30, 34, 0.5);
+      
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.16);
+      --glass-edge: inset 0 1px 1px rgba(255, 255, 255, 0.15);
+      
+      --text-primary: #F5F5F7;
+      --text-secondary: #86868B;
+      --text-muted: #515154;
+      
+      --accent: #0A84FF;
+      
+      --btn-bg: #F5F5F7;
+      --btn-text: #000000;
+      --btn-bg-dark: rgba(255, 255, 255, 0.08);
+      
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --duration-fast: 250ms;
+      --duration-normal: 400ms;
+      --duration-slow: 700ms;
+      
+      --space-xs: 0.25rem; --space-sm: 0.5rem; --space-md: 1rem;
+      --space-lg: 1.5rem; --space-xl: 2rem; --space-2xl: 3rem;
+      --space-3xl: 4rem; --space-4xl: 6rem; --space-5xl: 8rem;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    html { 
+      scroll-behavior: smooth; 
+      overflow-x: hidden; 
+      background: var(--bg-deep);
+      scroll-snap-type: y proximity; 
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Typography */
+    h1 { font-size: clamp(2.5rem, 6vw + 1rem, 4.5rem); font-weight: 700; letter-spacing: -0.04em; line-height: 1.1; }
+    h2 { font-size: clamp(1.75rem, 4vw + 0.5rem, 3rem); font-weight: 600; letter-spacing: -0.03em; }
+    h3 { font-size: clamp(1.25rem, 2vw + 0.25rem, 1.5rem); font-weight: 600; letter-spacing: -0.02em; }
+    p { font-size: clamp(1rem, 1.2vw + 0.5rem, 1.125rem); color: var(--text-secondary); }
+    a { color: inherit; text-decoration: none; }
+
+    .text-gradient {
+      background: linear-gradient(180deg, #FFFFFF 0%, #86868B 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Navbar */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      padding: var(--space-md) var(--space-xl);
+      display: flex; align-items: center; justify-content: space-between;
+      min-height: 64px;
+      background: rgba(0, 0, 0, 0.2);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      /* Add this line to prevent the flash */
+      border-bottom: 1px solid transparent; 
+      transition: all var(--duration-normal) var(--ease-out-expo);
+    }
+    .navbar.is-solid {
+      background: rgba(10, 10, 12, 0.65);
+      border-bottom: 1px solid var(--border-subtle);
+      /* Optional: matching the subtle shadow from the battery page */
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); 
+    }
+    .navbar__brand { font-weight: 600; font-size: 1.125rem; }
+    .navbar__links { display: flex; gap: var(--space-xl); list-style: none; }
+    .navbar__links a { font-size: 0.875rem; font-weight: 500; color: var(--text-secondary); transition: color var(--duration-fast); }
+    .navbar__links a:hover { color: var(--text-primary); }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-bottom: var(--space-xl);
+      font-size: 0.875rem; font-weight: 500; color: var(--text-secondary);
+      transition: color var(--duration-fast);
+      opacity: 0; animation: fade-up 1s var(--ease-out-expo) 0.1s forwards;
+    }
+    .back-link:hover { color: var(--text-primary); }
+
+    /* Hero — Modified Colors for Hyperscooters (Electric Purple/Cyan) */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; padding: var(--space-5xl) var(--space-xl) var(--space-4xl);
+      overflow: hidden;
+      scroll-snap-align: start;
+    }
+    .hero__bg { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+    
+    .hero__orb {
+      position: absolute; border-radius: 50%;
+      filter: blur(120px); opacity: 0.5;
+      animation: orb-float 20s var(--ease-in-out) infinite alternate;
+    }
+    .hero__orb--1 { 
+      width: 60vw; height: 60vw; max-width: 800px;
+      background: radial-gradient(circle, #7000FF, #00D1FF);
+      top: -20%; left: -10%; 
+    }
+    .hero__orb--2 { 
+      width: 50vw; height: 50vw; max-width: 600px;
+      background: radial-gradient(circle, #00FFC2, #0057FF);
+      bottom: -10%; right: -5%; animation-delay: -5s; 
+    }
+    
+    @keyframes orb-float { 
+      0% { transform: translate(0, 0) scale(1); } 
+      100% { transform: translate(5%, -5%) scale(1.1); } 
+    }
+
+    .hero__content { position: relative; z-index: 2; text-align: center; max-width: 800px; margin: 0 auto; }
+    
+    .hero__badge {
+      display: inline-flex; align-items: center; gap: var(--space-sm);
+      padding: 6px 16px; margin-bottom: var(--space-xl);
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(30px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 999px; font-size: 0.8125rem; font-weight: 500; color: #D1D1D6;
+      opacity: 0; animation: fade-up 1s var(--ease-out-expo) 0.2s forwards;
+    }
+    .hero__headline { margin-bottom: var(--space-lg); opacity: 0; animation: fade-up 1s var(--ease-out-expo) 0.3s forwards; }
+    .hero__subtitle { max-width: 640px; margin: 0 auto var(--space-2xl); opacity: 0; animation: fade-up 1s var(--ease-out-expo) 0.4s forwards; }
+
+    .hero__glass {
+      position: absolute; background: var(--bg-glass);
+      backdrop-filter: blur(40px);
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.6), var(--glass-edge);
+      border-radius: 20px; padding: var(--space-lg) var(--space-xl);
+      font-size: 0.875rem; font-weight: 500; color: var(--text-primary);
+      opacity: 0; animation: fade-up 1.2s var(--ease-out-expo) 0.8s forwards;
+      z-index: 1;
+    }
+    .hero__glass--1 { top: 30%; left: 8%; transform: rotate(-3deg); }
+    .hero__glass--2 { bottom: 25%; right: 8%; transform: rotate(3deg); }
+
+    @keyframes fade-up { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Sections */
+    .section { 
+      padding: var(--space-4xl) var(--space-xl); 
+      max-width: 1200px; 
+      margin: 0 auto; 
+      position: relative; 
+      z-index: 2; 
+      scroll-snap-align: start; 
+    }
+    .section__header { text-align: center; margin-bottom: var(--space-4xl); max-width: 600px; margin-left: auto; margin-right: auto; }
+    
+    .capabilities__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--space-lg); }
+    
+    /* Capability Cards */
+    .capability-card {
+      display: flex; flex-direction: column;
+      background: var(--bg-glass);
+      backdrop-filter: blur(40px);
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3), var(--glass-edge);
+      border-radius: 24px; padding: var(--space-2xl);
+      transition: all var(--duration-normal) var(--ease-out-expo);
+      position: relative; overflow: hidden;
+    }
+    .capability-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.06), transparent 40%);
+      opacity: 0; transition: opacity var(--duration-normal); pointer-events: none;
+    }
+    .capability-card:hover {
+      transform: translateY(-8px) scale(1.01);
+      border-color: var(--border-strong);
+      background: var(--bg-glass-hover);
+    }
+    .capability-card:hover::before { opacity: 1; }
+    
+    .capability-card__icon {
+      width: 56px; height: 56px; display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border-subtle);
+      border-radius: 16px; margin-bottom: var(--space-xl); font-size: 1.5rem;
+    }
+    .capability-card__title { margin-bottom: var(--space-sm); color: var(--text-primary); }
+    .capability-card__desc { font-size: 1rem; line-height: 1.6; flex-grow: 1; }
+
+    /* Performance Panel */
+    .cta-panel {
+      max-width: 900px; margin: 0 auto; padding: var(--space-4xl) var(--space-2xl);
+      background: linear-gradient(180deg, rgba(20,20,22,0.8) 0%, rgba(10,10,12,0.9) 100%);
+      backdrop-filter: blur(40px);
+      border: 1px solid var(--border-subtle); border-radius: 32px;
+      text-align: center; position: relative; overflow: hidden;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.5), var(--glass-edge);
+    }
+    .cta-panel__title { margin-bottom: var(--space-md); }
+    .cta-panel__text { margin-bottom: 0; font-size: 1.125rem; max-width: 700px; margin-left: auto; margin-right: auto; line-height: 1.8; }
+
+    /* Scroll Reveals */
+    .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s var(--ease-out-expo); }
+    .reveal.is-visible { opacity: 1; transform: translateY(0); }
+    .reveal--stagger-1 { transition-delay: 0.1s; } .reveal--stagger-2 { transition-delay: 0.2s; }
+    .reveal--stagger-3 { transition-delay: 0.3s; } .reveal--stagger-4 { transition-delay: 0.4s; }
+
+    /* Footer */
+    .footer { padding: var(--space-2xl) var(--space-xl); border-top: 1px solid var(--border-subtle); background: var(--bg-deep); scroll-snap-align: end; }
+    .footer__inner { max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-md); }
+    .footer__copy, .footer__links a { font-size: 0.875rem; color: var(--text-muted); font-weight: 500; }
+    .footer__links { display: flex; gap: var(--space-lg); list-style: none; }
+    .footer__links a:hover { color: var(--text-primary); }
+
+
+    /* Hamburger Logic */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  z-index: 1200;
+  position: relative;
+}
+
+.hamburger {
+  display: block; width: 24px; height: 2px;
+  background: var(--text-primary);
+  position: relative; transition: background 0.3s;
+}
+
+.hamburger::before, .hamburger::after {
+  content: ''; position: absolute; width: 24px; height: 2px;
+  background: var(--text-primary); transition: all 0.3s;
+}
+.hamburger::before { top: -8px; }
+.hamburger::after { bottom: -8px; }
+
+/* Animation to 'X' */
+.menu-toggle.is-active .hamburger { background: transparent; }
+.menu-toggle.is-active .hamburger::before { transform: rotate(45deg); top: 0; }
+.menu-toggle.is-active .hamburger::after { transform: rotate(-45deg); bottom: 0; }
+
+/* Mobile Menu Responsive Overlay */
+@media (max-width: 768px) {
+  .menu-toggle { display: block; }
+
+  .navbar__links {
+    position: fixed;
+    top: 0;
+    right: -100%; /* Hidden off-screen */
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.98);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3xl);
+    transition: right 0.5s var(--ease-out-expo);
+    z-index: 1050;
+  }
+
+  .navbar__links.is-open { right: 0; } /* Slide in */
+  .navbar__links a { font-size: 1.5rem; color: var(--text-primary); }
+}
+    
+    @media (max-width: 768px) {
+      .hero__glass { display: none; }
+      .capabilities__grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-  <header class="navbar" id="navbar" role="banner">
-    <a href="index.html" class="navbar__brand">DsSoft</a>
-    <button type="button" class="navbar__toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
-      <span></span><span></span><span></span>
+  <header class="navbar" id="navbar">
+  <a href="index.html" class="navbar__brand">DsSoft</a>
+  <nav class="navbar__nav">
+    <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu">
+      <span class="hamburger"></span>
     </button>
-    <nav class="navbar__nav" aria-label="Main">
-      <ul class="navbar__links">
-        <li><a href="index.html#capabilities">What I do</a></li>
-        <li><a href="index.html#tiktok">TikTok</a></li>
-        <li><a href="hyperscooters.html">Hyperscooters</a></li>
-        <li><a href="reverse-engineering.html">Reverse engineering</a></li>
-        <li><a href="https://t.me/the_hackintosh" target="_blank" rel="noopener noreferrer">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
+    <ul class="navbar__links" id="navbar-links">
+      <li><a href="index.html#capabilities">What I do</a></li>
+      <li><a href="index.html#tiktok">TikTok</a></li>
+      <li><a href="hyperscooters.html">Hyperscooters</a></li>
+      <li><a href="reverse-engineering.html">Reverse engineering</a></li>
+      <li><a href="https://t.me/the_hackintosh" target="_blank">Contact</a></li>
+    </ul>
+  </nav>
+</header>
 
-  <main class="page-content">
-    <a href="index.html" class="back-link">← Back to home</a>
-    <h1>Hyperscooters</h1>
-    <p>Building hyperscooters on small, mass-market frames — Xiaomi, Ninebot, and similar — that reach speeds up to 140 km/h. Full custom electronics, battery packs, and VESC-based ESCs tuned for maximum performance in a compact footprint.</p>
+  <main>
+    <section class="hero">
+      <div class="hero__bg">
+        <div class="hero__orb hero__orb--1"></div>
+        <div class="hero__orb hero__orb--2"></div>
+      </div>
+      
+      <div class="hero__glass hero__glass--1">140 km/h Peak</div>
+      <div class="hero__glass hero__glass--2">450A+ Phase Current</div>
+      
+      <div class="hero__content">
+        <a href="index.html" class="back-link">&larr; Back to home</a>
+        <div class="hero__badge">Performance Tuning</div>
+        <h1 class="hero__headline text-gradient">Hyperscooters</h1>
+        <p class="hero__subtitle">Transforming mass-market frames into high-performance electric machines. Xiaomi and Ninebot bases rebuilt with custom 100V electronics and race-tuned firmware.</p>
+      </div>
+    </section>
 
-    <div class="glass-panel">
-      <h2>What goes into a build</h2>
-      <ul>
-        <li><strong>Frames:</strong> Xiaomi and Ninebot bases are common starting points: robust, available, and well-understood. Mods include reinforcement where needed and mounting for larger batteries and controllers.</li>
-        <li><strong>Power:</strong> Custom high-voltage packs (e.g. 72V–100V nominal) and VESC ESCs modified for 450A+ phase current. Motor choice and gearing are matched to target top speed and torque.</li>
-        <li><strong>Firmware & tuning:</strong> VESC configuration for FOC, current limits, and thermal management. Throttle mapping and braking curves tuned for street use and safety.</li>
-        <li><strong>Build logs & content:</strong> Hyperscooter builds and runs are documented on TikTok — follow for teardowns, speed runs, and build process.</li>
-      </ul>
-    </div>
+    <section id="build-specs" class="section">
+      <header class="section__header reveal">
+        <h2 class="text-gradient">What goes into a build</h2>
+      </header>
+      <div class="capabilities__grid">
+        <div class="capability-card reveal reveal--stagger-1">
+          <div class="capability-card__icon">🛴</div>
+          <h3 class="capability-card__title">Reinforced Frames</h3>
+          <p class="capability-card__desc">Using Xiaomi and Ninebot bases as robust starting points. We add structural reinforcement and custom mounting for oversized components.</p>
+        </div>
+        
+        <div class="capability-card reveal reveal--stagger-2">
+          <div class="capability-card__icon">⚡</div>
+          <h3 class="capability-card__title">Extreme Power</h3>
+          <p class="capability-card__desc">Custom 72V–100V nominal packs paired with VESC ESCs modified to handle 450A+ phase current for instant torque.</p>
+        </div>
+        
+        <div class="capability-card reveal reveal--stagger-3">
+          <div class="capability-card__icon">⚙️</div>
+          <h3 class="capability-card__title">Firmware Tuning</h3>
+          <p class="capability-card__desc">Expert VESC configuration including Field Oriented Control (FOC), custom throttle mapping, and intelligent thermal management.</p>
+        </div>
+        
+        <div class="capability-card reveal reveal--stagger-4">
+          <div class="capability-card__icon">🛠️</div>
+          <h3 class="capability-card__title">Safety First</h3>
+          <p class="capability-card__desc">High-speed builds require upgraded braking systems, specialized tires, and mechanical stress-testing before any run.</p>
+        </div>
+      </div>
+    </section>
 
-    <div class="glass-panel">
-      <h2>Performance</h2>
-      <p>140 km/h on a small-frame scooter is achievable with the right combination of voltage, current, motor, and gearing. It requires careful thermal and mechanical design: batteries and ESCs need cooling and secure mounting. Every build is done with safety in mind — brakes, tires, and structure are part of the spec, not an afterthought.</p>
-    </div>
+    <section id="performance" class="section">
+      <div class="cta-panel reveal">
+        <h2 class="cta-panel__title text-gradient">The Performance Reality</h2>
+        <p class="cta-panel__text">Reaching 140 km/h on a small-frame scooter isn't just about raw power—it's about thermal and mechanical harmony. Every build balances voltage, motor gearing, and cooling. My process ensures that batteries and ESCs remain stable under extreme discharge, turning a standard commuter into a stable, high-speed instrument of engineering.</p>
+      </div>
+    </section>
   </main>
 
   <footer class="footer">
     <div class="footer__inner">
-      <p class="footer__copy">© DSSoft</p>
+      <p class="footer__copy">© DsSoft</p>
       <ul class="footer__links">
         <li><a href="index.html">Home</a></li>
-        <li><a href="index.html#tiktok">TikTok</a></li>
-        <li><a href="vesc.html">VESC</a></li>
         <li><a href="battery.html">Battery</a></li>
+        <li><a href="vesc.html">VESC</a></li>
       </ul>
     </div>
   </footer>
+
   <script>
-    (function(){var n=document.getElementById('navbar');function u(){n.classList.toggle('is-solid',window.scrollY>60);}window.addEventListener('scroll',u,{passive:true});u();})();
+    const navbar = document.getElementById('navbar');
+  const menuToggle = document.getElementById('menu-toggle');
+  const navbarLinks = document.getElementById('navbar-links');
+
+  // Sticky Nav
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('is-solid', window.scrollY > 60);
+  });
+
+  // Hamburger Menu Toggle
+  menuToggle.addEventListener('click', () => {
+    menuToggle.classList.toggle('is-active');
+    navbarLinks.classList.toggle('is-open');
+    // Lock scroll when menu is open
+    document.body.style.overflow = navbarLinks.classList.contains('is-open') ? 'hidden' : '';
+  });
+
+  // Close menu when clicking a link
+  document.querySelectorAll('.navbar__links a').forEach(link => {
+    link.addEventListener('click', () => {
+      menuToggle.classList.remove('is-active');
+      navbarLinks.classList.remove('is-open');
+      document.body.style.overflow = '';
+    });
+  });
+
+  // Reveal Animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('is-visible');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
   </script>
 </body>
 </html>
