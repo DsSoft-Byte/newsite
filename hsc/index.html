@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hyperscooters — DsSoft</title>
+  <meta name="description" content="Pushing the limits of small-form EV performance.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================
+       DSSoft — Ultra-Premium Liquid Glass Edition
+       ============================================ */
+    :root {
+      --bg-deep: #000000;
+      --bg-glass: rgba(20, 20, 22, 0.4);
+      --bg-glass-hover: rgba(30, 30, 34, 0.5);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.16);
+      --glass-edge: inset 0 1px 1px rgba(255, 255, 255, 0.15);
+      --text-primary: #F5F5F7;
+      --text-secondary: #86868B;
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --duration-normal: 400ms;
+      --space-xl: 2rem;
+      --space-4xl: 6rem;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; background: var(--bg-deep); }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Typography Scaling */
+h1 { 
+  font-size: clamp(2.5rem, 8vw, 4.5rem); 
+  font-weight: 700; 
+  letter-spacing: -0.04em; 
+  line-height: 1.1; 
+  margin-bottom: 1.5rem; 
+}
+
+.hero p { 
+  font-size: clamp(1.1rem, 2vw, 1.25rem); 
+  line-height: 1.6; 
+}
+
+    .text-gradient {
+      background: linear-gradient(180deg, #FFFFFF 0%, #86868B 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Navbar Styling */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between;
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      transition: all var(--duration-normal) var(--ease-out-expo);
+    }
+    .navbar.is-solid { background: rgba(10, 10, 12, 0.8); border-bottom: 1px solid var(--border-subtle); }
+    .navbar__brand { font-weight: 600; font-size: 1.125rem; text-decoration: none; color: white; }
+    
+    .navbar__links { display: flex; gap: 2rem; list-style: none; }
+    .navbar__links a { font-size: 0.875rem; font-weight: 500; color: var(--text-secondary); text-decoration: none; transition: 0.3s; }
+    .navbar__links a:hover { color: white; }
+
+    /* Hero & Background Orbs */
+    .hero {
+  min-height: 100vh; /* Full viewport height */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Horizontal center */
+  justify-content: center; /* Vertical center */
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  padding: 0 1.5rem;
+}
+    .hero__bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+    .hero__orb {
+      position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.4;
+      animation: orb-float 20s infinite alternate ease-in-out;
+    }
+    .hero__orb--1 { width: 50vw; height: 50vw; background: radial-gradient(circle, #007AFF, #000); top: -10%; left: -10%; }
+    .hero__orb--2 { width: 40vw; height: 40vw; background: radial-gradient(circle, #5E5CE6, #000); bottom: 10%; right: -5%; }
+    
+    @keyframes orb-float { from { transform: translate(0,0); } to { transform: translate(5%, 5%); } }
+
+    .hero__content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* Add this line to enable 3D depth */
+  perspective: 1000px; 
+}
+
+    /* Projects Grid */
+    .section { padding: var(--space-4xl) 1.5rem; max-width: 1200px; margin: 0 auto; }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+
+    .project-card {
+      background: var(--bg-glass);
+      backdrop-filter: blur(40px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 24px;
+      padding: 2.5rem;
+      transition: all var(--duration-normal) var(--ease-out-expo);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3), var(--glass-edge);
+      display: flex;
+      flex-direction: column;
+    }
+    .project-card:hover {
+      transform: translateY(-10px);
+      background: var(--bg-glass-hover);
+      border-color: var(--border-strong);
+    }
+
+    .project-card h3 { font-size: 1.5rem; margin-bottom: 0.75rem; }
+    .project-card .desc { color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 1rem; }
+    .specs {
+      margin-top: auto;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 0.875rem;
+    }
+    .specs span { display: block; color: #007AFF; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.75rem; margin-bottom: 0.25rem;}
+
+    /* Mobile Menu Overlay Fixes */
+.menu-toggle { 
+  display: none; 
+  background: none; 
+  border: none; 
+  cursor: pointer; 
+  z-index: 2000; 
+  padding: 10px;
+}
+.hamburger { 
+  display: block; width: 24px; height: 2px; background: white; position: relative; 
+  transition: background 0.3s;
+}
+.hamburger::before, .hamburger::after { 
+  content: ''; position: absolute; width: 24px; height: 2px; background: white; transition: 0.3s; 
+}
+.hamburger::before { top: -8px; } 
+.hamburger::after { bottom: -8px; }
+
+/* Animation to 'X' */
+.menu-toggle.is-active .hamburger { background: transparent; }
+.menu-toggle.is-active .hamburger::before { transform: rotate(45deg); top: 0; }
+.menu-toggle.is-active .hamburger::after { transform: rotate(-45deg); bottom: 0; }
+
+/* Tablet & Mobile Logic */
+@media (max-width: 768px) {
+  .menu-toggle { display: block; }
+
+  .navbar__links {
+    position: fixed; 
+    top: 0; 
+    right: -100%; /* Hidden off-screen by default on mobile */
+    width: 100%; 
+    height: 100vh;
+    background: rgba(0,0,0,0.98); 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center;
+    transition: right 0.5s var(--ease-out-expo);
+    z-index: 1050;
+  }
+  
+  .navbar__links.is-open { 
+    right: 0; 
+  }
+
+  .navbar__links a { 
+    font-size: 1.5rem; 
+  }
+}
+
+/* Scooter Card Button */
+.btn-subtle {
+  display: inline-block;
+  margin-bottom: 2rem;
+  padding: 8px 16px;
+  width: fit-content;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.02);
+  transition: all 0.3s var(--ease-out-expo);
+}
+
+.btn-subtle:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--border-strong);
+  transform: translateX(4px);
+}
+
+.hero__glass-plate {
+  padding: 3rem;
+  background: rgba(255, 255, 255, 0.03); /* Slightly more visible */
+  backdrop-filter: blur(25px) saturate(180%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 40px;
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 255, 255, 0.2),
+    0 20px 50px rgba(0, 0, 0, 0.5);
+  
+  /* Reset transition so the mouse move is smooth but doesn't lag */
+  transition: transform 0.1s ease-out;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+@keyframes plate-float {
+  from { transform: translateY(0) rotateX(0); }
+  to { transform: translateY(-10px) rotateX(2deg); }
+}
+
+/* Ensure the text inside doesn't get blurry */
+.hero__glass-plate h1, 
+.hero__glass-plate p {
+  position: relative;
+  z-index: 2;
+}
+  </style>
+</head>
+<body>
+<header class="navbar" id="navbar">
+  <a href="https://dssoft.ch" class="navbar__brand">DsSoft</a>
+  <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu">
+    <span class="hamburger"></span>
+  </button>
+  <ul class="navbar__links" id="navbar-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="hyperscooters.html">Hyperscooters</a></li>
+    <li><a href="reverse-engineering.html">Reverse Engineering</a></li>
+    <li><a href="https://t.me/the_hackintosh" target="_blank">Contact</a></li>
+  </ul>
+</header>
+
+  <main>
+    <section class="hero">
+  <div class="hero__bg">
+    <div class="hero__orb hero__orb--1"></div>
+    <div class="hero__orb hero__orb--2"></div>
+  </div>
+  
+  <div class="hero__content">
+    <div class="hero__glass-plate">
+      <h1 class="text-gradient">Hyperscooters</h1>
+      <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto;">
+        Pushing the boundaries of urban mobility through custom battery architecture and high-torque motor tuning.
+      </p>
+    </div>
+  </div>
+</section>
+
+    <section class="section">
+  <div class="projects-grid">
+    
+    <div class="project-card">
+      <h3>Frontfraese</h3>
+      <p class="desc">A Xiaomi modded for high-speed urban riding, optimized for flickability and sustained torque.</p>
+      
+      <a href="starburst.html" class="btn-subtle">View Build</a>
+      
+      <div class="specs">
+        <span>Powertrain</span>
+        65H 22x3 Motor / 20S3P EVE 50TG Pack
+      </div>
+    </div>
+
+    <div class="project-card">
+      <h3>LimeWire</h3>
+      <p class="desc">Ninebot SNSC platform built on JREV legacy. Engineered to challenge small-chassis speed records.</p>
+      
+      <a href="zentrident.html" class="btn-subtle">View Build</a>
+      
+      <div class="specs">
+        <span>Powertrain</span>
+        Dual 65H 33x2 Motors / 20S6P EVE 40PL Pack
+      </div>
+    </div>
+
+    <div class="project-card">
+      <h3>The Prototype</h3>
+      <p class="desc">The "Daily" testbed. This is where thermal limits are tested and new firmware is abused daily.</p>
+      
+      <a href="prototype.html" class="btn-subtle">View Build</a>
+      
+      <div class="specs">
+        <span>Powertrain</span>
+        65H 17x4 Motor / 14S3P EVE 50PL Pack
+      </div>
+    </div>
+
+  </div>
+</section>
+  </main>
+
+  <footer>
+    &copy; 2026 DsSoft — Built for Performance.
+  </footer>
+
+  <script>
+  const navbar = document.getElementById('navbar');
+  const menuToggle = document.getElementById('menu-toggle');
+  const navbarLinks = document.getElementById('navbar-links');
+  const plate = document.querySelector('.hero__glass-plate');
+
+  // Sticky Header
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('is-solid', window.scrollY > 50);
+  });
+
+  // Mobile Menu Toggle
+  menuToggle.addEventListener('click', () => {
+    menuToggle.classList.toggle('is-active');
+    navbarLinks.classList.toggle('is-open');
+    document.body.style.overflow = navbarLinks.classList.contains('is-open') ? 'hidden' : '';
+  });
+
+  // Liquid Glass Mouse Tilt Effect
+  // This calculates the tilt based on mouse position relative to center screen
+  document.addEventListener('mousemove', (e) => {
+    if (!plate) return;
+    
+    // Calculate rotation (Sensitivity: /50)
+    const x = (window.innerWidth / 2 - e.pageX) / 50;
+    const y = (window.innerHeight / 2 - e.pageY) / 50;
+    
+    // Apply rotation - Notice we swap X and Y for natural tilting
+    plate.style.transform = `rotateY(${-x}deg) rotateX(${y}deg)`;
+  });
+
+  // Reset plate when mouse leaves window
+  document.addEventListener('mouseleave', () => {
+    plate.style.transform = `rotateY(0deg) rotateX(0deg)`;
+  });
+  </script>
+</body>
+</html>

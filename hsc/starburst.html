@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Name — DsSoft</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep: #000000;
+      --bg-glass: rgba(255, 255, 255, 0.03);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --text-primary: #F5F5F7;
+      --text-secondary: #86868B;
+      --accent: #007AFF;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+        font-family: 'Inter', sans-serif; 
+        background: var(--bg-deep); 
+        color: var(--text-primary); 
+        line-height: 1.6;
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+
+    /* Project Header */
+    .project-hero {
+      padding: 160px 0 80px;
+      text-align: center;
+    }
+    .badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 99px;
+      background: rgba(0, 122, 255, 0.1);
+      color: var(--accent);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    h1 { font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: -0.04em; margin-bottom: 1.5rem; }
+
+    /* Technical Specs Table */
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1px;
+      background: var(--border-subtle);
+      border: 1px solid var(--border-subtle);
+      border-radius: 24px;
+      overflow: hidden;
+      margin: 40px 0;
+    }
+    .spec-item {
+      background: var(--bg-deep);
+      padding: 2rem;
+      text-align: center;
+    }
+    .spec-label { color: var(--text-secondary); font-size: 0.8rem; text-transform: uppercase; display: block; margin-bottom: 0.5rem; }
+    .spec-value { font-size: 1.25rem; font-weight: 600; color: var(--text-primary); }
+
+    /* Content Sections */
+    .content-section { padding: 80px 0; }
+    .glass-card {
+      background: var(--bg-glass);
+      border: 1px solid var(--border-subtle);
+      border-radius: 32px;
+      padding: 3rem;
+      backdrop-filter: blur(20px);
+    }
+    h2 { font-size: 2rem; margin-bottom: 1.5rem; }
+    p { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 1.5rem; }
+
+    /* Image Gallery Mock */
+    .gallery {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .img-placeholder {
+      background: #111;
+      border-radius: 16px;
+      min-height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #333;
+    }
+
+    footer { padding: 4rem 0; text-align: center; border-top: 1px solid var(--border-subtle); color: var(--text-secondary); }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header class="project-hero">
+      <div class="badge">Performance Build</div>
+      <h1>Project Starburst</h1>
+      <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto;">A complete architectural overhaul of the Xiaomi M365 platform, pushing 10'000W+ peak power in a lightweight urban chassis.</p>
+    </header>
+
+    <section class="specs-grid">
+      <div class="spec-item">
+        <span class="spec-label">Voltage</span>
+        <div class="spec-value">72-84V (20S)</div>
+      </div>
+      <div class="spec-item">
+        <span class="spec-label">Peak Current</span>
+        <div class="spec-value">325A Battery</div>
+      </div>
+      <div class="spec-item">
+        <span class="spec-label">Motor</span>
+        <div class="spec-value">65H 22x3 Custom</div>
+      </div>
+      <div class="spec-item">
+        <span class="spec-label">Controller</span>
+        <div class="spec-value">VESC UBOX 85/150</div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="glass-card">
+        <h2>The Architecture</h2>
+        <p>The goal was to maintain the original Xiaomi silhouette while integrating a high-discharge EVE 50PL pack. This required a custom 3D-printed deck spacer and reinforced folding mechanism to handle the extreme vibration and torque.</p>
+        
+        <div class="gallery">
+          <div class="img-placeholder">Main Build Photo</div>
+          <div class="img-placeholder">Wiring/ESC Detail</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    &copy; 2026 DsSoft — High Power Lab
+  </footer>
+
+</body>
+</html>
