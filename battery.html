@@ -453,6 +453,7 @@
       background: rgba(0, 0, 0, 0.3);
       width: 100%;
       /* Ensures it stays within the grid cell */
+      cursor: zoom-in;
     }
 
     .aero-gallery__item img {
@@ -468,6 +469,55 @@
     .aero-gallery__item:hover img {
       transform: scale(1.05);
       opacity: 1;
+    }
+
+    /* Caption styling */
+    .aero-gallery__caption {
+      padding: var(--space-sm) var(--space-md);
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    /* Lightbox Background */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(15px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s var(--ease-out-expo);
+      padding: var(--space-xl);
+    }
+
+    .lightbox.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Lightbox Image */
+    .lightbox img {
+      max-width: 95%;
+      max-height: 90vh;
+      border-radius: 12px;
+      box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+      transform: scale(0.9);
+      transition: transform 0.4s var(--ease-out-expo);
+    }
+
+    .lightbox.active img {
+      transform: scale(1);
     }
 
     /* Process Panel */
@@ -748,19 +798,28 @@
 
       <div class="aero-gallery reveal">
         <div class="aero-gallery__header">
-          <h3 class="text-gradient">Recent Configurations</h3>
+          <h3 class="text-gradient">Gallery of Battery Builds</h3>
         </div>
         <div class="aero-gallery__grid">
-          <div class="aero-gallery__item">
+          <div class="aero-gallery__item" onclick="openLightbox(this)">
             <img src="assets/images/batt1.jpg" alt="Not welded 16S5P Block" loading="lazy">
+            <div class="aero-gallery__caption">Unwelded 16S5P Block</div>
           </div>
-          <div class="aero-gallery__item">
+
+          <div class="aero-gallery__item" onclick="openLightbox(this)">
             <img src="assets/images/batt2.jpg" alt="Small 6S1P High Discharge drone pack" loading="lazy">
+            <div class="aero-gallery__caption">6S1P High Discharge Pack</div>
           </div>
-          <div class="aero-gallery__item">
+
+          <div class="aero-gallery__item" onclick="openLightbox(this)">
             <img src="assets/images/batt3.jpg" alt="High-discharge 6S1P with visible 50PL cells" loading="lazy">
+            <div class="aero-gallery__caption">6S1P with 50PL Cells</div>
           </div>
         </div>
+      </div>
+
+      <div id="lightbox" class="lightbox" onclick="this.classList.remove('active')">
+        <img id="lightbox-img" src="" alt="">
       </div>
     </section>
 
@@ -813,6 +872,16 @@
         document.body.style.overflow = '';
       });
     });
+
+    // LightBox
+    function openLightbox(element) {
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+      const clickedImgSrc = element.querySelector('img').src;
+
+      lightboxImg.src = clickedImgSrc;
+      lightbox.classList.add('active');
+    }
 
     // Reveal Animations
     const observer = new IntersectionObserver((entries) => {
