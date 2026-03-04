@@ -338,6 +338,67 @@
       background: var(--bg-glass-hover);
     }
 
+    /* Feature Row Container */
+.feature-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3xl);
+  margin-bottom: var(--space-5xl);
+  padding: 0 var(--space-xl);
+}
+
+.feature-image {
+  flex: 1;
+  width: 100%;
+}
+
+.feature-image img {
+  width: 100%;
+  border-radius: 40px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+  border: 1px solid var(--border-subtle);
+}
+
+.feature-text {
+  flex: 1;
+  max-width: 500px;
+}
+
+.feature-label {
+  display: block;
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-md);
+}
+
+/* Desktop Polish: Side-by-Side */
+@media (min-width: 1024px) {
+  .feature-row {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: var(--space-5xl);
+  }
+
+  .feature-row.row-reverse {
+    flex-direction: row-reverse;
+  }
+
+  .feature-text {
+    text-align: left;
+  }
+}
+
+/* Apple-style typography tweak */
+h2.text-gradient {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  margin-bottom: var(--space-lg);
+  line-height: 1.1;
+}
+
     .capability-card__icon {
       width: 56px;
       height: 56px;
@@ -585,6 +646,21 @@
       bottom: 0;
     }
 
+    .section__header {
+      text-align: center;
+      margin-bottom: var(--space-4xl);
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .text-gradient {
+      background: linear-gradient(180deg, #FFFFFF 0%, #86868B 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
     /* Mobile Menu Responsive Overlay */
     @media (max-width: 768px) {
       .menu-toggle {
@@ -671,49 +747,41 @@
     </section>
 
     <section id="capabilities" class="section">
-      <div class="capabilities__grid">
-        <div class="capability-card reveal">
-          <div class="capability-card__icon">🔍</div>
-          <h3 class="capability-card__title">Binary & Crypto Analysis</h3>
-          <ul class="capability-list">
-            <li>Deep analysis in IDA Pro and Ghidra: control flow and protocol mapping.</li>
-            <li>Multi-layer obfuscation and commercial DRM teardown (Lua VM decryption).</li>
-            <li>SASL v3 for X-Plane: 5-layer crypto bypass and activation break.</li>
-          </ul>
-        </div>
+    <header class="section__header reveal">
+        <h2 class="text-gradient">The Research Lab</h2>
+      </header>
+      <div class="feature-row reveal">
+    <div class="feature-image">
+      <img src="assets/images/proto1.jpg" alt="High-Discharge Packs">
+    </div>
+    <div class="feature-text">
+      <span class="feature-label">01. Hardware Matrix</span>
+      <h2 class="text-gradient">Total Ecosystem Coverage.</h2>
+      <p>Our testing infrastructure spans the entire evolution of the mobile landscape. With active hardware ranging from the legacy iPhone 3GS to the latest iPhone 16 Pro, we ensure that no system, regardless of age or architecture, remains a "black box." If a vulnerability exists, we have the hardware to find it.</p>
+    </div>
+  </div>
 
-        <div class="capability-card reveal">
-          <div class="capability-card__icon">📱</div>
-          <h3 class="capability-card__title">iOS & Mobile Exploitation</h3>
-          <ul class="capability-list">
-            <li>Bootrom analysis and firmware reverse engineering.</li>
-            <li>Runtime instrumentation with Frida: dylib injection and JB bypass.</li>
-            <li>iCloud lock mitigation research on legacy A5 and custom ramdisks for A7-A11.</li>
-          </ul>
-        </div>
-      </div>
+  <div class="feature-row row-reverse reveal">
+    <div class="feature-image">
+      <img src="assets/images/proto2.jpg" alt="Precision Welding">
+    </div>
+    <div class="feature-text">
+      <span class="feature-label">02. Low-Level Analysis</span>
+      <h2 class="text-gradient">Beyond the Application Layer.</h2>
+      <p>We specialize in full-stack reverse engineering, moving far beyond simple app analysis. From Bootrom-level exploits to core Firmware extraction, we deconstruct iOS at its most fundamental level to understand exactly how the silicon communicates with the software.</p>
+    </div>
+  </div>
 
-      <div class="aero-gallery reveal">
-        <div class="aero-gallery__header">
-          <h3 class="text-gradient">Fleet of test iDevices</h3>
-        </div>
-        <div class="aero-gallery__grid">
-          <div class="aero-gallery__item" onclick="openLightbox(this)">
-            <img src="assets/images/proto1.jpg" alt="Not welded 16S5P Block" loading="lazy">
-            <div class="aero-gallery__caption">3GS - 16 Pro, we have em all.</div>
-          </div>
-
-          <div class="aero-gallery__item" onclick="openLightbox(this)">
-            <img src="assets/images/proto2.jpg" alt="Small 6S1P High Discharge drone pack" loading="lazy">
-            <div class="aero-gallery__caption">Jailbroken 13 Pro</div>
-          </div>
-
-          <div class="aero-gallery__item" onclick="openLightbox(this)">
-            <img src="assets/images/proto3.jpg" alt="High-discharge 6S1P with visible 50PL cells" loading="lazy">
-            <div class="aero-gallery__caption">iPhone 8 Prototype, Dev fused.</div>
-          </div>
-        </div>
-      </div>
+  <div class="feature-row reveal">
+    <div class="feature-image">
+      <img src="assets/images/proto3.jpg" alt="High-Discharge Packs">
+    </div>
+    <div class="feature-text">
+      <span class="feature-label">03. Development Hardware</span>
+      <h2 class="text-gradient">Native Root Authority.</h2>
+      <p>For specialized research that requires bypassing standard retail restrictions, we utilize Internal Development (Dev-fused) prototypes. These units grant native, unauthorized code execution and unrestricted root access, allowing for deep-kernel debugging and hardware-level security auditing that retail units cannot provide.</p>
+    </div>
+  </div>
 
       <div id="lightbox" class="lightbox" onclick="this.classList.remove('active')">
         <img id="lightbox-img" src="" alt="">

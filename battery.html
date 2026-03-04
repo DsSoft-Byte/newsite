@@ -347,26 +347,30 @@
     }
 
     .capabilities__grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: var(--space-lg);
-    }
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 0; /* No gap! We use borders to create the grid */
+  border-top: 1px solid var(--border-subtle);
+  border-left: 1px solid var(--border-subtle);
+}
 
     /* Capability Cards */
     .capability-card {
-      display: flex;
-      flex-direction: column;
-      background: var(--bg-glass);
-      backdrop-filter: saturate(180%) blur(40px);
-      -webkit-backdrop-filter: saturate(180%) blur(40px);
-      border: 1px solid var(--border-subtle);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), var(--glass-edge);
-      border-radius: 24px;
-      padding: var(--space-2xl);
-      transition: all var(--duration-normal) var(--ease-out-expo);
-      position: relative;
-      overflow: hidden;
-    }
+  background: transparent; /* No more boxes */
+  backdrop-filter: none;
+  border-radius: 0; 
+  border-right: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: var(--space-3xl) var(--space-2xl);
+  transition: background var(--duration-normal) var(--ease-out-expo);
+}
+
+@media (min-width: 1024px) {
+  .capability-card:nth-child(1),
+  .capability-card:nth-child(4) {
+    grid-column: span 3; /* First and fourth cards are wider */
+  }
+}
 
     .capability-card::before {
       content: '';
@@ -379,40 +383,94 @@
     }
 
     .capability-card:hover {
-      transform: translateY(-8px) scale(1.01);
-      border-color: var(--border-strong);
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), var(--glass-edge);
-      background: var(--bg-glass-hover);
-    }
+  background: rgba(255, 255, 255, 0.02); /* Very subtle hint of depth */
+  transform: none; /* Keep it stable and professional */
+}
 
     .capability-card:hover::before {
       opacity: 1;
     }
 
     .capability-card__icon {
-      width: 56px;
-      height: 56px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border-subtle);
-      border-radius: 16px;
-      margin-bottom: var(--space-xl);
-      font-size: 1.5rem;
-      box-shadow: var(--glass-edge);
-    }
+  background: none;
+  border: none;
+  box-shadow: none;
+  font-size: 2.5rem; /* Larger icons as the focal point */
+  margin-bottom: var(--space-xl);
+  filter: drop-shadow(0 0 15px var(--accent-glow)); /* Icon is the only glow */
+}
 
     .capability-card__title {
-      margin-bottom: var(--space-sm);
-      color: var(--text-primary);
-    }
+  font-size: 1.5rem;
+  letter-spacing: -0.03em;
+  margin-bottom: var(--space-md);
+}
 
     .capability-card__desc {
-      font-size: 1rem;
-      line-height: 1.6;
-      flex-grow: 1;
-    }
+  max-width: 90%;
+  color: var(--text-secondary);
+}
+
+/* Feature Row Container */
+.feature-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3xl);
+  margin-bottom: var(--space-5xl);
+  padding: 0 var(--space-xl);
+}
+
+.feature-image {
+  flex: 1;
+  width: 100%;
+}
+
+.feature-image img {
+  width: 100%;
+  border-radius: 40px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+  border: 1px solid var(--border-subtle);
+}
+
+.feature-text {
+  flex: 1;
+  max-width: 500px;
+}
+
+.feature-label {
+  display: block;
+  color: whitesmoke;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-md);
+}
+
+/* Desktop Polish: Side-by-Side */
+@media (min-width: 1024px) {
+  .feature-row {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: var(--space-5xl);
+  }
+
+  .feature-row.row-reverse {
+    flex-direction: row-reverse;
+  }
+
+  .feature-text {
+    text-align: left;
+  }
+}
+
+/* Apple-style typography tweak */
+h2.text-gradient {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  margin-bottom: var(--space-lg);
+  line-height: 1.1;
+}
 
     /* ============================================
        Aero Glass Image Gallery
@@ -435,26 +493,58 @@
     }
 
     .aero-gallery__grid {
-      display: grid;
-      /* FIX: Use 100% as the max width to prevent overflow on tiny screens */
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
-      gap: var(--space-md);
-      width: 100%;
-    }
+  display: grid;
+  /* Default: 1 column for mobile */
+  grid-template-columns: 1fr; 
+  gap: var(--space-lg);
+  width: 100%;
+}
 
     .aero-gallery__item {
-      position: relative;
-      border-radius: 16px;
-      overflow: hidden;
-      /* FIX: Re-enable aspect-ratio. 
-     Without it, a container with height: 100% and no content will collapse to 0px height. */
-      aspect-ratio: 2 / 3;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      background: rgba(0, 0, 0, 0.3);
-      width: 100%;
-      /* Ensures it stays within the grid cell */
-      cursor: zoom-in;
-    }
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 2 / 3;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.3);
+  width: 100%;
+  cursor: zoom-in;
+}
+
+@media (min-width: 768px) {
+  .aero-gallery__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+  }
+}
+
+@media (max-width: 768px) {
+  .aero-gallery {
+    margin-left: calc(var(--space-md) * -1); /* Pulls it to the screen edges */
+    margin-right: calc(var(--space-md) * -1);
+    border-radius: 0; /* Full-width looks better on small screens */
+    border-left: none;
+    border-right: none;
+    padding: var(--space-xl) var(--space-md);
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    /* Tighten up spaces for mobile */
+    --space-xl: 1.25rem;
+    --space-2xl: 1.5rem;
+    --space-4xl: 3rem;
+  }
+
+  .section {
+    padding: var(--space-4xl) var(--space-md); /* Less side padding */
+  }
+
+  .capability-card {
+    padding: var(--space-xl); /* Stop cards from feeling like tiny boxes */
+  }
+}
 
     .aero-gallery__item img {
       width: 100%;
@@ -757,69 +847,42 @@
 
     <section id="what-i-build" class="section">
       <header class="section__header reveal">
-        <h2 class="text-gradient">What I build</h2>
+        <h2 class="text-gradient">Advanced Power Systems</h2>
       </header>
-      <div class="capabilities__grid">
-        <div class="capability-card reveal reveal--stagger-1">
-          <div class="capability-card__icon">🚀</div>
-          <h3 class="capability-card__title">High-Discharge Packs</h3>
-          <p class="capability-card__desc">Built for hyperscooters and small-frame builds, featuring dense 40S+
-            configurations where space allows.</p>
-        </div>
+      <section id="capabilities" class="section">
+        <div class="feature-row reveal">
+    <div class="feature-image">
+      <img src="assets/images/batt2.jpg" alt="High-Discharge Packs">
+    </div>
+    <div class="feature-text">
+      <span class="feature-label">01. High-Density Engineering</span>
+      <h2 class="text-gradient">Maximum Output. Minimal Footprint.</h2>
+      <p>We specialize in high-voltage, high-density configurations for hyperscooter and custom small-frame builds. By architecting dense 40S+ arrays, we push the limits of energy density, ensuring that peak performance never comes at the cost of thermal stability or safety.</p>
+    </div>
+  </div>
 
-        <div class="capability-card reveal reveal--stagger-2">
-          <div class="capability-card__icon">⚡</div>
-          <h3 class="capability-card__title">Custom Layouts</h3>
-          <p class="capability-card__desc">Bespoke series/parallel configurations strictly matched to controller and
-            motor specs (e.g., 100V nominal for high-power VESC setups).</p>
-        </div>
+  <div class="feature-row row-reverse reveal">
+    <div class="feature-image">
+      <img src="assets/images/batt1.jpg" alt="Precision Welding">
+    </div>
+    <div class="feature-text">
+      <span class="feature-label">02. Low-Impedance Assembly</span>
+      <h2 class="text-gradient">Thermal Management & Conductivity.</h2>
+      <p>Our assembly process utilizes custom-engineered, pure copper busbars designed for ultra-low resistance. Precision spot-welding ensures every interconnect is optimized to handle massive 450A+ phase current loads without heat soak, providing consistent power delivery under extreme stress.</p>
+    </div>
+  </div>
 
-        <div class="capability-card reveal reveal--stagger-3">
-          <div class="capability-card__icon">🧠</div>
-          <h3 class="capability-card__title">BMS Integration</h3>
-          <p class="capability-card__desc">Intelligent balancing, deep protection parameters, and robust communication
-            via UART or CAN bus protocols where needed.</p>
-        </div>
-
-        <div class="capability-card reveal reveal--stagger-4">
-          <div class="capability-card__icon">🔥</div>
-          <h3 class="capability-card__title">Precision Welding</h3>
-          <p class="capability-card__desc">Spot-welded pure nickel strip (or laser-welded where applicable) engineered
-            specifically for low resistance and high-current durability.</p>
-        </div>
-
-        <div class="capability-card reveal reveal--stagger-5">
-          <div class="capability-card__icon">❄️</div>
-          <h3 class="capability-card__title">Thermal & Mechanical</h3>
-          <p class="capability-card__desc">Rigorous physical design accounting for mounting constraints, heavy
-            vibration, and vital cooling parameters during harsh use.</p>
-        </div>
-      </div>
-
-      <div class="aero-gallery reveal">
-        <div class="aero-gallery__header">
-          <h3 class="text-gradient">Gallery of Battery Builds</h3>
-        </div>
-        <div class="aero-gallery__grid">
-          <div class="aero-gallery__item" onclick="openLightbox(this)">
-            <img src="assets/images/batt1.jpg" alt="Not welded 16S5P Block" loading="lazy">
-            <div class="aero-gallery__caption">Unwelded 16S5P Block</div>
-          </div>
-
-          <div class="aero-gallery__item" onclick="openLightbox(this)">
-            <img src="assets/images/batt2.jpg" alt="Small 6S1P High Discharge drone pack" loading="lazy">
-            <div class="aero-gallery__caption">6S1P High Discharge Pack</div>
-          </div>
-
-          <div class="aero-gallery__item" onclick="openLightbox(this)">
-            <img src="assets/images/batt3.jpg" alt="High-discharge 6S1P with visible 50PL cells" loading="lazy">
-            <div class="aero-gallery__caption">6S1P with 50PL Cells</div>
-          </div>
-        </div>
-      </div>
-
-      <div id="lightbox" class="lightbox" onclick="this.classList.remove('active')">
-        <img id="lightbox-img" src="" alt="">
+  <div class="feature-row reveal">
+    <div class="feature-image">
+      <img src="assets/images/batt3.jpg" alt="High-Discharge Packs">
+    </div>
+    <div class="feature-text">
+      <span class="feature-label">03. Systems Integration</span>
+      <h2 class="text-gradient">Validation & Performance Mapping.</h2>
+      <p>Reliability is the result of rigorous data. Before a single cell is welded, we conduct exhaustive research and stress-testing on cell chemistries and BMS logic. We don’t just build packs; we map every component to your specific motor and controller curves to ensure total system synergy.</p>
+    </div>
+  </div>
+</section>
       </div>
     </section>
 

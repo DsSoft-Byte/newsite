@@ -350,6 +350,67 @@
       overflow: hidden;
     }
 
+    /* Feature Row Container */
+.feature-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3xl);
+  margin-bottom: var(--space-5xl);
+  padding: 0 var(--space-xl);
+}
+
+.feature-image {
+  flex: 1;
+  width: 100%;
+}
+
+.feature-image img {
+  width: 100%;
+  border-radius: 40px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+  border: 1px solid var(--border-subtle);
+}
+
+.feature-text {
+  flex: 1;
+  max-width: 500px;
+}
+
+.feature-label {
+  display: block;
+  color: whitesmoke;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-md);
+}
+
+/* Desktop Polish: Side-by-Side */
+@media (min-width: 1024px) {
+  .feature-row {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: var(--space-5xl);
+  }
+
+  .feature-row.row-reverse {
+    flex-direction: row-reverse;
+  }
+
+  .feature-text {
+    text-align: left;
+  }
+}
+
+/* Apple-style typography tweak */
+h2.text-gradient {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  margin-bottom: var(--space-lg);
+  line-height: 1.1;
+}
+
     .capability-card::before {
       content: '';
       position: absolute;
@@ -728,63 +789,40 @@
 
     <section id="build-specs" class="section">
       <header class="section__header reveal">
-        <h2 class="text-gradient">What goes into a build</h2>
+        <h2 class="text-gradient">The G30 Flagship.</h2>
       </header>
-      <div class="capabilities__grid">
-        <div class="capability-card reveal reveal--stagger-1">
-          <div class="capability-card__icon">🛴</div>
-          <h3 class="capability-card__title">Reinforced Frames</h3>
-          <p class="capability-card__desc">Using Xiaomi and Ninebot bases as robust starting points. We add structural
-            reinforcement and custom mounting for oversized components.</p>
-        </div>
+       <div class="feature-row reveal">
+    <div class="feature-image">
+      <img src="assets/images/lime1.jpg" alt="High-Discharge Packs">
+    </div>
+    <div class="feature-text">
+      <span class="feature-label">01. Extreme Engineering</span>
+      <h2 class="text-gradient">Performance in its purest form.</h2>
+      <p>The G30 redefines the power-to-weight ratio. Delivering a massive 32kW (42HP) output in a compact 45kg chassis, it packs half the power of a standard family car into a fraction of the footprint. Engineered for the bold, it achieves a sustained top speed of 140km/h.</p>
+    </div>
+  </div>
 
-        <div class="capability-card reveal reveal--stagger-2">
-          <div class="capability-card__icon">⚡</div>
-          <h3 class="capability-card__title">Extreme Power</h3>
-          <p class="capability-card__desc">Custom 72V–100V nominal packs paired with VESC ESCs modified to handle 450A+
-            phase current for instant torque.</p>
-        </div>
+  <div class="feature-row row-reverse reveal">
+    <div class="feature-image">
+      <img src="assets/images/lime2.jpg" alt="Precision Welding">
+    </div>
+    <div class="feature-text">
+      <span class="feature-label">02. Deceleration Authority</span>
+      <h2 class="text-gradient">Surgical Braking Power</h2>
+      <p>Speed is nothing without control. Utilizing a braking system derived from championship-grade German MTB platforms, the G30 offers relentless stopping power. These units are thermal-mapped to handle repeated high-speed shedding from triple-digit speeds without fade.</p>
+    </div>
+  </div>
 
-        <div class="capability-card reveal reveal--stagger-3">
-          <div class="capability-card__icon">⚙️</div>
-          <h3 class="capability-card__title">Firmware Tuning</h3>
-          <p class="capability-card__desc">Expert VESC configuration including Field Oriented Control (FOC), custom
-            throttle mapping, and intelligent thermal management.</p>
-        </div>
-
-        <div class="capability-card reveal reveal--stagger-4">
-          <div class="capability-card__icon">🛠️</div>
-          <h3 class="capability-card__title">Safety First</h3>
-          <p class="capability-card__desc">High-speed builds require upgraded braking systems, specialized tires, and
-            mechanical stress-testing before any run.</p>
-        </div>
-      </div>
-
-      <div class="aero-gallery reveal">
-        <div class="aero-gallery__header">
-          <h3 class="text-gradient">Flagship G30-Based Hyperscooter</h3>
-        </div>
-        <div class="aero-gallery__grid">
-          <div class="aero-gallery__item" onclick="openLightbox(this)">
-            <img src="assets/images/lime1.jpg" alt="Not welded 16S5P Block" loading="lazy">
-            <div class="aero-gallery__caption">Whole Scooter</div>
-          </div>
-
-          <div class="aero-gallery__item" onclick="openLightbox(this)">
-            <img src="assets/images/lime2.jpg" alt="Small 6S1P High Discharge drone pack" loading="lazy">
-            <div class="aero-gallery__caption">Brake Details</div>
-          </div>
-
-          <div class="aero-gallery__item" onclick="openLightbox(this)">
-            <img src="assets/images/lime3.jpg" alt="High-discharge 6S1P with visible 50PL cells" loading="lazy">
-            <div class="aero-gallery__caption">Rear Details</div>
-          </div>
-        </div>
-      </div>
-
-      <div id="lightbox" class="lightbox" onclick="this.classList.remove('active')">
-        <img id="lightbox-img" src="" alt="">
-      </div>
+  <div class="feature-row reveal">
+    <div class="feature-image">
+      <img src="assets/images/lime3.jpg" alt="High-Discharge Packs">
+    </div>
+    <div class="feature-text">
+      <span class="feature-label">03. Proven Endurance</span>
+      <h2 class="text-gradient">Inconspicuous by Design.</h2>
+      <p>With over 3,000km of real-world testing, the G30 platform is built for longevity. Its genius lies in its aesthetic: a rugged, rental-inspired silhouette that provides total mechanical reliability while remaining completely under the radar.</p>
+    </div>
+  </div>
     </section>
 
     <section id="performance" class="section">

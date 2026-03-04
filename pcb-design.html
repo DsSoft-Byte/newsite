@@ -337,6 +337,67 @@
       background: var(--bg-glass-hover);
     }
 
+    /* Feature Row Container */
+.feature-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3xl);
+  margin-bottom: var(--space-5xl);
+  padding: 0 var(--space-xl);
+}
+
+.feature-image {
+  flex: 1;
+  width: 100%;
+}
+
+.feature-image img {
+  width: 100%;
+  border-radius: 40px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+  border: 1px solid var(--border-subtle);
+}
+
+.feature-text {
+  flex: 1;
+  max-width: 500px;
+}
+
+.feature-label {
+  display: block;
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-md);
+}
+
+/* Desktop Polish: Side-by-Side */
+@media (min-width: 1024px) {
+  .feature-row {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: var(--space-5xl);
+  }
+
+  .feature-row.row-reverse {
+    flex-direction: row-reverse;
+  }
+
+  .feature-text {
+    text-align: left;
+  }
+}
+
+/* Apple-style typography tweak */
+h2.text-gradient {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  margin-bottom: var(--space-lg);
+  line-height: 1.1;
+}
+
     .capability-card__icon {
       width: 56px;
       height: 56px;
@@ -670,55 +731,38 @@
     </section>
 
     <section id="capabilities" class="section">
-      <div class="capabilities__grid">
-        <div class="capability-card reveal">
-          <div class="capability-card__icon">🔬</div>
-          <h3 class="capability-card__title">Advanced Microsoldering</h3>
-          <ul class="capability-list">
-            <li><strong>Component Scale:</strong> 0603 resistors and smaller under high-power magnification.</li>
-            <li><strong>GPU & BGA:</strong> VRAM replacement, core rework, and precise BGA reballing.</li>
-            <li><strong>MCU Packages:</strong> QFP64 STM32 removal, replacement, and complex trace repair.</li>
-            <li><strong>Fault Isolation:</strong> Schematic recovery and board-level debugging for custom hardware.</li>
-          </ul>
-        </div>
+      <div class="feature-row reveal">
+    <div class="feature-image">
+      <img src="assets/images/pcb1.jpg" alt="High-Discharge Packs">
+    </div>
+    <div class="feature-text">
+      <span class="feature-label">01. Engineering & Restoration</span>
+      <h2 class="text-gradient">Outperforming the Factory.</h2>
+      <p>Every build or rework born from our community trials is engineered to surpass OEM standards. Whether we are architecting entirely new power systems or performing surgical-grade repairs on high-end GPUs, our goal is simple: absolute peak performance that outlasts the original.</p>
+    </div>
+  </div>
 
-        <div class="capability-card reveal">
-          <div class="capability-card__icon">📐</div>
-          <h3 class="capability-card__title">Custom PCB Design</h3>
-          <ul class="capability-list">
-            <li><strong>Full Pipeline:</strong> Schematic capture to fabrication-ready layout and DFM.</li>
-            <li><strong>Power Electronics:</strong> High-current and thermal optimization for motor controllers.</li>
-            <li><strong>Bespoke Solutions:</strong> Custom BMS, instrumentation, and revision-controlled prototypes.
-            </li>
-          </ul>
-        </div>
-      </div>
+  <div class="feature-row row-reverse reveal">
+    <div class="feature-image">
+      <img src="assets/images/pcb5.jpg" alt="Precision Welding">
+    </div>
+    <div class="feature-text">
+      <span class="feature-label">02. Architectural Optimization</span>
+      <h2 class="text-gradient">Refining Existing Excellence.</h2>
+      <p>Even the best PCB designs have untapped potential. We look beyond the factory spec to identify bottlenecks, swapping critical components and modifying board layouts to push stability and efficiency further than the original designers intended.</p>
+    </div>
+  </div>
 
-      <div class="aero-gallery reveal">
-        <div class="aero-gallery__header">
-          <h3 class="text-gradient">Recent Projects</h3>
-        </div>
-        <div class="aero-gallery__grid">
-          <div class="aero-gallery__item" onclick="openLightbox(this)">
-            <img src="assets/images/pcb1.jpg" alt="Not welded 16S5P Block" loading="lazy">
-            <div class="aero-gallery__caption">100V 300A Vesc Controller</div>
-          </div>
-
-          <div class="aero-gallery__item" onclick="openLightbox(this)">
-            <img src="assets/images/pcb2.jpg" alt="Small 6S1P High Discharge drone pack" loading="lazy">
-            <div class="aero-gallery__caption">Close-Up of STM32 Logic</div>
-          </div>
-
-          <div class="aero-gallery__item" onclick="openLightbox(this)">
-            <img src="assets/images/pcb3.jpg" alt="High-discharge 6S1P with visible 50PL cells" loading="lazy">
-            <div class="aero-gallery__caption">12 TOLT 100V 411A MOSFETs</div>
-          </div>
-        </div>
-      </div>
-
-      <div id="lightbox" class="lightbox" onclick="this.classList.remove('active')">
-        <img id="lightbox-img" src="" alt="">
-      </div>
+  <div class="feature-row reveal">
+    <div class="feature-image">
+      <img src="assets/images/pcb4.jpg" alt="High-Discharge Packs">
+    </div>
+    <div class="feature-text">
+      <span class="feature-label">03. Modular Reliability</span>
+      <h2 class="text-gradient">Redefining Uptime.</h2>
+      <p>Complexity shouldn't mean fragility. We treat modularity as a core principle, ensuring every design is resilient, accessible, and ready for rapid, on-site servicing. Minimal downtime isn't a feature—it’s a requirement.</p>
+    </div>
+  </div>
     </section>
   </main>
 

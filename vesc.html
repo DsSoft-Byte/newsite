@@ -340,6 +340,67 @@
       overflow: hidden;
     }
 
+    /* Feature Row Container */
+.feature-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3xl);
+  margin-bottom: var(--space-5xl);
+  padding: 0 var(--space-xl);
+}
+
+.feature-image {
+  flex: 1;
+  width: 100%;
+}
+
+.feature-image img {
+  width: 100%;
+  border-radius: 40px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+  border: 1px solid var(--border-subtle);
+}
+
+.feature-text {
+  flex: 1;
+  max-width: 500px;
+}
+
+.feature-label {
+  display: block;
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-md);
+}
+
+/* Desktop Polish: Side-by-Side */
+@media (min-width: 1024px) {
+  .feature-row {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: var(--space-5xl);
+  }
+
+  .feature-row.row-reverse {
+    flex-direction: row-reverse;
+  }
+
+  .feature-text {
+    text-align: left;
+  }
+}
+
+/* Apple-style typography tweak */
+h2.text-gradient {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  margin-bottom: var(--space-lg);
+  line-height: 1.1;
+}
+
     .capability-card:hover {
       transform: translateY(-8px);
       border-color: var(--border-strong);
@@ -659,64 +720,38 @@
     </section>
 
     <section id="capabilities" class="section">
-      <header class="section__header reveal">
-        <h2 class="text-gradient">Capabilities</h2>
-      </header>
-      <div class="capabilities__grid">
-        <div class="capability-card reveal">
-          <div class="capability-card__icon">📈</div>
-          <h3 class="capability-card__title">Current & Voltage</h3>
-          <p class="capability-card__desc">Standardizing 450A+ phase current and 100V nominal configurations. Perfectly
-            matched to high-power motor and battery builds.</p>
-        </div>
+       <div class="feature-row reveal">
+    <div class="feature-image">
+      <img src="assets/images/pcb1.jpg" alt="High-Discharge Packs">
+    </div>
+    <div class="feature-text">
+      <span class="feature-label">01. Assembly</span>
+      <h2 class="text-gradient">Chasing Perfection</h2>
+      <p>Battle tested in our Flagship scooters, over 15K kilometers on end, our ESCs are built to last and outlast any build you would do.</p>
+    </div>
+  </div>
 
-        <div class="capability-card reveal">
-          <div class="capability-card__icon">💻</div>
-          <h3 class="capability-card__title">Firmware Tuning</h3>
-          <p class="capability-card__desc">Deep VESC Tool configuration including FOC parameters, braking curves, and
-            proactive thermal rollback to protect hardware.</p>
-        </div>
+  <div class="feature-row row-reverse reveal">
+    <div class="feature-image">
+      <img src="assets/images/mp1.jpg" alt="Precision Welding">
+    </div>
+    <div class="feature-text">
+      <span class="feature-label">02. Sourcing</span>
+      <h2 class="text-gradient">From part to finished Board</h2>
+      <p>No matter what your usecase needs, we can get it. Partnering with tens of suppliers in center of Shenzhen we can get everything, fast.</p>
+    </div>
+  </div>
 
-        <div class="capability-card reveal">
-          <div class="capability-card__icon">🌡️</div>
-          <h3 class="capability-card__title">Thermal Engineering</h3>
-          <p class="capability-card__desc">Advanced heatsinking and airflow integration. We ensure sustained high
-            current doesn't cook the FETs or the PCB.</p>
-        </div>
-
-        <div class="capability-card reveal">
-          <div class="capability-card__icon">🔌</div>
-          <h3 class="capability-card__title">Compact Integration</h3>
-          <p class="capability-card__desc">Optimizing placement and wiring in tight frames like Xiaomi and Ninebot with
-            clean, high-gauge cable runs and strain relief.</p>
-        </div>
-      </div>
-
-      <div class="aero-gallery reveal">
-        <div class="aero-gallery__header">
-          <h3 class="text-gradient">Gallery of VESC Builds</h3>
-        </div>
-        <div class="aero-gallery__grid">
-          <div class="aero-gallery__item" onclick="openLightbox(this)">
-            <img src="assets/images/mp1.jpg" alt="Not welded 16S5P Block" loading="lazy">
-            <div class="aero-gallery__caption">MP2-ESC - 150V 250A</div>
-          </div>
-
-          <div class="aero-gallery__item" onclick="openLightbox(this)">
-            <img src="assets/images/paolo2.jpg" alt="Small 6S1P High Discharge drone pack" loading="lazy">
-            <div class="aero-gallery__caption">100V 300A VESC</div>
-          </div>
-
-          <div class="aero-gallery__item" onclick="openLightbox(this)">
-            <img src="assets/images/pcb3.jpg" alt="High-discharge 6S1P with visible 50PL cells" loading="lazy">
-            <div class="aero-gallery__caption">12 High Power MOSFETs</div>
-          </div>
-        </div>
-      </div>
-
-      <div id="lightbox" class="lightbox" onclick="this.classList.remove('active')">
-        <img id="lightbox-img" src="" alt="">
-      </div>
+  <div class="feature-row reveal">
+    <div class="feature-image">
+      <img src="assets/images/pcb3.jpg" alt="High-Discharge Packs">
+    </div>
+    <div class="feature-text">
+      <span class="feature-label">03. Transistors</span>
+      <h2 class="text-gradient">The Power-Stuff</h2>
+      <p>We evaluate, buy and test dozens of transistors every week, making sure we provide you with the most powerful and reliable ESCs you can buy.</p>
+    </div>
+  </div>
     </section>
 
     <section id="why-vesc" class="section">
