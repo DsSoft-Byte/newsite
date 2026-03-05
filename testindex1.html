@@ -591,11 +591,11 @@
         const lastRect  = lastCard.getBoundingClientRect();
         const firstRect = cards[0].getBoundingClientRect();
 
-        // Scrolling down past the last card — let the user leave freely
-        if (scrollingDown && lastRect.bottom < window.innerHeight * 0.5) return;
+        // Scrolling down and the last card has substantially left the viewport — free exit
+        if (scrollingDown && lastRect.top < -window.innerHeight * 0.25) return;
 
-        // Scrolling up above the first card — let the user leave freely
-        if (!scrollingDown && firstRect.top > window.innerHeight * 0.5) return;
+        // Scrolling up and the first card hasn't entered the viewport yet — free entry, no snap
+        if (!scrollingDown && firstRect.bottom < window.innerHeight * 0.25) return;
 
         const nearest  = nearestAlignedIndex();
         const isMobile = window.innerWidth <= 768;
@@ -603,8 +603,8 @@
         const cardTop  = cards[nearest].getBoundingClientRect().top - navH;
 
         // Only snap if meaningfully misaligned (relaxed threshold)
-        if (Math.abs(cardTop) > 80) snapTo(nearest);
-      }, 350); // longer debounce — won't fight slow or deliberate scrolls
+        if (Math.abs(cardTop) > 160) snapTo(nearest);
+      }, 600); // generous debounce — won't fight slow or deliberate scrolls
 
     }, { passive: true });
 
