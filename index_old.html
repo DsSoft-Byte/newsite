@@ -34,9 +34,6 @@
       --space-xs: 0.25rem; --space-sm: 0.5rem; --space-md: 1rem;
       --space-lg: 1.5rem;  --space-xl: 2rem;   --space-2xl: 3rem;
       --space-3xl: 4rem;   --space-4xl: 6rem;  --space-5xl: 8rem;
-
-      /* JS will set this to window.innerHeight px; CSS dvh is the modern fallback */
-      --vh: 1vh;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -102,13 +99,7 @@
 
     /* ── Hero ── */
     .hero {
-      /* Use dvh (dynamic viewport height) where supported — it tracks the
-         actual available space as iOS Safari's browser chrome shows/hides.
-         Fall back to the JS-set --vh custom property, then plain vh. */
-      min-height: 100vh;
-      min-height: calc(var(--vh, 1vh) * 100);
-      min-height: 100dvh;
-      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
       position: relative; padding: var(--space-5xl) var(--space-xl) var(--space-4xl); overflow: hidden;
     }
     .hero__bg { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
@@ -162,12 +153,7 @@
     .capabilities__header p  { font-size: 1.125rem; }
 
     .capability-card {
-      position: relative; width: 100%;
-      /* Same triple-layer dvh fix for the cards — this is the key fix for iOS Safari.
-         The JS --vh var handles older iOS; dvh handles modern Safari; vh is the baseline. */
-      height: 100vh;
-      height: calc(var(--vh, 1vh) * 100);
-      height: 100dvh;
+      position: relative; width: 100%; height: 100vh;
       overflow: hidden; display: flex; align-items: flex-end; cursor: pointer;
     }
 
@@ -229,7 +215,7 @@
     .capability-card + .capability-card { border-top: 1px solid rgba(255,255,255,0.06); }
 
     @media (max-width: 768px) {
-      .capability-card { height: 92vh; height: calc(var(--vh, 1vh) * 92); height: 92dvh; }
+      .capability-card { height: 92vh; }
       .capability-card__title { font-size: clamp(2rem, 10vw, 3rem); }
     }
 
@@ -449,20 +435,6 @@
   </footer>
 
   <script>
-    /* ── iOS Safari viewport height fix ───────────────────────────────────────
-       iOS Safari's 100vh includes the browser chrome (address bar, tab bar),
-       so full-screen elements end up clipped. We measure the real inner height
-       and expose it as --vh, then update it on resize only (NOT on every scroll,
-       which would cause constant reflow as the chrome shows/hides).
-       Modern Safari supports 'dvh' (dynamic viewport height) in CSS directly,
-       so the triple-declaration fallback in CSS handles that path automatically.
-    ── */
-    function setVh() {
-      document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
-    }
-    setVh();
-    window.addEventListener('resize', setVh, { passive: true });
-
     /* ── Navbar ── */
     const navbar     = document.getElementById('navbar');
     const menuToggle = document.getElementById('menu-toggle');
@@ -508,16 +480,21 @@
       return d;
     });
 
-    let currentCard    = -1;
-    let isSnapping     = false;
+    let currentCard    = -1;    // active card index
+    let isSnapping     = false; // true while programmatic scroll is running
     let snapTimer      = null;
     let scrollEndTimer = null;
 
+    /* Show dots rail only while the card track is on screen */
     const trackObserver = new IntersectionObserver(entries => {
       dotsWrap.classList.toggle('is-visible', entries[0].isIntersecting);
     }, { threshold: 0.01 });
     trackObserver.observe(snapTrack);
 
+    /*
+      Activate a card — idempotent.
+      Guards against repeated calls with the same index so dots never flicker.
+    */
     function activateCard(index) {
       if (index === currentCard) return;
       currentCard = index;
@@ -525,28 +502,26 @@
       cards.forEach((c, i) => {
         const on = (i === index);
         c.classList.toggle('is-active', on);
-        if (on) c.classList.add('was-active');
+        if (on) c.classList.add('was-active'); // permanent — text stays visible
       });
       dots.forEach((d, i) => d.classList.toggle('is-active', i === index));
 
       if (index > 0 && scrollHint) scrollHint.classList.add('is-hidden');
     }
 
+    /* Smooth-scroll the page to align a card flush with the top of the viewport */
     function snapTo(index, behavior = 'smooth') {
       if (index < 0 || index >= cards.length) return;
       isSnapping = true;
-      // On mobile the fixed navbar physically covers the top of the card,
-      // so we offset by its height. On desktop the navbar is a transparent
-      // overlay and cards should snap flush to y=0.
-      const isMobile = window.innerWidth <= 768;
-      const navH     = isMobile ? navbar.getBoundingClientRect().height : 0;
-      const cardTop  = cards[index].getBoundingClientRect().top;
-      const target   = window.scrollY + cardTop - navH;
-      window.scrollTo({ top: target, behavior });
+      cards[index].scrollIntoView({ behavior, block: 'start' });
       clearTimeout(snapTimer);
       snapTimer = setTimeout(() => { isSnapping = false; }, 1000);
     }
 
+    /*
+      Which card has the most pixels visible inside the viewport right now?
+      Pure geometry — no IntersectionObserver threshold weirdness.
+    */
     function mostVisibleIndex() {
       let best = -1, bestPx = 0;
       cards.forEach((c, i) => {
@@ -557,35 +532,40 @@
       return best;
     }
 
+    /*
+      Which card is the least misaligned from the top of the viewport?
+      Used to decide where to snap after scrolling stops.
+    */
     function nearestAlignedIndex() {
-      const isMobile = window.innerWidth <= 768;
-      const navH = isMobile ? navbar.getBoundingClientRect().height : 0;
       let best = 0, bestDist = Infinity;
       cards.forEach((c, i) => {
-        const dist = Math.abs(c.getBoundingClientRect().top - navH);
+        const dist = Math.abs(c.getBoundingClientRect().top);
         if (dist < bestDist) { bestDist = dist; best = i; }
       });
       return best;
     }
 
+    /* Single, cheap scroll listener — drives both active-card sync and snap */
     window.addEventListener('scroll', () => {
+
+      /* 1 ▸ Keep dots/content in sync with whatever is most visible */
       const visible = mostVisibleIndex();
       if (visible !== -1) activateCard(visible);
 
+      /* 2 ▸ After scrolling settles, snap the nearest card flush to the viewport */
       if (isSnapping) return;
       clearTimeout(scrollEndTimer);
       scrollEndTimer = setTimeout(() => {
         if (isSnapping) return;
 
+        /* Skip snap if the card track isn't on screen at all */
         const tr = snapTrack.getBoundingClientRect();
         if (tr.bottom < 0 || tr.top > window.innerHeight) return;
 
-        const nearest  = nearestAlignedIndex();
-        const isMobile = window.innerWidth <= 768;
-        const navH     = isMobile ? navbar.getBoundingClientRect().height : 0;
-        const cardTop  = cards[nearest].getBoundingClientRect().top - navH;
-        if (Math.abs(cardTop) > 2) snapTo(nearest);
-      }, 150);
+        const nearest = nearestAlignedIndex();
+        const cardTop = cards[nearest].getBoundingClientRect().top;
+        if (Math.abs(cardTop) > 2) snapTo(nearest); /* >2 px off → snap */
+      }, 150); /* 150 ms debounce — fast enough to feel snappy, won't fight the user */
 
     }, { passive: true });
 
@@ -611,7 +591,7 @@
       else           snapTo(Math.max(currentCard - 1, 0));
     }, { passive: true });
 
-    /* ── Boot ── */
+    /* ── Boot: activate whatever card is most visible on load ── */
     const boot = mostVisibleIndex();
     activateCard(boot !== -1 ? boot : 0);
   </script>
