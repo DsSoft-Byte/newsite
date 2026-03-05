@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DsSoft — Full-stack hardware & software</title>
+  <meta name="description" content="Reverse engineering, embedded systems, PCB design and more.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep: #000000;
+      --bg-elevated: #111111;
+      --bg-glass: rgba(20, 20, 22, 0.4);
+      --bg-glass-hover: rgba(30, 30, 34, 0.5);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.16);
+      --glass-edge: inset 0 1px 1px rgba(255, 255, 255, 0.15);
+      --text-primary: #F5F5F7;
+      --text-secondary: #86868B;
+      --text-muted: #515154;
+      --accent: #0A84FF;
+      --accent-glow: rgba(10, 132, 255, 0.4);
+      --btn-bg: #F5F5F7;
+      --btn-text: #000000;
+      --btn-bg-dark: rgba(255, 255, 255, 0.08);
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --duration-fast: 250ms;
+      --duration-normal: 400ms;
+      --duration-slow: 700ms;
+      --space-xs: 0.25rem; --space-sm: 0.5rem; --space-md: 1rem;
+      --space-lg: 1.5rem;  --space-xl: 2rem;   --space-2xl: 3rem;
+      --space-3xl: 4rem;   --space-4xl: 6rem;  --space-5xl: 8rem;
+
+      /* JS will set this to window.innerHeight px; CSS dvh is the modern fallback */
+      --vh: 1vh;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { overflow-x: hidden; background: var(--bg-deep); height: 100%; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg-deep); color: var(--text-primary);
+      line-height: 1.6; overflow-x: hidden;
+      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+      -ms-overflow-style: none; scrollbar-width: none;
+    }
+    body::-webkit-scrollbar { display: none; }
+
+    h1 { font-size: clamp(2.5rem, 6vw + 1rem, 4.5rem); font-weight: 700; letter-spacing: -0.04em; line-height: 1.1; }
+    h2 { font-size: clamp(1.75rem, 4vw + 0.5rem, 3rem); font-weight: 600; letter-spacing: -0.03em; }
+    h3 { font-size: clamp(1.25rem, 2vw + 0.25rem, 1.5rem); font-weight: 600; letter-spacing: -0.02em; }
+    p  { font-size: clamp(1rem, 1.2vw + 0.5rem, 1.125rem); color: var(--text-secondary); }
+    a  { color: inherit; text-decoration: none; }
+
+    .text-gradient {
+      background: linear-gradient(180deg, #FFFFFF 0%, #86868B 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    /* ── Navbar ── */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      padding: var(--space-md) var(--space-xl);
+      display: flex; align-items: center; justify-content: space-between; min-height: 64px;
+      background: rgba(0,0,0,0.2);
+      backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid transparent;
+      transition: all var(--duration-normal) var(--ease-out-expo);
+    }
+    .navbar.is-solid { background: rgba(10,10,12,0.65); border-bottom: 1px solid var(--border-subtle); box-shadow: 0 4px 30px rgba(0,0,0,0.5); }
+    .navbar__brand { font-weight: 600; font-size: 1.125rem; letter-spacing: -0.02em; color: var(--text-primary); z-index: 1100; }
+    .navbar__nav   { display: flex; align-items: center; }
+
+    .menu-toggle { display: none; background: none; border: none; cursor: pointer; padding: 10px; z-index: 1200; position: relative; }
+    .hamburger { display: block; width: 24px; height: 2px; background: var(--text-primary); position: relative; transition: background 0.3s; }
+    .hamburger::before, .hamburger::after { content: ''; position: absolute; width: 24px; height: 2px; background: var(--text-primary); transition: all 0.3s; }
+    .hamburger::before { top: -8px; } .hamburger::after { bottom: -8px; }
+    .menu-toggle.is-active .hamburger { background: transparent; }
+    .menu-toggle.is-active .hamburger::before { transform: rotate(45deg); top: 0; }
+    .menu-toggle.is-active .hamburger::after  { transform: rotate(-45deg); bottom: 0; }
+
+    .navbar__links { display: flex; gap: var(--space-xl); list-style: none; }
+    .navbar__links a { font-size: 0.875rem; font-weight: 500; color: var(--text-secondary); transition: color var(--duration-fast); }
+    .navbar__links a:hover { color: var(--text-primary); }
+
+    @media (max-width: 768px) {
+      .menu-toggle { display: block; }
+      .navbar__links {
+        position: fixed; top: 0; right: -100%; width: 100%; height: 100vh;
+        background: rgba(0,0,0,0.98); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+        flex-direction: column; align-items: center; justify-content: center;
+        gap: var(--space-3xl); transition: right 0.5s var(--ease-out-expo); z-index: 1050;
+      }
+      .navbar__links.is-open { right: 0; }
+      .navbar__links a { font-size: 1.5rem; color: var(--text-primary); }
+    }
+
+    /* ── Hero ── */
+    .hero {
+      /* Use dvh (dynamic viewport height) where supported — it tracks the
+         actual available space as iOS Safari's browser chrome shows/hides.
+         Fall back to the JS-set --vh custom property, then plain vh. */
+      min-height: 100vh;
+      min-height: calc(var(--vh, 1vh) * 100);
+      min-height: 100dvh;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; padding: var(--space-5xl) var(--space-xl) var(--space-4xl); overflow: hidden;
+    }
+    .hero__bg { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+    .hero__orb { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.6; animation: orb-float 20s var(--ease-in-out) infinite alternate; }
+    .hero__orb--1 { width: 60vw; height: 60vw; max-width: 800px; max-height: 800px; background: radial-gradient(circle, #094074, #3B82F6, #8B5CF6); top: -20%; left: -10%; }
+    .hero__orb--2 { width: 50vw; height: 50vw; max-width: 600px; max-height: 600px; background: radial-gradient(circle, #7C3AED, #EC4899, #F43F5E); bottom: -10%; right: -5%; animation-delay: -5s; }
+    @keyframes orb-float { 0% { transform: translate(0,0) scale(1); } 100% { transform: translate(5%,-5%) scale(1.1); } }
+
+    .hero__content { position: relative; z-index: 2; text-align: center; max-width: 800px; margin: 0 auto; }
+    .hero__badge {
+      display: inline-flex; align-items: center; gap: var(--space-sm); padding: 6px 16px; margin-bottom: var(--space-xl);
+      background: rgba(255,255,255,0.03); backdrop-filter: saturate(180%) blur(30px); -webkit-backdrop-filter: saturate(180%) blur(30px);
+      border: 1px solid var(--border-subtle); box-shadow: var(--glass-edge); border-radius: 999px;
+      font-size: 0.8125rem; font-weight: 500; color: #D1D1D6;
+      opacity: 0; animation: fade-up 1s var(--ease-out-expo) 0.2s forwards;
+    }
+    .hero__headline { margin-bottom: var(--space-lg); opacity: 0; animation: fade-up 1s var(--ease-out-expo) 0.3s forwards; }
+    .hero__subtitle { max-width: 640px; margin: 0 auto var(--space-2xl); opacity: 0; animation: fade-up 1s var(--ease-out-expo) 0.4s forwards; }
+    .hero__cta {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 16px 32px; background: var(--btn-bg); color: var(--btn-text);
+      font-weight: 600; font-size: 1rem; letter-spacing: -0.01em; border-radius: 999px; cursor: pointer;
+      transition: all var(--duration-fast) var(--ease-out-expo);
+      opacity: 0; animation: fade-up 1s var(--ease-out-expo) 0.5s forwards;
+    }
+    .hero__cta:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(255,255,255,0.2); }
+    .hero__glass {
+      position: absolute; background: var(--bg-glass);
+      backdrop-filter: saturate(180%) blur(40px); -webkit-backdrop-filter: saturate(180%) blur(40px);
+      border: 1px solid var(--border-subtle); box-shadow: 0 30px 60px rgba(0,0,0,0.6), var(--glass-edge);
+      border-radius: 20px; padding: var(--space-lg) var(--space-xl);
+      font-size: 0.875rem; font-weight: 500; color: var(--text-primary);
+      opacity: 0; animation: fade-up 1.2s var(--ease-out-expo) 0.8s forwards; z-index: 1;
+    }
+    .hero__glass--1 { top: 20%; left: 5%; transform: rotate(-3deg); }
+    .hero__glass--2 { bottom: 20%; right: 5%; transform: rotate(3deg); }
+    @media (max-width: 1280px) { .hero__glass { display: none; } }
+    @keyframes fade-up { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ── Metrics ── */
+    .metrics { position: relative; z-index: 2; padding: var(--space-xl) var(--space-xl) var(--space-4xl); border-bottom: 1px solid var(--border-subtle); }
+    .metrics__inner { max-width: 1000px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-around; gap: var(--space-xl); }
+    .metrics__item { text-align: center; }
+    .metrics__value { font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; color: var(--text-primary); letter-spacing: -0.04em; display: block; margin-bottom: 4px; }
+    .metrics__label { font-size: 0.8125rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.1em; }
+
+    /* ── Capability Cards ── */
+    .immersive-wrapper { position: relative; z-index: 2; }
+    .capabilities__header { text-align: center; padding: var(--space-5xl) var(--space-xl) var(--space-3xl); max-width: 700px; margin: 0 auto; }
+    .capabilities__header h2 { margin-bottom: var(--space-md); }
+    .capabilities__header p  { font-size: 1.125rem; }
+
+    .capability-card {
+      position: relative; width: 100%;
+      /* Same triple-layer dvh fix for the cards — this is the key fix for iOS Safari.
+         The JS --vh var handles older iOS; dvh handles modern Safari; vh is the baseline. */
+      height: 100vh;
+      height: calc(var(--vh, 1vh) * 100);
+      height: 100dvh;
+      overflow: hidden; display: flex; align-items: flex-end; cursor: pointer;
+    }
+
+    .capability-card__bg {
+      position: absolute; inset: 0;
+      background-image: var(--bg-image); background-size: cover; background-position: center;
+      transform: scale(1.08);
+      transition: transform 1.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
+      opacity: 0.55; will-change: transform, opacity;
+    }
+    .capability-card.is-active  .capability-card__bg,
+    .capability-card.was-active .capability-card__bg { transform: scale(1); opacity: 0.65; }
+
+    .capability-card__scrim {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.42) 45%, rgba(0,0,0,0.08) 80%, transparent 100%);
+      z-index: 1;
+    }
+    .capability-card__scrim-top {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 30%);
+      z-index: 1;
+    }
+
+    .capability-card__content {
+      position: relative; z-index: 2;
+      padding: clamp(2rem, 5vw, 4rem); padding-bottom: clamp(2.5rem, 6vw, 5rem);
+      width: 100%; max-width: 900px;
+      transform: translateY(32px); opacity: 0;
+      transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1) 0.15s, opacity 0.15s linear;
+      will-change: transform, opacity;
+    }
+    .capability-card.is-active  .capability-card__content,
+    .capability-card.was-active .capability-card__content { transform: translateY(0); opacity: 1; }
+
+    .capability-card__eyebrow {
+      display: inline-block; font-size: 0.75rem; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 0.75rem;
+    }
+    .capability-card__title { font-size: clamp(2.6rem, 7vw, 5.5rem); font-weight: 700; letter-spacing: -0.04em; line-height: 1.0; margin-bottom: 1rem; }
+    .capability-card__desc  { font-size: clamp(1rem, 1.5vw, 1.2rem); color: rgba(255,255,255,0.6); max-width: 480px; margin-bottom: 2rem; line-height: 1.55; }
+    .capability-card__link  {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.9375rem; font-weight: 600; color: #fff;
+      border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 2px;
+      transition: gap 0.25s var(--ease-out-expo), border-color 0.25s ease;
+    }
+    .capability-card__link:hover { gap: 14px; border-color: rgba(255,255,255,0.8); }
+
+    .capability-card__counter {
+      position: absolute; top: clamp(1.5rem,4vw,2.5rem); right: clamp(1.5rem,4vw,2.5rem); z-index: 3;
+      font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.08em; color: rgba(255,255,255,0.35);
+      opacity: 0; transform: translateY(-8px);
+      transition: opacity 0.6s ease 0.4s, transform 0.6s var(--ease-out-expo) 0.4s;
+    }
+    .capability-card.is-active  .capability-card__counter,
+    .capability-card.was-active .capability-card__counter { opacity: 1; transform: translateY(0); }
+
+    .capability-card + .capability-card { border-top: 1px solid rgba(255,255,255,0.06); }
+
+    @media (max-width: 768px) {
+      .capability-card { height: 92vh; height: calc(var(--vh, 1vh) * 92); height: 92dvh; }
+      .capability-card__title { font-size: clamp(2rem, 10vw, 3rem); }
+    }
+
+    /* ── Secondary tiles ── */
+    .secondary-section { padding: var(--space-5xl) var(--space-xl); max-width: 1200px; margin: 0 auto; }
+    .secondary-section__header { text-align: center; margin-bottom: var(--space-3xl); }
+    .secondary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-lg); }
+    .glass-tile {
+      background: rgba(255,255,255,0.03); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid var(--border-subtle); border-radius: 32px; padding: var(--space-2xl);
+      text-decoration: none; transition: all 0.5s var(--ease-out-expo); display: flex; flex-direction: column; height: 100%;
+    }
+    .glass-tile:hover { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.2); transform: translateY(-5px); }
+    .glass-tile__icon  { font-size: 1.5rem; margin-bottom: var(--space-md); opacity: 0.8; }
+    .glass-tile__title { font-size: 1.25rem; font-weight: 600; color: var(--text-primary); margin-bottom: var(--space-xs); }
+    .glass-tile__desc  { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.5; }
+    @media (max-width: 768px) { .glass-tile { padding: var(--space-xl); border-radius: 24px; } }
+
+    /* ── CTA Panel ── */
+    .cta-section { padding: 0 var(--space-xl) var(--space-5xl); max-width: 1200px; margin: 0 auto; }
+    .cta-panel {
+      padding: var(--space-5xl) var(--space-2xl); border-radius: 48px; position: relative; overflow: hidden;
+      border: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: center; text-align: center; background: #000;
+    }
+    .cta-panel::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: var(--bg-image); background-size: cover; background-position: center;
+      opacity: 0.4; transition: transform 2s var(--ease-out-expo); z-index: 1;
+    }
+    .cta-panel__overlay { position: absolute; inset: 0; background: radial-gradient(circle at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%); backdrop-filter: blur(2px); z-index: 2; }
+    .cta-panel__content { position: relative; z-index: 3; }
+    .cta-panel:hover::before { transform: scale(1.1); }
+    .cta-panel__btn { display: inline-flex; align-items: center; padding: 16px 32px; background: #FFFFFF; color: #000000; font-weight: 600; border-radius: 999px; transition: all 0.4s var(--ease-out-expo); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+    .cta-panel__btn:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 20px 40px rgba(0,0,0,0.5); background: #F5F5F7; }
+    .cta-panel__title { margin-bottom: var(--space-lg); }
+    .cta-panel__text  { margin-bottom: var(--space-3xl); font-size: 1.125rem; line-height: 1.6; max-width: 550px; margin-left: auto; margin-right: auto; color: var(--text-secondary); }
+
+    /* ── Reveals ── */
+    .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s var(--ease-out-expo); }
+    .reveal.is-visible { opacity: 1; transform: translateY(0); }
+    .reveal--stagger-1 { transition-delay: 0.05s; } .reveal--stagger-2 { transition-delay: 0.1s; }
+    .reveal--stagger-3 { transition-delay: 0.15s; } .reveal--stagger-4 { transition-delay: 0.2s; }
+
+    /* ── Footer ── */
+    .footer { padding: var(--space-2xl) var(--space-xl); border-top: 1px solid var(--border-subtle); background: var(--bg-deep); }
+    .footer__inner { max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-md); }
+    .footer__copy, .footer__links a { font-size: 0.875rem; color: var(--text-muted); font-weight: 500; }
+    .footer__links { display: flex; gap: var(--space-lg); list-style: none; }
+    .footer__links a:hover { color: var(--text-primary); }
+    @media (max-width: 768px) { .hero__orb { opacity: 0.4; } }
+
+    /* ── Scroll hint ── */
+    .scroll-hint { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); z-index: 5; display: flex; flex-direction: column; align-items: center; gap: 6px; opacity: 0; animation: hint-fade 1s ease 2s forwards; pointer-events: none; }
+    .scroll-hint__label { font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.35); }
+    .scroll-hint__arrow { width: 20px; height: 20px; border-right: 1.5px solid rgba(255,255,255,0.35); border-bottom: 1.5px solid rgba(255,255,255,0.35); transform: rotate(45deg); animation: arrow-bounce 1.6s ease-in-out 2.2s infinite; }
+    @keyframes hint-fade { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes arrow-bounce { 0%,100% { transform: rotate(45deg) translate(0,0); } 50% { transform: rotate(45deg) translate(4px,4px); } }
+    .scroll-hint.is-hidden { opacity: 0 !important; transition: opacity 0.4s ease; animation: none; }
+
+    /* ── Progress dots ── */
+    .card-dots { position: fixed; right: 1.5rem; top: 50%; transform: translateY(-50%); z-index: 500; display: flex; flex-direction: column; gap: 10px; pointer-events: none; opacity: 0; transition: opacity 0.4s ease; }
+    .card-dots.is-visible { opacity: 1; }
+    .card-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.25); transition: background 0.3s ease, transform 0.3s ease; }
+    .card-dot.is-active { background: #fff; transform: scale(1.5); }
+  </style>
+</head>
+
+<body>
+
+  <header class="navbar" id="navbar">
+    <a href="index.html" class="navbar__brand">DsSoft</a>
+    <nav class="navbar__nav">
+      <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu">
+        <span class="hamburger"></span>
+      </button>
+      <ul class="navbar__links" id="navbar-links">
+        <li><a href="#capabilities">Capabilities</a></li>
+        <li><a href="#tiktok">TikTok</a></li>
+        <li><a href="hyperscooters.html">Hyperscooters</a></li>
+        <li><a href="https://t.me/the_hackintosh" target="_blank">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <section class="hero">
+      <div class="hero__bg">
+        <div class="hero__orb hero__orb--1"></div>
+        <div class="hero__orb hero__orb--2"></div>
+      </div>
+      <div class="hero__glass hero__glass--1">Silicon → Firmware → Runtime</div>
+      <div class="hero__glass hero__glass--2">Hardware + Software Mastery</div>
+      <div class="hero__content">
+        <div class="hero__badge">Solo Operator</div>
+        <h1 class="hero__headline text-gradient">From silicon to runtime. Complete system mastery.</h1>
+        <p class="hero__subtitle">Battery building, VESC mods to 450A, hyperscooters to 140 km/h, reverse engineering, and embedded development.</p>
+        <a href="#capabilities" class="hero__cta">Explore Capabilities</a>
+      </div>
+    </section>
+
+    <section class="metrics">
+      <div class="metrics__inner">
+        <div class="metrics__item reveal"><span class="metrics__value">5000+</span><span class="metrics__label">Hours IDA Pro</span></div>
+        <div class="metrics__item reveal reveal--stagger-1"><span class="metrics__value">18yo</span><span class="metrics__label">Solo operator</span></div>
+        <div class="metrics__item reveal reveal--stagger-2"><span class="metrics__value">450A</span><span class="metrics__label">VESC builds</span></div>
+        <div class="metrics__item reveal reveal--stagger-3"><span class="metrics__value">140 km/h</span><span class="metrics__label">Hyperscooters</span></div>
+      </div>
+    </section>
+
+    <section id="capabilities" class="immersive-wrapper">
+      <div class="capabilities__header reveal">
+        <h2 class="text-gradient">Core Capabilities</h2>
+        <p>Every layer of the stack, owned end-to-end.</p>
+      </div>
+
+      <div id="capabilities-snap">
+
+        <a href="battery.html" class="capability-card" id="cap-0" style="--bg-image: url('./assets/images/batt1.jpg');">
+          <div class="capability-card__bg"></div>
+          <div class="capability-card__scrim-top"></div>
+          <div class="capability-card__scrim"></div>
+          <div class="capability-card__counter">01 / 03</div>
+          <div class="capability-card__content">
+            <span class="capability-card__eyebrow">Energy Systems</span>
+            <h3 class="capability-card__title text-gradient">Battery Building</h3>
+            <p class="capability-card__desc">40S+ high-discharge packs engineered for hyperscooters and DIY EV projects.</p>
+            <span class="capability-card__link">View Engineering Process <span aria-hidden="true">→</span></span>
+          </div>
+          <div class="scroll-hint" id="scroll-hint">
+            <span class="scroll-hint__label">Scroll</span>
+            <div class="scroll-hint__arrow"></div>
+          </div>
+        </a>
+
+        <a href="hyperscooters.html" class="capability-card" id="cap-1" style="--bg-image: url('./assets/images/lime5.jpg');">
+          <div class="capability-card__bg"></div>
+          <div class="capability-card__scrim-top"></div>
+          <div class="capability-card__scrim"></div>
+          <div class="capability-card__counter">02 / 03</div>
+          <div class="capability-card__content">
+            <span class="capability-card__eyebrow">Mobility</span>
+            <h3 class="capability-card__title text-gradient">Hyperscooter Design</h3>
+            <p class="capability-card__desc">140 km/h performance achieved through custom VESC logic and thermal optimisation.</p>
+            <span class="capability-card__link">See the G30 Flagship <span aria-hidden="true">→</span></span>
+          </div>
+        </a>
+
+        <a href="pcb-design.html" class="capability-card" id="cap-2" style="--bg-image: url('./assets/images/pcb1.jpg');">
+          <div class="capability-card__bg"></div>
+          <div class="capability-card__scrim-top"></div>
+          <div class="capability-card__scrim"></div>
+          <div class="capability-card__counter">03 / 03</div>
+          <div class="capability-card__content">
+            <span class="capability-card__eyebrow">Research</span>
+            <h3 class="capability-card__title text-gradient">PCB Design</h3>
+            <p class="capability-card__desc">Custom printed circuit board layouts for hyperscooters and EV projects.</p>
+            <span class="capability-card__link">See the PCB Work <span aria-hidden="true">→</span></span>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <div class="card-dots" id="card-dots"></div>
+
+    <section class="secondary-section">
+      <div class="secondary-section__header reveal">
+        <h2 class="text-gradient">More Work</h2>
+      </div>
+      <div class="secondary-grid">
+        <a href="hackintosh.html" class="glass-tile reveal">
+          <div class="glass-tile__icon">🖥️</div>
+          <h4 class="glass-tile__title">Hackintosh Systems</h4>
+          <p class="glass-tile__desc">Custom EFI architecture and kernel driver (Kext) development for macOS x86 hardware.</p>
+        </a>
+        <a href="embedded-tooling.html" class="glass-tile reveal reveal--stagger-1">
+          <div class="glass-tile__icon">🛠️</div>
+          <h4 class="glass-tile__title">Custom Tooling</h4>
+          <p class="glass-tile__desc">Proprietary logic for FastOTA rollbacks and LayerOne™ DRM management systems.</p>
+        </a>
+        <a href="coreboot.html" class="glass-tile reveal reveal--stagger-2">
+          <div class="glass-tile__icon">🐇</div>
+          <h4 class="glass-tile__title">Firmware Optimization</h4>
+          <p class="glass-tile__desc">Coreboot modifications, blob removal, and custom SeaBIOS/Grub payload integration.</p>
+        </a>
+      </div>
+    </section>
+
+    <section id="tiktok" class="cta-section">
+      <div class="cta-panel reveal" style="--bg-image: url('assets/images/lime2.jpg');">
+        <div class="cta-panel__overlay"></div>
+        <div class="cta-panel__content">
+          <h2 class="cta-panel__title text-gradient">The Build Logs</h2>
+          <p class="cta-panel__text">Experience the engineering in motion.</p>
+          <a href="https://www.tiktok.com/@whos_.daniel" target="_blank" class="cta-panel__btn">
+            <span>Follow on</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" style="margin-left:8px">
+              <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer__inner">
+      <p class="footer__copy">© DsSoft. All rights reserved.</p>
+      <ul class="footer__links">
+        <li><a href="reverse-engineering.html">Reverse engineering</a></li>
+        <li><a href="custom-tooling.html">Tooling</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script>
+    /* ── iOS Safari viewport height fix ───────────────────────────────────────
+       iOS Safari's 100vh includes the browser chrome (address bar, tab bar),
+       so full-screen elements end up clipped. We measure the real inner height
+       and expose it as --vh, then update it on resize only (NOT on every scroll,
+       which would cause constant reflow as the chrome shows/hides).
+       Modern Safari supports 'dvh' (dynamic viewport height) in CSS directly,
+       so the triple-declaration fallback in CSS handles that path automatically.
+    ── */
+    // Set --vh once on load as a fallback for older iOS that lacks dvh.
+    // We intentionally do NOT update it on resize/scroll — on iOS Safari the
+    // viewport height changes as the browser chrome shows/hides, and
+    // recomputing mid-scroll causes the momentum scroller to "snap" to the
+    // new card height. Modern Safari handles this via the CSS `dvh` unit
+    // already declared in the stylesheet, so the JS var only needs to be
+    // set once as a static baseline for older devices.
+    function setVh() {
+      document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+    }
+    setVh();
+    // Only update on orientationchange (phone rotated), never on scroll/resize
+    window.addEventListener('orientationchange', () => {
+      setTimeout(setVh, 200); // brief delay lets the browser settle first
+    }, { passive: true });
+
+    /* ── Navbar ── */
+    const navbar     = document.getElementById('navbar');
+    const menuToggle = document.getElementById('menu-toggle');
+    const navLinks   = document.getElementById('navbar-links');
+
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('is-solid', window.scrollY > 50);
+    }, { passive: true });
+
+    menuToggle.addEventListener('click', () => {
+      menuToggle.classList.toggle('is-active');
+      navLinks.classList.toggle('is-open');
+      document.body.style.overflow = navLinks.classList.contains('is-open') ? 'hidden' : '';
+    });
+
+    document.querySelectorAll('.navbar__links a').forEach(link => {
+      link.addEventListener('click', () => {
+        menuToggle.classList.remove('is-active');
+        navLinks.classList.remove('is-open');
+        document.body.style.overflow = '';
+      });
+    });
+
+    /* ── Generic reveals ── */
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('is-visible'); });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    /* ─────────────────────────────────────────────────────────────
+       Capability cards — no snapping, scroll-driven fade
+       Cards activate based on visibility. Content fades in when
+       the card is centred and fades out as it leaves. No snap at all.
+       ───────────────────────────────────────────────────────────── */
+    const cards      = Array.from(document.querySelectorAll('.capability-card'));
+    const snapTrack  = document.getElementById('capabilities-snap');
+    const dotsWrap   = document.getElementById('card-dots');
+    const scrollHint = document.getElementById('scroll-hint');
+
+    /* Build dots */
+    const dots = cards.map(() => {
+      const d = document.createElement('div');
+      d.className = 'card-dot';
+      dotsWrap.appendChild(d);
+      return d;
+    });
+
+    let currentCard = -1;
+
+    const trackObserver = new IntersectionObserver(entries => {
+      dotsWrap.classList.toggle('is-visible', entries[0].isIntersecting);
+    }, { threshold: 0.01 });
+    trackObserver.observe(snapTrack);
+
+    function activateCard(index) {
+      if (index === currentCard) return;
+      currentCard = index;
+      cards.forEach((c, i) => {
+        const on = (i === index);
+        c.classList.toggle('is-active', on);
+        if (on) c.classList.add('was-active');
+      });
+      dots.forEach((d, i) => d.classList.toggle('is-active', i === index));
+      if (index > 0 && scrollHint) scrollHint.classList.add('is-hidden');
+    }
+
+    /* Scroll-driven opacity on each card's content based on how centred it is */
+    function updateCardFades() {
+      const vh = window.innerHeight;
+      cards.forEach(card => {
+        const r       = card.getBoundingClientRect();
+        const content = card.querySelector('.capability-card__content');
+        const counter = card.querySelector('.capability-card__counter');
+        if (!content) return;
+
+        // How far is the card centre from the viewport centre? (0 = perfect, 1 = fully off)
+        const cardCentre = r.top + r.height / 2;
+        const vpCentre   = vh / 2;
+        const dist       = Math.abs(cardCentre - vpCentre);
+        const maxDist    = vh * 0.75;
+        const opacity    = Math.max(0, 1 - dist / maxDist);
+
+        content.style.opacity = opacity;
+        if (counter) counter.style.opacity = opacity * 0.6;
+      });
+    }
+
+    function mostVisibleIndex() {
+      let best = -1, bestPx = 0;
+      cards.forEach((c, i) => {
+        const r  = c.getBoundingClientRect();
+        const px = Math.max(0, Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0));
+        if (px > bestPx) { bestPx = px; best = i; }
+      });
+      return best;
+    }
+
+    window.addEventListener('scroll', () => {
+      const visible = mostVisibleIndex();
+      if (visible !== -1) activateCard(visible);
+      updateCardFades();
+    }, { passive: true });
+
+    /* ── Keyboard navigation — still useful on desktop ── */
+    document.addEventListener('keydown', e => {
+      if (!dotsWrap.classList.contains('is-visible')) return;
+      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+        e.preventDefault();
+        const next = Math.min(currentCard + 1, cards.length - 1);
+        const isMobile = window.innerWidth <= 768;
+        const navH = isMobile ? navbar.getBoundingClientRect().height : 0;
+        const target = window.scrollY + cards[next].getBoundingClientRect().top - navH;
+        window.scrollTo({ top: target, behavior: 'smooth' });
+      }
+      if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        const prev = Math.max(currentCard - 1, 0);
+        const isMobile = window.innerWidth <= 768;
+        const navH = isMobile ? navbar.getBoundingClientRect().height : 0;
+        const target = window.scrollY + cards[prev].getBoundingClientRect().top - navH;
+        window.scrollTo({ top: target, behavior: 'smooth' });
+      }
+    });
+
+    /* Touch scrolls freely — no swipe snap */
+
+    /* ── Boot ── */
+    const boot = mostVisibleIndex();
+    activateCard(boot !== -1 ? boot : 0);
+    updateCardFades();
+  </script>
+
+</body>
+</html>
