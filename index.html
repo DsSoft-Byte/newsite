@@ -197,7 +197,7 @@
       padding: clamp(2rem, 5vw, 4rem); padding-bottom: clamp(2.5rem, 6vw, 5rem);
       width: 100%; max-width: 900px;
       transform: translateY(32px); opacity: 0;
-      transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1) 0.15s, opacity 0.8s ease 0.15s;
+      transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1) 0.15s, opacity 0.15s linear;
       will-change: transform, opacity;
     }
     .capability-card.is-active  .capability-card__content,
@@ -493,7 +493,9 @@
     document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
     /* ─────────────────────────────────────────────────────────────
-       Capability cards — scroll-position snap (no threshold jitter)
+       Capability cards — no snapping, scroll-driven fade
+       Cards activate based on visibility. Content fades in when
+       the card is centred and fades out as it leaves. No snap at all.
        ───────────────────────────────────────────────────────────── */
     const cards      = Array.from(document.querySelectorAll('.capability-card'));
     const snapTrack  = document.getElementById('capabilities-snap');
@@ -508,10 +510,7 @@
       return d;
     });
 
-    let currentCard    = -1;
-    let isSnapping     = false;
-    let snapTimer      = null;
-    let scrollEndTimer = null;
+    let currentCard = -1;
 
     const trackObserver = new IntersectionObserver(entries => {
       dotsWrap.classList.toggle('is-visible', entries[0].isIntersecting);
@@ -521,30 +520,34 @@
     function activateCard(index) {
       if (index === currentCard) return;
       currentCard = index;
-
       cards.forEach((c, i) => {
         const on = (i === index);
         c.classList.toggle('is-active', on);
         if (on) c.classList.add('was-active');
       });
       dots.forEach((d, i) => d.classList.toggle('is-active', i === index));
-
       if (index > 0 && scrollHint) scrollHint.classList.add('is-hidden');
     }
 
-    function snapTo(index, behavior = 'smooth') {
-      if (index < 0 || index >= cards.length) return;
-      isSnapping = true;
-      // On mobile the fixed navbar physically covers the top of the card,
-      // so we offset by its height. On desktop the navbar is a transparent
-      // overlay and cards should snap flush to y=0.
-      const isMobile = window.innerWidth <= 768;
-      const navH     = isMobile ? navbar.getBoundingClientRect().height : 0;
-      const cardTop  = cards[index].getBoundingClientRect().top;
-      const target   = window.scrollY + cardTop - navH;
-      window.scrollTo({ top: target, behavior });
-      clearTimeout(snapTimer);
-      snapTimer = setTimeout(() => { isSnapping = false; }, 1000);
+    /* Scroll-driven opacity on each card's content based on how centred it is */
+    function updateCardFades() {
+      const vh = window.innerHeight;
+      cards.forEach(card => {
+        const r       = card.getBoundingClientRect();
+        const content = card.querySelector('.capability-card__content');
+        const counter = card.querySelector('.capability-card__counter');
+        if (!content) return;
+
+        // How far is the card centre from the viewport centre? (0 = perfect, 1 = fully off)
+        const cardCentre = r.top + r.height / 2;
+        const vpCentre   = vh / 2;
+        const dist       = Math.abs(cardCentre - vpCentre);
+        const maxDist    = vh * 0.75;
+        const opacity    = Math.max(0, 1 - dist / maxDist);
+
+        content.style.opacity = opacity;
+        if (counter) counter.style.opacity = opacity * 0.6;
+      });
     }
 
     function mostVisibleIndex() {
@@ -557,63 +560,39 @@
       return best;
     }
 
-    function nearestAlignedIndex() {
-      const isMobile = window.innerWidth <= 768;
-      const navH = isMobile ? navbar.getBoundingClientRect().height : 0;
-      let best = 0, bestDist = Infinity;
-      cards.forEach((c, i) => {
-        const dist = Math.abs(c.getBoundingClientRect().top - navH);
-        if (dist < bestDist) { bestDist = dist; best = i; }
-      });
-      return best;
-    }
-
     window.addEventListener('scroll', () => {
       const visible = mostVisibleIndex();
       if (visible !== -1) activateCard(visible);
-
-      if (isSnapping) return;
-      clearTimeout(scrollEndTimer);
-      scrollEndTimer = setTimeout(() => {
-        if (isSnapping) return;
-
-        const tr = snapTrack.getBoundingClientRect();
-        if (tr.bottom < 0 || tr.top > window.innerHeight) return;
-
-        const nearest  = nearestAlignedIndex();
-        const isMobile = window.innerWidth <= 768;
-        const navH     = isMobile ? navbar.getBoundingClientRect().height : 0;
-        const cardTop  = cards[nearest].getBoundingClientRect().top - navH;
-        if (Math.abs(cardTop) > 2) snapTo(nearest);
-      }, 150);
-
+      updateCardFades();
     }, { passive: true });
 
-    /* ── Keyboard navigation ── */
+    /* ── Keyboard navigation — still useful on desktop ── */
     document.addEventListener('keydown', e => {
       if (!dotsWrap.classList.contains('is-visible')) return;
       if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
-        e.preventDefault(); snapTo(Math.min(currentCard + 1, cards.length - 1));
+        e.preventDefault();
+        const next = Math.min(currentCard + 1, cards.length - 1);
+        const isMobile = window.innerWidth <= 768;
+        const navH = isMobile ? navbar.getBoundingClientRect().height : 0;
+        const target = window.scrollY + cards[next].getBoundingClientRect().top - navH;
+        window.scrollTo({ top: target, behavior: 'smooth' });
       }
       if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-        e.preventDefault(); snapTo(Math.max(currentCard - 1, 0));
+        e.preventDefault();
+        const prev = Math.max(currentCard - 1, 0);
+        const isMobile = window.innerWidth <= 768;
+        const navH = isMobile ? navbar.getBoundingClientRect().height : 0;
+        const target = window.scrollY + cards[prev].getBoundingClientRect().top - navH;
+        window.scrollTo({ top: target, behavior: 'smooth' });
       }
     });
 
-    /* ── Touch swipe ── */
-    let touchStartY = 0;
-    const SWIPE_MIN = 50;
-    snapTrack.addEventListener('touchstart', e => { touchStartY = e.changedTouches[0].screenY; }, { passive: true });
-    snapTrack.addEventListener('touchend', e => {
-      const delta = touchStartY - e.changedTouches[0].screenY;
-      if (Math.abs(delta) < SWIPE_MIN) return;
-      if (delta > 0) snapTo(Math.min(currentCard + 1, cards.length - 1));
-      else           snapTo(Math.max(currentCard - 1, 0));
-    }, { passive: true });
+    /* Touch scrolls freely — no swipe snap */
 
     /* ── Boot ── */
     const boot = mostVisibleIndex();
     activateCard(boot !== -1 ? boot : 0);
+    updateCardFades();
   </script>
 
 </body>
