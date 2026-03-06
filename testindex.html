@@ -106,13 +106,10 @@
       .navbar__links a { font-size: 1.5rem; color: var(--text-primary); }
     }
 
-    /* ── Hero ──
-       Key change: we only use `100dvh` as the live value.
-       The --vh custom property is intentionally frozen after load so
-       Safari chrome show/hide events don't trigger a reflow here.
-       `min-height` means content is never clipped even if dvh shrinks. */
+    /* Hero: svh = small viewport height (chrome fully visible = smallest size).
+       Using min-height means it never shrinks, page height stays stable. */
     .hero {
-      min-height: 100dvh;
+      min-height: 100svh;
       display: flex; align-items: center; justify-content: center;
       position: relative; padding: var(--space-5xl) var(--space-xl) var(--space-4xl); overflow: hidden;
     }
@@ -167,18 +164,21 @@
     .capabilities__header p  { font-size: 1.125rem; }
 
     /*
-      Capability cards: use `100dvh` only — this is the live dynamic value that
-      Safari updates as the chrome appears/disappears. We do NOT also set a
-      `height` via the frozen --vh property here, because that would create a
-      competing constraint that snaps when --vh gets updated on orientation change.
+      Capability cards: use `min-height: 100svh` (small viewport height — the
+      height when the browser chrome is FULLY VISIBLE, i.e. the smallest the
+      viewport ever gets). This is the key fix:
 
-      The background image is on a child element with `will-change: transform`
-      and an explicit CSS transition, so any dvh-driven resize animates the
-      background gracefully rather than jumping.
+      - `svh` is the stable lower bound — it never shrinks — so the total
+        page height never decreases while scrolling. Safari therefore never
+        needs to compensate scroll position, eliminating the "pull" effect.
+      - When the chrome hides and the viewport grows, the card simply has
+        extra space at the bottom via min-height, which is invisible to the user.
+      - We avoid `dvh`/`lvh` on the card itself because those values change
+        live as the chrome animates, directly causing layout reflow mid-scroll.
     */
     .capability-card {
       position: relative; width: 100%;
-      height: 100dvh;
+      min-height: 100svh;
       overflow: hidden; display: flex; align-items: flex-end; cursor: pointer;
     }
 
@@ -186,15 +186,8 @@
       position: absolute; inset: 0;
       background-image: var(--bg-image); background-size: cover; background-position: center;
       transform: scale(1.08);
-      /*
-        Added `height` to the transition list so that when dvh changes (Safari
-        chrome appearing/disappearing), the background smoothly resizes instead
-        of snapping. 600ms easing gives a natural feel that matches the browser
-        chrome animation speed.
-      */
       transition: transform 1.6s cubic-bezier(0.16, 1, 0.3, 1),
-                  opacity 0.8s ease,
-                  height 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                  opacity 0.8s ease;
       opacity: 0.55; will-change: transform, opacity;
     }
     .capability-card.is-active  .capability-card__bg,
@@ -248,7 +241,7 @@
     .capability-card + .capability-card { border-top: 1px solid rgba(255,255,255,0.06); }
 
     @media (max-width: 768px) {
-      .capability-card { height: 92dvh; }
+      .capability-card { min-height: 92svh; }
       .capability-card__title { font-size: clamp(2rem, 10vw, 3rem); }
     }
 
