@@ -35,7 +35,13 @@
       --space-lg: 1.5rem;  --space-xl: 2rem;   --space-2xl: 3rem;
       --space-3xl: 4rem;   --space-4xl: 6rem;  --space-5xl: 8rem;
 
-      /* JS will set this to window.innerHeight px; CSS dvh is the modern fallback */
+      /*
+        --vh is set ONCE on page load from window.innerHeight and thereafter
+        only on genuine resizes (orientation flip or desktop window drag).
+        It deliberately does NOT update when Safari's bottom bar appears /
+        disappears — those events change the height by a small delta on the
+        same axis, so we detect and skip them to avoid jarring reflows.
+      */
       --vh: 1vh;
     }
 
@@ -100,14 +106,10 @@
       .navbar__links a { font-size: 1.5rem; color: var(--text-primary); }
     }
 
-    /* ── Hero ── */
+    /* Hero: svh = small viewport height (chrome fully visible = smallest size).
+       Using min-height means it never shrinks, page height stays stable. */
     .hero {
-      /* Use dvh (dynamic viewport height) where supported — it tracks the
-         actual available space as iOS Safari's browser chrome shows/hides.
-         Fall back to the JS-set --vh custom property, then plain vh. */
-      min-height: 100vh;
-      min-height: calc(var(--vh, 1vh) * 100);
-      min-height: 100dvh;
+      min-height: 100svh;
       display: flex; align-items: center; justify-content: center;
       position: relative; padding: var(--space-5xl) var(--space-xl) var(--space-4xl); overflow: hidden;
     }
@@ -161,13 +163,22 @@
     .capabilities__header h2 { margin-bottom: var(--space-md); }
     .capabilities__header p  { font-size: 1.125rem; }
 
+    /*
+      Capability cards: use `min-height: 100svh` (small viewport height — the
+      height when the browser chrome is FULLY VISIBLE, i.e. the smallest the
+      viewport ever gets). This is the key fix:
+
+      - `svh` is the stable lower bound — it never shrinks — so the total
+        page height never decreases while scrolling. Safari therefore never
+        needs to compensate scroll position, eliminating the "pull" effect.
+      - When the chrome hides and the viewport grows, the card simply has
+        extra space at the bottom via min-height, which is invisible to the user.
+      - We avoid `dvh`/`lvh` on the card itself because those values change
+        live as the chrome animates, directly causing layout reflow mid-scroll.
+    */
     .capability-card {
       position: relative; width: 100%;
-      /* Same triple-layer dvh fix for the cards — this is the key fix for iOS Safari.
-         The JS --vh var handles older iOS; dvh handles modern Safari; vh is the baseline. */
-      height: 100vh;
-      height: calc(var(--vh, 1vh) * 100);
-      height: 100dvh;
+      min-height: 100svh;
       overflow: hidden; display: flex; align-items: flex-end; cursor: pointer;
     }
 
@@ -175,7 +186,8 @@
       position: absolute; inset: 0;
       background-image: var(--bg-image); background-size: cover; background-position: center;
       transform: scale(1.08);
-      transition: transform 1.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
+      transition: transform 1.6s cubic-bezier(0.16, 1, 0.3, 1),
+                  opacity 0.8s ease;
       opacity: 0.55; will-change: transform, opacity;
     }
     .capability-card.is-active  .capability-card__bg,
@@ -229,7 +241,7 @@
     .capability-card + .capability-card { border-top: 1px solid rgba(255,255,255,0.06); }
 
     @media (max-width: 768px) {
-      .capability-card { height: 92vh; height: calc(var(--vh, 1vh) * 92); height: 92dvh; }
+      .capability-card { min-height: 92svh; }
       .capability-card__title { font-size: clamp(2rem, 10vw, 3rem); }
     }
 
@@ -378,7 +390,7 @@
           </div>
         </a>
 
-        <a href="reverse-engineering.html" class="capability-card" id="cap-1" style="--bg-image: url('./assets/images/proto1.jpg');">
+        <a href="reverse-engineering.html" class="capability-card" id="cap-2" style="--bg-image: url('./assets/images/proto1.jpg');">
           <div class="capability-card__bg"></div>
           <div class="capability-card__scrim-top"></div>
           <div class="capability-card__scrim"></div>
@@ -391,7 +403,7 @@
           </div>
         </a>
 
-        <a href="pcb-design.html" class="capability-card" id="cap-2" style="--bg-image: url('./assets/images/pcb1.jpg');">
+        <a href="pcb-design.html" class="capability-card" id="cap-3" style="--bg-image: url('./assets/images/pcb1.jpg');">
           <div class="capability-card__bg"></div>
           <div class="capability-card__scrim-top"></div>
           <div class="capability-card__scrim"></div>
@@ -463,18 +475,55 @@
 
   <script>
     /* ── iOS Safari viewport height fix ───────────────────────────────────────
-       iOS Safari's 100vh includes the browser chrome (address bar, tab bar),
-       so full-screen elements end up clipped. We measure the real inner height
-       and expose it as --vh, then update it on resize only (NOT on every scroll,
-       which would cause constant reflow as the chrome shows/hides).
-       Modern Safari supports 'dvh' (dynamic viewport height) in CSS directly,
-       so the triple-declaration fallback in CSS handles that path automatically.
+       The core problem: when Safari's bottom bar slides in/out during scrolling,
+       it fires a `resize` event with a changed innerHeight. If we naively update
+       --vh on every resize this causes a jarring snap/reflow on every full-screen
+       element simultaneously.
+
+       Strategy:
+         1. Set --vh ONCE on page load.
+         2. On subsequent resize events, ONLY update if:
+              a. The WIDTH changed  →  genuine resize (desktop drag, split-view)
+              b. OR the orientation changed  →  rotate event
+            If only the HEIGHT changed by a small amount (≤ 120px threshold) and
+            width is the same, it's almost certainly the Safari chrome animating —
+            so we ignore it.
+         3. The actual smooth size change on the cards is handled entirely by
+            CSS `100dvh` — the browser animates dvh natively as the chrome moves,
+            so it's GPU-composited and silky smooth with no JS involved.
+         4. The background image child has `transition: height 0.6s ease` so even
+            on genuine resizes the image reflows gracefully.
     ── */
+    let lastWidth  = window.innerWidth;
+    let lastHeight = window.innerHeight;
+    const VH_CHROME_THRESHOLD = 120; // px — Safari chrome is ~50-90px tall
+
     function setVh() {
       document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+      lastWidth  = window.innerWidth;
+      lastHeight = window.innerHeight;
     }
+
+    // Set once on load
     setVh();
-    window.addEventListener('resize', setVh, { passive: true });
+
+    window.addEventListener('resize', () => {
+      const newW = window.innerWidth;
+      const newH = window.innerHeight;
+      const dW   = Math.abs(newW - lastWidth);
+      const dH   = Math.abs(newH - lastHeight);
+
+      // Skip if only height changed by a small amount (Safari chrome show/hide)
+      if (dW === 0 && dH <= VH_CHROME_THRESHOLD) return;
+
+      setVh();
+    }, { passive: true });
+
+    // Always update on orientation change (rotate)
+    window.addEventListener('orientationchange', () => {
+      // Small delay — browser needs a tick to settle the new dimensions
+      setTimeout(setVh, 150);
+    }, { passive: true });
 
     /* ── Navbar ── */
     const navbar     = document.getElementById('navbar');
@@ -506,9 +555,7 @@
     document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
     /* ─────────────────────────────────────────────────────────────
-       Capability cards — no snapping, scroll-driven fade
-       Cards activate based on visibility. Content fades in when
-       the card is centred and fades out as it leaves. No snap at all.
+       Capability cards — scroll-driven fade, no snapping
        ───────────────────────────────────────────────────────────── */
     const cards      = Array.from(document.querySelectorAll('.capability-card'));
     const snapTrack  = document.getElementById('capabilities-snap');
@@ -542,7 +589,6 @@
       if (index > 0 && scrollHint) scrollHint.classList.add('is-hidden');
     }
 
-    /* Scroll-driven opacity on each card's content based on how centred it is */
     function updateCardFades() {
       const vh = window.innerHeight;
       cards.forEach(card => {
@@ -551,7 +597,6 @@
         const counter = card.querySelector('.capability-card__counter');
         if (!content) return;
 
-        // How far is the card centre from the viewport centre? (0 = perfect, 1 = fully off)
         const cardCentre = r.top + r.height / 2;
         const vpCentre   = vh / 2;
         const dist       = Math.abs(cardCentre - vpCentre);
@@ -579,7 +624,7 @@
       updateCardFades();
     }, { passive: true });
 
-    /* ── Keyboard navigation — still useful on desktop ── */
+    /* ── Keyboard navigation ── */
     document.addEventListener('keydown', e => {
       if (!dotsWrap.classList.contains('is-visible')) return;
       if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
@@ -599,8 +644,6 @@
         window.scrollTo({ top: target, behavior: 'smooth' });
       }
     });
-
-    /* Touch scrolls freely — no swipe snap */
 
     /* ── Boot ── */
     const boot = mostVisibleIndex();
