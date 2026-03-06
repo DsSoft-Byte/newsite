@@ -10,27 +10,36 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    /* ============================================
+       DSSoft — Ultra-Premium Liquid Glass Edition
+       ============================================ */
     :root {
       --bg-deep: #000000;
       --bg-elevated: #111111;
       --bg-glass: rgba(20, 20, 22, 0.4);
       --bg-glass-hover: rgba(30, 30, 34, 0.5);
+
       --border-subtle: rgba(255, 255, 255, 0.08);
       --border-strong: rgba(255, 255, 255, 0.16);
       --glass-edge: inset 0 1px 1px rgba(255, 255, 255, 0.15);
+
       --text-primary: #F5F5F7;
       --text-secondary: #86868B;
       --text-muted: #515154;
+
       --accent: #0A84FF;
       --accent-glow: rgba(10, 132, 255, 0.4);
+
       --btn-bg: #F5F5F7;
       --btn-text: #000000;
       --btn-bg-dark: rgba(255, 255, 255, 0.08);
+
       --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
       --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
       --duration-fast: 250ms;
       --duration-normal: 400ms;
       --duration-slow: 700ms;
+
       --space-xs: 0.25rem;
       --space-sm: 0.5rem;
       --space-md: 1rem;
@@ -54,6 +63,8 @@
       scroll-behavior: smooth;
       overflow-x: hidden;
       background: var(--bg-deep);
+      /* Scroll Snapping */
+      scroll-snap-type: y proximity;
     }
 
     body {
@@ -63,8 +74,10 @@
       line-height: 1.6;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
+    /* Typography */
     h1 {
       font-size: clamp(2.5rem, 6vw + 1rem, 4.5rem);
       font-weight: 700;
@@ -94,6 +107,7 @@
       text-decoration: none;
     }
 
+    /* Gradient Text Utilities */
     .text-gradient {
       background: linear-gradient(180deg, #FFFFFF 0%, #86868B 100%);
       -webkit-background-clip: text;
@@ -101,7 +115,7 @@
       background-clip: text;
     }
 
-    /* ── Navbar ── */
+    /* Navbar */
     .navbar {
       position: fixed;
       top: 0;
@@ -113,21 +127,15 @@
       align-items: center;
       justify-content: space-between;
       min-height: 64px;
-      /* Fully transparent on load */
-      background: transparent;
-      backdrop-filter: none;
-      -webkit-backdrop-filter: none;
+      background: rgba(0, 0, 0, 0.2);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
       border-bottom: 1px solid transparent;
-      transition: background 0.5s var(--ease-out-expo),
-        backdrop-filter 0.5s var(--ease-out-expo),
-        border-color 0.5s var(--ease-out-expo),
-        box-shadow 0.5s var(--ease-out-expo);
+      transition: all var(--duration-normal) var(--ease-out-expo);
     }
 
     .navbar.is-solid {
       background: rgba(10, 10, 12, 0.65);
-      backdrop-filter: saturate(180%) blur(20px);
-      -webkit-backdrop-filter: saturate(180%) blur(20px);
       border-bottom: 1px solid var(--border-subtle);
       box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
     }
@@ -156,64 +164,71 @@
       color: var(--text-primary);
     }
 
-    /* ─────────────────────────────────────────
-       HERO IMAGE — change the URL below to swap
-    ───────────────────────────────────────── */
-    :root {
-      --hero-image: url('assets/images/rawbattery.jpg');
-      /* ← swap your image here */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: var(--space-xl);
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: color var(--duration-fast);
+      opacity: 0;
+      animation: fade-up 1s var(--ease-out-expo) 0.1s forwards;
     }
 
-    /* ── Hero ── */
+    .back-link:hover {
+      color: var(--text-primary);
+    }
+
+    /* Hero (Fullscreen Snap) */
     .hero {
       min-height: 100vh;
+      /* Forces true fullscreen */
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
       padding: var(--space-5xl) var(--space-xl) var(--space-4xl);
       overflow: hidden;
-    }
-
-    /* Full-bleed background image */
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: var(--hero-image);
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      /* Darken so text stays readable */
-      filter: brightness(0.45) saturate(1.2);
-      z-index: 0;
-      transition: filter 0.6s ease;
-    }
-
-    /* Gradient vignette over the image so bottom fades to black */
-    .hero::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to bottom,
-          rgba(0, 0, 0, 0.15) 0%,
-          rgba(0, 0, 0, 0.05) 40%,
-          rgba(0, 0, 0, 0.7) 85%,
-          rgba(0, 0, 0, 1) 100%);
-      z-index: 1;
-      pointer-events: none;
+      scroll-snap-align: start;
+      /* Snaps to top */
     }
 
     .hero__bg {
       position: absolute;
       inset: 0;
       pointer-events: none;
-      z-index: 2;
-      /* orbs sit above the image */
+      z-index: 0;
     }
 
     .hero__orb {
-      display: none;
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.6;
+      animation: orb-float 20s var(--ease-in-out) infinite alternate;
+    }
+
+    .hero__orb--1 {
+      width: 60vw;
+      height: 60vw;
+      max-width: 800px;
+      max-height: 800px;
+      background: radial-gradient(circle, #EAB308, #F59E0B, #EF4444);
+      top: -20%;
+      left: -10%;
+    }
+
+    .hero__orb--2 {
+      width: 50vw;
+      height: 50vw;
+      max-width: 600px;
+      max-height: 600px;
+      background: radial-gradient(circle, #10B981, #06B6D4, #3B82F6);
+      bottom: -10%;
+      right: -5%;
+      animation-delay: -5s;
     }
 
     @keyframes orb-float {
@@ -228,7 +243,7 @@
 
     .hero__content {
       position: relative;
-      z-index: 10;
+      z-index: 2;
       text-align: center;
       max-width: 800px;
       margin: 0 auto;
@@ -266,23 +281,6 @@
       animation: fade-up 1s var(--ease-out-expo) 0.4s forwards;
     }
 
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: var(--space-xl);
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: var(--text-secondary);
-      transition: color var(--duration-fast);
-      opacity: 0;
-      animation: fade-up 1s var(--ease-out-expo) 0.1s forwards;
-    }
-
-    .back-link:hover {
-      color: var(--text-primary);
-    }
-
     .hero__glass {
       position: absolute;
       background: var(--bg-glass);
@@ -297,7 +295,7 @@
       color: var(--text-primary);
       opacity: 0;
       animation: fade-up 1.2s var(--ease-out-expo) 0.8s forwards;
-      z-index: 10;
+      z-index: 1;
     }
 
     .hero__glass--1 {
@@ -330,13 +328,14 @@
       }
     }
 
-    /* ── Sections ── */
+    /* Sections */
     .section {
       padding: var(--space-4xl) var(--space-xl);
       max-width: 1200px;
       margin: 0 auto;
       position: relative;
       z-index: 2;
+      scroll-snap-align: start;
     }
 
     .section__header {
@@ -347,66 +346,271 @@
       margin-right: auto;
     }
 
-    /* ── Feature rows ── */
-    .feature-row {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: var(--space-3xl);
-      margin-bottom: var(--space-5xl);
-      padding: 0 var(--space-xl);
+    .capabilities__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 0; /* No gap! We use borders to create the grid */
+  border-top: 1px solid var(--border-subtle);
+  border-left: 1px solid var(--border-subtle);
+}
+
+    /* Capability Cards */
+    .capability-card {
+  background: transparent; /* No more boxes */
+  backdrop-filter: none;
+  border-radius: 0; 
+  border-right: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: var(--space-3xl) var(--space-2xl);
+  transition: background var(--duration-normal) var(--ease-out-expo);
+}
+
+@media (min-width: 1024px) {
+  .capability-card:nth-child(1),
+  .capability-card:nth-child(4) {
+    grid-column: span 3; /* First and fourth cards are wider */
+  }
+}
+
+    .capability-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.06), transparent 40%);
+      opacity: 0;
+      transition: opacity var(--duration-normal);
+      pointer-events: none;
     }
 
-    .feature-image {
-      flex: 1;
+    .capability-card:hover {
+  background: rgba(255, 255, 255, 0.02); /* Very subtle hint of depth */
+  transform: none; /* Keep it stable and professional */
+}
+
+    .capability-card:hover::before {
+      opacity: 1;
+    }
+
+    .capability-card__icon {
+  background: none;
+  border: none;
+  box-shadow: none;
+  font-size: 2.5rem; /* Larger icons as the focal point */
+  margin-bottom: var(--space-xl);
+  filter: drop-shadow(0 0 15px var(--accent-glow)); /* Icon is the only glow */
+}
+
+    .capability-card__title {
+  font-size: 1.5rem;
+  letter-spacing: -0.03em;
+  margin-bottom: var(--space-md);
+}
+
+    .capability-card__desc {
+  max-width: 90%;
+  color: var(--text-secondary);
+}
+
+/* Feature Row Container */
+.feature-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3xl);
+  margin-bottom: var(--space-5xl);
+  padding: 0 var(--space-xl);
+}
+
+.feature-image {
+  flex: 1;
+  width: 100%;
+}
+
+.feature-image img {
+  width: 100%;
+  border-radius: 40px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+  border: 1px solid var(--border-subtle);
+}
+
+.feature-text {
+  flex: 1;
+  max-width: 500px;
+}
+
+.feature-label {
+  display: block;
+  color: whitesmoke;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-md);
+}
+
+/* Desktop Polish: Side-by-Side */
+@media (min-width: 1024px) {
+  .feature-row {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: var(--space-5xl);
+  }
+
+  .feature-row.row-reverse {
+    flex-direction: row-reverse;
+  }
+
+  .feature-text {
+    text-align: left;
+  }
+}
+
+/* Apple-style typography tweak */
+h2.text-gradient {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  margin-bottom: var(--space-lg);
+  line-height: 1.1;
+}
+
+    /* ============================================
+       Aero Glass Image Gallery
+       ============================================ */
+    .aero-gallery {
+      margin-top: var(--space-3xl);
+      background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: blur(40px) saturate(200%);
+      -webkit-backdrop-filter: blur(40px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      border-radius: 32px;
+      padding: var(--space-2xl);
+    }
+
+    .aero-gallery__header {
+      text-align: center;
+      margin-bottom: var(--space-2xl);
+    }
+
+    .aero-gallery__grid {
+  display: grid;
+  /* Default: 1 column for mobile */
+  grid-template-columns: 1fr; 
+  gap: var(--space-lg);
+  width: 100%;
+}
+
+    .aero-gallery__item {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 2 / 3;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.3);
+  width: 100%;
+  cursor: zoom-in;
+}
+
+@media (min-width: 768px) {
+  .aero-gallery__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+  }
+}
+
+@media (max-width: 768px) {
+  .aero-gallery {
+    margin-left: calc(var(--space-md) * -1); /* Pulls it to the screen edges */
+    margin-right: calc(var(--space-md) * -1);
+    border-radius: 0; /* Full-width looks better on small screens */
+    border-left: none;
+    border-right: none;
+    padding: var(--space-xl) var(--space-md);
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    /* Tighten up spaces for mobile */
+    --space-xl: 1.25rem;
+    --space-2xl: 1.5rem;
+    --space-4xl: 3rem;
+  }
+
+  .section {
+    padding: var(--space-4xl) var(--space-md); /* Less side padding */
+  }
+
+  .capability-card {
+    padding: var(--space-xl); /* Stop cards from feeling like tiny boxes */
+  }
+}
+
+    .aero-gallery__item img {
       width: 100%;
-    }
-
-    .feature-image img {
-      width: 100%;
-      border-radius: 40px;
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
-      border: 1px solid var(--border-subtle);
-    }
-
-    .feature-text {
-      flex: 1;
-      max-width: 500px;
-    }
-
-    .feature-label {
+      height: 100%;
+      object-fit: cover;
       display: block;
-      color: whitesmoke;
-      font-weight: 600;
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: var(--space-md);
+      /* Removes any weird baseline spacing */
+      transition: transform var(--duration-slow) var(--ease-out-expo);
+      opacity: 0.8;
     }
 
-    @media (min-width: 1024px) {
-      .feature-row {
-        flex-direction: row;
-        justify-content: space-between;
-        gap: var(--space-5xl);
-      }
-
-      .feature-row.row-reverse {
-        flex-direction: row-reverse;
-      }
-
-      .feature-text {
-        text-align: left;
-      }
+    .aero-gallery__item:hover img {
+      transform: scale(1.05);
+      opacity: 1;
     }
 
-    h2.text-gradient {
-      font-size: clamp(2rem, 4vw, 3.5rem);
-      margin-bottom: var(--space-lg);
-      line-height: 1.1;
+    /* Caption styling */
+    .aero-gallery__caption {
+      padding: var(--space-sm) var(--space-md);
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      border-top: 1px solid var(--border-subtle);
     }
 
-    /* ── CTA Panel ── */
+    /* Lightbox Background */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(15px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s var(--ease-out-expo);
+      padding: var(--space-xl);
+    }
+
+    .lightbox.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Lightbox Image */
+    .lightbox img {
+      max-width: 95%;
+      max-height: 90vh;
+      border-radius: 12px;
+      box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+      transform: scale(0.9);
+      transition: transform 0.4s var(--ease-out-expo);
+    }
+
+    .lightbox.active img {
+      transform: scale(1);
+    }
+
+    /* Process Panel */
     .cta-panel {
       max-width: 900px;
       margin: 0 auto;
@@ -435,54 +639,44 @@
       line-height: 1.8;
     }
 
-    /* ──────────────────────────────────────────
-       SCROLL REVEAL  — re-fires every time
-       Elements start hidden via this class.
-       JS adds/removes .is-visible on enter/leave.
-    ────────────────────────────────────────── */
+    /* Scroll Reveals */
     .reveal {
       opacity: 0;
-      transform: translateY(48px);
-      /* NO transition here — transition is applied only when visible so exit is instant */
+      transform: translateY(40px);
+      transition: all 0.8s var(--ease-out-expo);
     }
 
     .reveal.is-visible {
       opacity: 1;
       transform: translateY(0);
-      transition: opacity 0.85s var(--ease-out-expo),
-        transform 0.85s var(--ease-out-expo);
     }
 
-    /* Stagger children inside a revealed parent */
-    .reveal--stagger>* {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: none;
+    .reveal--stagger-1 {
+      transition-delay: 0.05s;
     }
 
-    .reveal--stagger.is-visible>*:nth-child(1) {
-      transition: opacity 0.8s 0.05s var(--ease-out-expo), transform 0.8s 0.05s var(--ease-out-expo);
-      opacity: 1;
-      transform: translateY(0);
+    .reveal--stagger-2 {
+      transition-delay: 0.1s;
     }
 
-    .reveal--stagger.is-visible>*:nth-child(2) {
-      transition: opacity 0.8s 0.12s var(--ease-out-expo), transform 0.8s 0.12s var(--ease-out-expo);
-      opacity: 1;
-      transform: translateY(0);
+    .reveal--stagger-3 {
+      transition-delay: 0.15s;
     }
 
-    .reveal--stagger.is-visible>*:nth-child(3) {
-      transition: opacity 0.8s 0.19s var(--ease-out-expo), transform 0.8s 0.19s var(--ease-out-expo);
-      opacity: 1;
-      transform: translateY(0);
+    .reveal--stagger-4 {
+      transition-delay: 0.2s;
     }
 
-    /* ── Footer ── */
+    .reveal--stagger-5 {
+      transition-delay: 0.25s;
+    }
+
+    /* Footer */
     .footer {
       padding: var(--space-2xl) var(--space-xl);
       border-top: 1px solid var(--border-subtle);
       background: var(--bg-deep);
+      scroll-snap-align: end;
     }
 
     .footer__inner {
@@ -511,7 +705,7 @@
       color: var(--text-primary);
     }
 
-    /* ── Hamburger ── */
+    /* Hamburger Logic */
     .menu-toggle {
       display: none;
       background: none;
@@ -549,6 +743,7 @@
       bottom: -8px;
     }
 
+    /* Animation to 'X' */
     .menu-toggle.is-active .hamburger {
       background: transparent;
     }
@@ -563,13 +758,8 @@
       bottom: 0;
     }
 
+    /* Mobile Menu Responsive Overlay */
     @media (max-width: 768px) {
-      :root {
-        --space-xl: 1.25rem;
-        --space-2xl: 1.5rem;
-        --space-4xl: 3rem;
-      }
-
       .menu-toggle {
         display: block;
       }
@@ -578,10 +768,12 @@
         position: fixed;
         top: 0;
         right: -100%;
+        /* Hidden off-screen */
         width: 100%;
         height: 100vh;
         background: rgba(0, 0, 0, 0.98);
         backdrop-filter: blur(40px);
+        -webkit-backdrop-filter: blur(40px);
         flex-direction: column;
         align-items: center;
         justify-content: center;
@@ -594,17 +786,24 @@
         right: 0;
       }
 
+      /* Slide in */
       .navbar__links a {
         font-size: 1.5rem;
         color: var(--text-primary);
       }
+    }
 
+    @media (max-width: 768px) {
       .hero__orb {
         opacity: 0.4;
       }
 
-      .section {
-        padding: var(--space-4xl) var(--space-md);
+      .capabilities__grid {
+        grid-template-columns: 1fr;
+      }
+
+      .navbar__toggle {
+        display: block;
       }
     }
   </style>
@@ -650,47 +849,41 @@
       <header class="section__header reveal">
         <h2 class="text-gradient">Advanced Power Systems</h2>
       </header>
-
       <section id="capabilities" class="section">
         <div class="feature-row reveal">
-          <div class="feature-image">
-            <img src="assets/images/batt2.jpg" alt="High-Discharge Packs">
-          </div>
-          <div class="feature-text">
-            <span class="feature-label">01. High-Density Engineering</span>
-            <h2 class="text-gradient">Maximum Output. Minimal Footprint.</h2>
-            <p>We specialize in high-voltage, high-density configurations for hyperscooter and custom small-frame
-              builds. By architecting dense 40S+ arrays, we push the limits of energy density, ensuring that peak
-              performance never comes at the cost of thermal stability or safety.</p>
-          </div>
-        </div>
+    <div class="feature-image">
+      <img src="assets/images/batt2.jpg" alt="High-Discharge Packs">
+    </div>
+    <div class="feature-text">
+      <span class="feature-label">01. High-Density Engineering</span>
+      <h2 class="text-gradient">Maximum Output. Minimal Footprint.</h2>
+      <p>We specialize in high-voltage, high-density configurations for hyperscooter and custom small-frame builds. By architecting dense 40S+ arrays, we push the limits of energy density, ensuring that peak performance never comes at the cost of thermal stability or safety.</p>
+    </div>
+  </div>
 
-        <div class="feature-row row-reverse reveal">
-          <div class="feature-image">
-            <img src="assets/images/batt1.jpg" alt="Precision Welding">
-          </div>
-          <div class="feature-text">
-            <span class="feature-label">02. Low-Impedance Assembly</span>
-            <h2 class="text-gradient">Thermal Management & Conductivity.</h2>
-            <p>Our assembly process utilizes custom-engineered, pure copper busbars designed for ultra-low resistance.
-              Precision spot-welding ensures every interconnect is optimized to handle massive 450A+ phase current loads
-              without heat soak, providing consistent power delivery under extreme stress.</p>
-          </div>
-        </div>
+  <div class="feature-row row-reverse reveal">
+    <div class="feature-image">
+      <img src="assets/images/batt1.jpg" alt="Precision Welding">
+    </div>
+    <div class="feature-text">
+      <span class="feature-label">02. Low-Impedance Assembly</span>
+      <h2 class="text-gradient">Thermal Management & Conductivity.</h2>
+      <p>Our assembly process utilizes custom-engineered, pure copper busbars designed for ultra-low resistance. Precision spot-welding ensures every interconnect is optimized to handle massive 450A+ phase current loads without heat soak, providing consistent power delivery under extreme stress.</p>
+    </div>
+  </div>
 
-        <div class="feature-row reveal">
-          <div class="feature-image">
-            <img src="assets/images/batt3.jpg" alt="High-Discharge Packs">
-          </div>
-          <div class="feature-text">
-            <span class="feature-label">03. Systems Integration</span>
-            <h2 class="text-gradient">Validation & Performance Mapping.</h2>
-            <p>Reliability is the result of rigorous data. Before a single cell is welded, we conduct exhaustive
-              research and stress-testing on cell chemistries and BMS logic. We don't just build packs; we map every
-              component to your specific motor and controller curves to ensure total system synergy.</p>
-          </div>
-        </div>
-      </section>
+  <div class="feature-row reveal">
+    <div class="feature-image">
+      <img src="assets/images/batt3.jpg" alt="High-Discharge Packs">
+    </div>
+    <div class="feature-text">
+      <span class="feature-label">03. Systems Integration</span>
+      <h2 class="text-gradient">Validation & Performance Mapping.</h2>
+      <p>Reliability is the result of rigorous data. Before a single cell is welded, we conduct exhaustive research and stress-testing on cell chemistries and BMS logic. We don’t just build packs; we map every component to your specific motor and controller curves to ensure total system synergy.</p>
+    </div>
+  </div>
+</section>
+      </div>
     </section>
 
     <section id="process" class="section">
@@ -717,20 +910,24 @@
   </footer>
 
   <script>
-    /* ── Sticky Nav: transparent on load, blur on scroll ── */
     const navbar = document.getElementById('navbar');
+    const menuToggle = document.getElementById('menu-toggle');
+    const navbarLinks = document.getElementById('navbar-links');
+
+    // Sticky Nav
     window.addEventListener('scroll', () => {
       navbar.classList.toggle('is-solid', window.scrollY > 60);
     });
 
-    /* ── Hamburger ── */
-    const menuToggle = document.getElementById('menu-toggle');
-    const navbarLinks = document.getElementById('navbar-links');
+    // Hamburger Menu Toggle
     menuToggle.addEventListener('click', () => {
       menuToggle.classList.toggle('is-active');
       navbarLinks.classList.toggle('is-open');
+      // Lock scroll when menu is open
       document.body.style.overflow = navbarLinks.classList.contains('is-open') ? 'hidden' : '';
     });
+
+    // Close menu when clicking a link
     document.querySelectorAll('.navbar__links a').forEach(link => {
       link.addEventListener('click', () => {
         menuToggle.classList.remove('is-active');
@@ -739,29 +936,23 @@
       });
     });
 
-    /* ── Scroll Reveal ── */
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-        } else {
-          // Only re-arm (remove is-visible) when element exits through the BOTTOM.
-          // If it exits through the top (scrolled past upward), leave it visible
-          // so it doesn't flicker under the navbar.
-          const rect = entry.boundingClientRect;
-          if (rect.top > 0) {
-            // Element is below the viewport — it hasn't been seen yet, reset it
-            entry.target.classList.remove('is-visible');
-          }
-          // If rect.top <= 0 the element scrolled off the top — keep it visible
-        }
-      });
-    }, {
-      threshold: 0.12,
-      rootMargin: '-70px 0px -60px 0px'
-    });
+    // LightBox
+    function openLightbox(element) {
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+      const clickedImgSrc = element.querySelector('img').src;
 
-    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+      lightboxImg.src = clickedImgSrc;
+      lightbox.classList.add('active');
+    }
+
+    // Reveal Animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('is-visible');
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
   </script>
 </body>
 

@@ -5,27 +5,35 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Reverse Engineering & Security — DsSoft</title>
-  <meta name="description" content="Independent security researcher specializing in binary analysis, exploit research, and DRM teardown.">
+  <meta name="description"
+    content="Independent security researcher specializing in binary analysis, exploit research, and DRM teardown.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    /* ============================================
+       DSSoft — Ultra-Premium Liquid Glass Edition
+       ============================================ */
     :root {
       --bg-deep: #000000;
       --bg-elevated: #111111;
       --bg-glass: rgba(20, 20, 22, 0.4);
       --bg-glass-hover: rgba(30, 30, 34, 0.5);
+
       --border-subtle: rgba(255, 255, 255, 0.08);
       --border-strong: rgba(255, 255, 255, 0.16);
       --glass-edge: inset 0 1px 1px rgba(255, 255, 255, 0.15);
+
       --text-primary: #F5F5F7;
       --text-secondary: #86868B;
       --text-muted: #515154;
+
       --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
       --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
       --duration-fast: 250ms;
       --duration-normal: 400ms;
       --duration-slow: 700ms;
+
       --space-xs: 0.25rem;
       --space-sm: 0.5rem;
       --space-md: 1rem;
@@ -37,7 +45,9 @@
       --space-5xl: 8rem;
     }
 
-    *, *::before, *::after {
+    *,
+    *::before,
+    *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
@@ -54,31 +64,38 @@
       background: var(--bg-deep);
       color: var(--text-primary);
       line-height: 1.6;
-      overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
 
+    /* Typography */
     h1 {
       font-size: clamp(2.5rem, 6vw + 1rem, 4.5rem);
       font-weight: 700;
       letter-spacing: -0.04em;
       line-height: 1.1;
     }
+
     h2 {
       font-size: clamp(1.75rem, 4vw + 0.5rem, 3rem);
       font-weight: 600;
       letter-spacing: -0.03em;
     }
+
     h3 {
       font-size: clamp(1.25rem, 2vw + 0.25rem, 1.5rem);
       font-weight: 600;
       letter-spacing: -0.02em;
     }
+
     p {
       font-size: clamp(1rem, 1.2vw + 0.5rem, 1.125rem);
       color: var(--text-secondary);
     }
-    a { color: inherit; text-decoration: none; }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
 
     .text-gradient {
       background: linear-gradient(180deg, #FFFFFF 0%, #86868B 100%);
@@ -87,61 +104,73 @@
       background-clip: text;
     }
 
-    /* ── Navbar: fully transparent on load, blurs on scroll ── */
+    /* Navbar */
     .navbar {
       position: fixed;
-      top: 0; left: 0; right: 0;
+      top: 0;
+      left: 0;
+      right: 0;
       z-index: 1000;
       padding: var(--space-md) var(--space-xl);
       display: flex;
       align-items: center;
       justify-content: space-between;
       min-height: 64px;
-      background: transparent;
-      backdrop-filter: none;
-      -webkit-backdrop-filter: none;
+      background: rgba(0, 0, 0, 0.2);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      /* Add this line to prevent the flash */
       border-bottom: 1px solid transparent;
-      transition: background 0.5s var(--ease-out-expo),
-                  backdrop-filter 0.5s var(--ease-out-expo),
-                  border-color 0.5s var(--ease-out-expo),
-                  box-shadow 0.5s var(--ease-out-expo);
+      transition: all var(--duration-normal) var(--ease-out-expo);
     }
 
     .navbar.is-solid {
       background: rgba(10, 10, 12, 0.65);
-      backdrop-filter: saturate(180%) blur(20px);
-      -webkit-backdrop-filter: saturate(180%) blur(20px);
       border-bottom: 1px solid var(--border-subtle);
+      /* Optional: matching the subtle shadow from the battery page */
       box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
     }
 
     .navbar__brand {
       font-weight: 600;
       font-size: 1.125rem;
-      letter-spacing: -0.02em;
-      color: var(--text-primary);
     }
+
     .navbar__links {
       display: flex;
       gap: var(--space-xl);
       list-style: none;
     }
+
     .navbar__links a {
       font-size: 0.875rem;
       font-weight: 500;
       color: var(--text-secondary);
       transition: color var(--duration-fast);
     }
-    .navbar__links a:hover { color: var(--text-primary); }
 
-    /* ─────────────────────────────────────────
-       HERO IMAGE — change the URL below to swap
-    ───────────────────────────────────────── */
-    :root {
-      --hero-image: url('assets/images/proto1.jpg'); /* ← swap your image here */
+    .navbar__links a:hover {
+      color: var(--text-primary);
     }
 
-    /* ── Hero ── */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: var(--space-xl);
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: color var(--duration-fast);
+      opacity: 0;
+      animation: fade-up 1s var(--ease-out-expo) 0.1s forwards;
+    }
+
+    .back-link:hover {
+      color: var(--text-primary);
+    }
+
+    /* Hero — Terminal Green/Blue Theme */
     .hero {
       min-height: 100vh;
       display: flex;
@@ -152,49 +181,53 @@
       overflow: hidden;
     }
 
-    /* Full-bleed background image */
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: var(--hero-image);
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      filter: brightness(0.45) saturate(1.2);
-      z-index: 0;
-      transition: filter 0.6s ease;
-    }
-
-    /* Gradient vignette — fades to black at bottom */
-    .hero::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        to bottom,
-        rgba(0,0,0,0.15) 0%,
-        rgba(0,0,0,0.05) 40%,
-        rgba(0,0,0,0.7)  85%,
-        rgba(0,0,0,1)   100%
-      );
-      z-index: 1;
-      pointer-events: none;
-    }
-
     .hero__bg {
       position: absolute;
       inset: 0;
       pointer-events: none;
-      z-index: 2;
+      z-index: 0;
     }
 
-    /* Orbs hidden — hero uses image background */
-    .hero__orb { display: none; }
+    .hero__orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.35;
+      animation: orb-float 20s var(--ease-in-out) infinite alternate;
+    }
+
+    .hero__orb--1 {
+      width: 60vw;
+      height: 60vw;
+      max-width: 800px;
+      background: radial-gradient(circle, #10B981, #059669, #064E3B);
+      top: -20%;
+      left: -10%;
+    }
+
+    .hero__orb--2 {
+      width: 50vw;
+      height: 50vw;
+      max-width: 600px;
+      background: radial-gradient(circle, #3B82F6, #1D4ED8, #000000);
+      bottom: -10%;
+      right: -5%;
+      animation-delay: -5s;
+    }
+
+    @keyframes orb-float {
+      0% {
+        transform: translate(0, 0) scale(1);
+      }
+
+      100% {
+        transform: translate(5%, -5%) scale(1.1);
+      }
+    }
 
     .hero__content {
       position: relative;
-      z-index: 10;
+      z-index: 2;
       text-align: center;
       max-width: 900px;
       margin: 0 auto;
@@ -207,10 +240,8 @@
       padding: 6px 16px;
       margin-bottom: var(--space-xl);
       background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: saturate(180%) blur(30px);
-      -webkit-backdrop-filter: saturate(180%) blur(30px);
+      backdrop-filter: blur(30px);
       border: 1px solid var(--border-subtle);
-      box-shadow: var(--glass-edge);
       border-radius: 999px;
       font-size: 0.8125rem;
       font-weight: 500;
@@ -232,25 +263,10 @@
       animation: fade-up 1s var(--ease-out-expo) 0.4s forwards;
     }
 
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: var(--space-xl);
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: var(--text-secondary);
-      transition: color var(--duration-fast);
-      opacity: 0;
-      animation: fade-up 1s var(--ease-out-expo) 0.1s forwards;
-    }
-    .back-link:hover { color: var(--text-primary); }
-
     .hero__glass {
       position: absolute;
       background: var(--bg-glass);
-      backdrop-filter: saturate(180%) blur(40px);
-      -webkit-backdrop-filter: saturate(180%) blur(40px);
+      backdrop-filter: blur(40px);
       border: 1px solid var(--border-subtle);
       box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), var(--glass-edge);
       border-radius: 20px;
@@ -260,19 +276,34 @@
       color: var(--text-primary);
       opacity: 0;
       animation: fade-up 1.2s var(--ease-out-expo) 0.8s forwards;
-      z-index: 10;
+      z-index: 1;
     }
-    .hero__glass--1 { top: 30%; left: 8%; transform: rotate(-3deg); }
-    .hero__glass--2 { bottom: 25%; right: 10%; transform: rotate(3deg); }
 
-    @media (max-width: 1280px) { .hero__glass { display: none; } }
+    .hero__glass--1 {
+      top: 30%;
+      left: 8%;
+      transform: rotate(-3deg);
+    }
+
+    .hero__glass--2 {
+      bottom: 25%;
+      right: 10%;
+      transform: rotate(3deg);
+    }
 
     @keyframes fade-up {
-      from { opacity: 0; transform: translateY(30px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
-    /* ── Sections ── */
+    /* Sections */
     .section {
       padding: var(--space-4xl) var(--space-xl);
       max-width: 1200px;
@@ -281,61 +312,6 @@
       z-index: 2;
     }
 
-    .section__header {
-      text-align: center;
-      margin-bottom: var(--space-4xl);
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    /* ── Feature rows ── */
-    .feature-row {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: var(--space-3xl);
-      margin-bottom: var(--space-5xl);
-      padding: 0 var(--space-xl);
-    }
-
-    .feature-image { flex: 1; width: 100%; }
-    .feature-image img {
-      width: 100%;
-      border-radius: 40px;
-      box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-      border: 1px solid var(--border-subtle);
-    }
-
-    .feature-text { flex: 1; max-width: 500px; }
-
-    .feature-label {
-      display: block;
-      color: whitesmoke;
-      font-weight: 600;
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: var(--space-md);
-    }
-
-    @media (min-width: 1024px) {
-      .feature-row {
-        flex-direction: row;
-        justify-content: space-between;
-        gap: var(--space-5xl);
-      }
-      .feature-row.row-reverse { flex-direction: row-reverse; }
-      .feature-text { text-align: left; }
-    }
-
-    h2.text-gradient {
-      font-size: clamp(2rem, 4vw, 3.5rem);
-      margin-bottom: var(--space-lg);
-      line-height: 1.1;
-    }
-
-    /* ── Capability cards (kept from original) ── */
     .capabilities__grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -362,8 +338,70 @@
       background: var(--bg-glass-hover);
     }
 
+    /* Feature Row Container */
+.feature-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3xl);
+  margin-bottom: var(--space-5xl);
+  padding: 0 var(--space-xl);
+}
+
+.feature-image {
+  flex: 1;
+  width: 100%;
+}
+
+.feature-image img {
+  width: 100%;
+  border-radius: 40px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+  border: 1px solid var(--border-subtle);
+}
+
+.feature-text {
+  flex: 1;
+  max-width: 500px;
+}
+
+.feature-label {
+  display: block;
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-md);
+}
+
+/* Desktop Polish: Side-by-Side */
+@media (min-width: 1024px) {
+  .feature-row {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: var(--space-5xl);
+  }
+
+  .feature-row.row-reverse {
+    flex-direction: row-reverse;
+  }
+
+  .feature-text {
+    text-align: left;
+  }
+}
+
+/* Apple-style typography tweak */
+h2.text-gradient {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  margin-bottom: var(--space-lg);
+  line-height: 1.1;
+}
+
     .capability-card__icon {
-      width: 56px; height: 56px;
+      width: 56px;
+      height: 56px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -378,6 +416,7 @@
       list-style: none;
       margin-top: var(--space-md);
     }
+
     .capability-list li {
       position: relative;
       padding-left: 20px;
@@ -385,6 +424,7 @@
       color: var(--text-secondary);
       margin-bottom: 10px;
     }
+
     .capability-list li::before {
       content: '→';
       position: absolute;
@@ -392,14 +432,12 @@
       color: #10B981;
     }
 
-    /* ── CTA Panel ── */
     .cta-panel {
       max-width: 900px;
       margin: 0 auto;
       padding: var(--space-4xl) var(--space-2xl);
       background: linear-gradient(180deg, rgba(20, 20, 22, 0.8) 0%, rgba(10, 10, 12, 0.9) 100%);
-      backdrop-filter: saturate(180%) blur(40px);
-      -webkit-backdrop-filter: saturate(180%) blur(40px);
+      backdrop-filter: blur(40px);
       border: 1px solid var(--border-subtle);
       border-radius: 32px;
       text-align: center;
@@ -407,29 +445,119 @@
       overflow: hidden;
       box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5), var(--glass-edge);
     }
-    .cta-panel__title { margin-bottom: var(--space-md); }
-    .cta-panel__text {
-      margin-bottom: 0;
-      font-size: 1.125rem;
-      max-width: 700px;
-      margin-left: auto;
-      margin-right: auto;
-      line-height: 1.8;
-    }
 
-    /* ── Scroll Reveal — re-fires every time ── */
     .reveal {
       opacity: 0;
-      transform: translateY(48px);
+      transform: translateY(40px);
+      transition: all 0.8s var(--ease-out-expo);
     }
+
     .reveal.is-visible {
       opacity: 1;
       transform: translateY(0);
-      transition: opacity 0.85s var(--ease-out-expo),
-                  transform 0.85s var(--ease-out-expo);
     }
 
-    /* ── Lightbox ── */
+    .footer {
+      padding: var(--space-2xl) var(--space-xl);
+      border-top: 1px solid var(--border-subtle);
+      background: var(--bg-deep);
+    }
+
+    .footer__inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+
+    .footer__copy,
+    .footer__links a {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .footer__links {
+      display: flex;
+      gap: var(--space-lg);
+      list-style: none;
+    }
+
+    .footer__links a:hover {
+      color: var(--text-primary);
+    }
+
+    .aero-gallery {
+      margin-top: var(--space-3xl);
+      background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: blur(40px) saturate(200%);
+      -webkit-backdrop-filter: blur(40px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      border-radius: 32px;
+      padding: var(--space-2xl);
+    }
+
+    .aero-gallery__header {
+      text-align: center;
+      margin-bottom: var(--space-2xl);
+    }
+
+    .aero-gallery__grid {
+      display: grid;
+      /* FIX: Use 100% as the max width to prevent overflow on tiny screens */
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+      gap: var(--space-md);
+      width: 100%;
+    }
+
+    .aero-gallery__item {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      /* FIX: Re-enable aspect-ratio. 
+     Without it, a container with height: 100% and no content will collapse to 0px height. */
+      aspect-ratio: 2 / 3;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      background: rgba(0, 0, 0, 0.3);
+      width: 100%;
+      /* Ensures it stays within the grid cell */
+      cursor: zoom-in;
+    }
+
+    .aero-gallery__item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      /* Removes any weird baseline spacing */
+      transition: transform var(--duration-slow) var(--ease-out-expo);
+      opacity: 0.8;
+    }
+
+    .aero-gallery__item:hover img {
+      transform: scale(1.05);
+      opacity: 1;
+    }
+
+    /* Caption styling */
+    .aero-gallery__caption {
+      padding: var(--space-sm) var(--space-md);
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    /* Lightbox Background */
     .lightbox {
       position: fixed;
       inset: 0;
@@ -444,39 +572,28 @@
       transition: opacity 0.4s var(--ease-out-expo);
       padding: var(--space-xl);
     }
-    .lightbox.active { opacity: 1; pointer-events: auto; }
+
+    .lightbox.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Lightbox Image */
     .lightbox img {
-      max-width: 95%; max-height: 90vh;
+      max-width: 95%;
+      max-height: 90vh;
       border-radius: 12px;
       box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
       transform: scale(0.9);
       transition: transform 0.4s var(--ease-out-expo);
     }
-    .lightbox.active img { transform: scale(1); }
 
-    /* ── Footer ── */
-    .footer {
-      padding: var(--space-2xl) var(--space-xl);
-      border-top: 1px solid var(--border-subtle);
-      background: var(--bg-deep);
+    .lightbox.active img {
+      transform: scale(1);
     }
-    .footer__inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: var(--space-md);
-    }
-    .footer__copy, .footer__links a {
-      font-size: 0.875rem;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-    .footer__links { display: flex; gap: var(--space-lg); list-style: none; }
-    .footer__links a:hover { color: var(--text-primary); }
 
-    /* ── Hamburger ── */
+
+    /* Hamburger Logic */
     .menu-toggle {
       display: none;
       background: none;
@@ -486,39 +603,80 @@
       z-index: 1200;
       position: relative;
     }
+
     .hamburger {
       display: block;
-      width: 24px; height: 2px;
+      width: 24px;
+      height: 2px;
       background: var(--text-primary);
       position: relative;
       transition: background 0.3s;
     }
-    .hamburger::before, .hamburger::after {
+
+    .hamburger::before,
+    .hamburger::after {
       content: '';
       position: absolute;
-      width: 24px; height: 2px;
+      width: 24px;
+      height: 2px;
       background: var(--text-primary);
       transition: all 0.3s;
     }
-    .hamburger::before { top: -8px; }
-    .hamburger::after  { bottom: -8px; }
-    .menu-toggle.is-active .hamburger { background: transparent; }
-    .menu-toggle.is-active .hamburger::before { transform: rotate(45deg); top: 0; }
-    .menu-toggle.is-active .hamburger::after  { transform: rotate(-45deg); bottom: 0; }
 
+    .hamburger::before {
+      top: -8px;
+    }
+
+    .hamburger::after {
+      bottom: -8px;
+    }
+
+    /* Animation to 'X' */
+    .menu-toggle.is-active .hamburger {
+      background: transparent;
+    }
+
+    .menu-toggle.is-active .hamburger::before {
+      transform: rotate(45deg);
+      top: 0;
+    }
+
+    .menu-toggle.is-active .hamburger::after {
+      transform: rotate(-45deg);
+      bottom: 0;
+    }
+
+    .section__header {
+      text-align: center;
+      margin-bottom: var(--space-4xl);
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .text-gradient {
+      background: linear-gradient(180deg, #FFFFFF 0%, #86868B 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Mobile Menu Responsive Overlay */
     @media (max-width: 768px) {
-      :root {
-        --space-xl: 1.25rem;
-        --space-2xl: 1.5rem;
-        --space-4xl: 3rem;
+      .menu-toggle {
+        display: block;
       }
-      .menu-toggle { display: block; }
+
       .navbar__links {
         position: fixed;
-        top: 0; right: -100%;
-        width: 100%; height: 100vh;
+        top: 0;
+        right: -100%;
+        /* Hidden off-screen */
+        width: 100%;
+        height: 100vh;
         background: rgba(0, 0, 0, 0.98);
         backdrop-filter: blur(40px);
+        -webkit-backdrop-filter: blur(40px);
         flex-direction: column;
         align-items: center;
         justify-content: center;
@@ -526,10 +684,28 @@
         transition: right 0.5s var(--ease-out-expo);
         z-index: 1050;
       }
-      .navbar__links.is-open { right: 0; }
-      .navbar__links a { font-size: 1.5rem; color: var(--text-primary); }
-      .section { padding: var(--space-4xl) var(--space-md); }
-      .capabilities__grid { grid-template-columns: 1fr; }
+
+      .navbar__links.is-open {
+        right: 0;
+      }
+
+      /* Slide in */
+      .navbar__links a {
+        font-size: 1.5rem;
+        color: var(--text-primary);
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .hero__glass {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .capabilities__grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -571,42 +747,41 @@
     </section>
 
     <section id="capabilities" class="section">
-      <header class="section__header reveal">
+    <header class="section__header reveal">
         <h2 class="text-gradient">The Research Lab</h2>
       </header>
-
       <div class="feature-row reveal">
-        <div class="feature-image">
-          <img src="assets/images/proto1.jpg" alt="Hardware Matrix">
-        </div>
-        <div class="feature-text">
-          <span class="feature-label">01. Hardware Matrix</span>
-          <h2 class="text-gradient">Total Ecosystem Coverage.</h2>
-          <p>Our testing infrastructure spans the entire evolution of the mobile landscape. With active hardware ranging from the legacy iPhone 3GS to the latest iPhone 16 Pro, we ensure that no system, regardless of age or architecture, remains a "black box." If a vulnerability exists, we have the hardware to find it.</p>
-        </div>
-      </div>
+    <div class="feature-image">
+      <img src="assets/images/proto1.jpg" alt="High-Discharge Packs">
+    </div>
+    <div class="feature-text">
+      <span class="feature-label">01. Hardware Matrix</span>
+      <h2 class="text-gradient">Total Ecosystem Coverage.</h2>
+      <p>Our testing infrastructure spans the entire evolution of the mobile landscape. With active hardware ranging from the legacy iPhone 3GS to the latest iPhone 16 Pro, we ensure that no system, regardless of age or architecture, remains a "black box." If a vulnerability exists, we have the hardware to find it.</p>
+    </div>
+  </div>
 
-      <div class="feature-row row-reverse reveal">
-        <div class="feature-image">
-          <img src="assets/images/proto2.jpg" alt="Low-Level Analysis">
-        </div>
-        <div class="feature-text">
-          <span class="feature-label">02. Low-Level Analysis</span>
-          <h2 class="text-gradient">Beyond the Application Layer.</h2>
-          <p>We specialize in full-stack reverse engineering, moving far beyond simple app analysis. From Bootrom-level exploits to core Firmware extraction, we deconstruct iOS at its most fundamental level to understand exactly how the silicon communicates with the software.</p>
-        </div>
-      </div>
+  <div class="feature-row row-reverse reveal">
+    <div class="feature-image">
+      <img src="assets/images/proto2.jpg" alt="Precision Welding">
+    </div>
+    <div class="feature-text">
+      <span class="feature-label">02. Low-Level Analysis</span>
+      <h2 class="text-gradient">Beyond the Application Layer.</h2>
+      <p>We specialize in full-stack reverse engineering, moving far beyond simple app analysis. From Bootrom-level exploits to core Firmware extraction, we deconstruct iOS at its most fundamental level to understand exactly how the silicon communicates with the software.</p>
+    </div>
+  </div>
 
-      <div class="feature-row reveal">
-        <div class="feature-image">
-          <img src="assets/images/proto3.jpg" alt="Development Hardware">
-        </div>
-        <div class="feature-text">
-          <span class="feature-label">03. Development Hardware</span>
-          <h2 class="text-gradient">Native Root Authority.</h2>
-          <p>For specialized research that requires bypassing standard retail restrictions, we utilize Internal Development (Dev-fused) prototypes. These units grant native, unauthorized code execution and unrestricted root access, allowing for deep-kernel debugging and hardware-level security auditing that retail units cannot provide.</p>
-        </div>
-      </div>
+  <div class="feature-row reveal">
+    <div class="feature-image">
+      <img src="assets/images/proto3.jpg" alt="High-Discharge Packs">
+    </div>
+    <div class="feature-text">
+      <span class="feature-label">03. Development Hardware</span>
+      <h2 class="text-gradient">Native Root Authority.</h2>
+      <p>For specialized research that requires bypassing standard retail restrictions, we utilize Internal Development (Dev-fused) prototypes. These units grant native, unauthorized code execution and unrestricted root access, allowing for deep-kernel debugging and hardware-level security auditing that retail units cannot provide.</p>
+    </div>
+  </div>
 
       <div id="lightbox" class="lightbox" onclick="this.classList.remove('active')">
         <img id="lightbox-img" src="" alt="">
@@ -625,7 +800,7 @@
 
   <footer class="footer">
     <div class="footer__inner">
-      <p class="footer__copy">© DsSoft</p>
+      <p class="footer__copy">© DSSoft</p>
       <ul class="footer__links">
         <li><a href="index.html">Home</a></li>
         <li><a href="pcb-design.html">PCB design</a></li>
@@ -635,20 +810,24 @@
   </footer>
 
   <script>
-    /* ── Sticky Nav: transparent on load, blur on scroll ── */
     const navbar = document.getElementById('navbar');
+    const menuToggle = document.getElementById('menu-toggle');
+    const navbarLinks = document.getElementById('navbar-links');
+
+    // Sticky Nav
     window.addEventListener('scroll', () => {
       navbar.classList.toggle('is-solid', window.scrollY > 60);
     });
 
-    /* ── Hamburger ── */
-    const menuToggle = document.getElementById('menu-toggle');
-    const navbarLinks = document.getElementById('navbar-links');
+    // Hamburger Menu Toggle
     menuToggle.addEventListener('click', () => {
       menuToggle.classList.toggle('is-active');
       navbarLinks.classList.toggle('is-open');
+      // Lock scroll when menu is open
       document.body.style.overflow = navbarLinks.classList.contains('is-open') ? 'hidden' : '';
     });
+
+    // Close menu when clicking a link
     document.querySelectorAll('.navbar__links a').forEach(link => {
       link.addEventListener('click', () => {
         menuToggle.classList.remove('is-active');
@@ -657,37 +836,30 @@
       });
     });
 
-    /* ── Lightbox ── */
+    // LightBox
     function openLightbox(element) {
       const lightbox = document.getElementById('lightbox');
       const lightboxImg = document.getElementById('lightbox-img');
-      lightboxImg.src = element.querySelector('img').src;
+      const clickedImgSrc = element.querySelector('img').src;
+
+      lightboxImg.src = clickedImgSrc;
       lightbox.classList.add('active');
     }
+
+    // Close lightbox when pressing "Escape" key
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') document.getElementById('lightbox').classList.remove('active');
+      if (e.key === 'Escape') {
+        document.getElementById('lightbox').classList.remove('active');
+      }
     });
 
-    /* ── Scroll Reveal: re-fires on scroll down, no flicker under navbar ── */
-    const revealObserver = new IntersectionObserver((entries) => {
+    // Reveal Animations
+    const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-        } else {
-          const rect = entry.boundingClientRect;
-          if (rect.top > 0) {
-            // Below viewport — reset so it animates in on next scroll
-            entry.target.classList.remove('is-visible');
-          }
-          // Scrolled off the top — keep visible, no navbar flicker
-        }
+        if (entry.isIntersecting) entry.target.classList.add('is-visible');
       });
-    }, {
-      threshold: 0.12,
-      rootMargin: '-70px 0px -60px 0px'
-    });
-
-    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
   </script>
 </body>
 
