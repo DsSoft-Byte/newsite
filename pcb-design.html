@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,427 +11,99 @@
   <style>
     :root {
       --bg-deep: #000000;
-      --bg-elevated: #111111;
       --bg-glass: rgba(20, 20, 22, 0.4);
-      --bg-glass-hover: rgba(30, 30, 34, 0.5);
       --border-subtle: rgba(255, 255, 255, 0.08);
-      --border-strong: rgba(255, 255, 255, 0.16);
       --glass-edge: inset 0 1px 1px rgba(255, 255, 255, 0.15);
       --text-primary: #F5F5F7;
       --text-secondary: #86868B;
       --text-muted: #515154;
       --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
       --duration-fast: 250ms;
-      --duration-normal: 400ms;
-      --duration-slow: 700ms;
-      --space-xs: 0.25rem;
-      --space-sm: 0.5rem;
-      --space-md: 1rem;
-      --space-lg: 1.5rem;
-      --space-xl: 2rem;
-      --space-2xl: 3rem;
-      --space-3xl: 4rem;
-      --space-4xl: 6rem;
-      --space-5xl: 8rem;
+      --space-sm: 0.5rem; --space-md: 1rem; --space-lg: 1.5rem;
+      --space-xl: 2rem; --space-2xl: 3rem; --space-3xl: 4rem;
+      --space-4xl: 6rem; --space-5xl: 8rem;
+      --hero-image: url('assets/images/pcb1.jpg'); /* ← swap hero image here */
     }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; overflow-x: hidden; background: var(--bg-deep); }
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg-deep); color: var(--text-primary); line-height: 1.6; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    h1 { font-size: clamp(2.5rem, 6vw + 1rem, 4.5rem); font-weight: 700; letter-spacing: -0.04em; line-height: 1.1; }
+    h2 { font-size: clamp(1.75rem, 4vw + 0.5rem, 3rem); font-weight: 600; letter-spacing: -0.03em; }
+    p  { font-size: clamp(1rem, 1.2vw + 0.5rem, 1.125rem); color: var(--text-secondary); }
+    a  { color: inherit; text-decoration: none; }
+    .text-gradient { background: linear-gradient(180deg, #FFFFFF 0%, #86868B 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-      overflow-x: hidden;
-      background: var(--bg-deep);
-    }
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: var(--bg-deep);
-      color: var(--text-primary);
-      line-height: 1.6;
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    h1 {
-      font-size: clamp(2.5rem, 6vw + 1rem, 4.5rem);
-      font-weight: 700;
-      letter-spacing: -0.04em;
-      line-height: 1.1;
-    }
-    h2 {
-      font-size: clamp(1.75rem, 4vw + 0.5rem, 3rem);
-      font-weight: 600;
-      letter-spacing: -0.03em;
-    }
-    h3 {
-      font-size: clamp(1.25rem, 2vw + 0.25rem, 1.5rem);
-      font-weight: 600;
-      letter-spacing: -0.02em;
-    }
-    p {
-      font-size: clamp(1rem, 1.2vw + 0.5rem, 1.125rem);
-      color: var(--text-secondary);
-    }
-    a { color: inherit; text-decoration: none; }
-
-    .text-gradient {
-      background: linear-gradient(180deg, #FFFFFF 0%, #86868B 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    /* ── Navbar: fully transparent on load, blurs on scroll ── */
-    .navbar {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 1000;
-      padding: var(--space-md) var(--space-xl);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      min-height: 64px;
-      background: transparent;
-      backdrop-filter: none;
-      -webkit-backdrop-filter: none;
-      border-bottom: 1px solid transparent;
-      transition: background 0.5s var(--ease-out-expo),
-                  backdrop-filter 0.5s var(--ease-out-expo),
-                  border-color 0.5s var(--ease-out-expo),
-                  box-shadow 0.5s var(--ease-out-expo);
-    }
-
-    .navbar.is-solid {
-      background: rgba(10, 10, 12, 0.65);
-      backdrop-filter: saturate(180%) blur(20px);
-      -webkit-backdrop-filter: saturate(180%) blur(20px);
-      border-bottom: 1px solid var(--border-subtle);
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-    }
-
-    .navbar__brand {
-      font-weight: 600;
-      font-size: 1.125rem;
-      letter-spacing: -0.02em;
-      color: var(--text-primary);
-    }
-    .navbar__links {
-      display: flex;
-      gap: var(--space-xl);
-      list-style: none;
-    }
-    .navbar__links a {
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: var(--text-secondary);
-      transition: color var(--duration-fast);
-    }
+    .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: var(--space-md) var(--space-xl); display: flex; align-items: center; justify-content: space-between; min-height: 64px; background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; border-bottom: 1px solid transparent; transition: background 0.5s var(--ease-out-expo), backdrop-filter 0.5s var(--ease-out-expo), border-color 0.5s var(--ease-out-expo), box-shadow 0.5s var(--ease-out-expo); }
+    .navbar.is-solid { background: rgba(10,10,12,0.65); backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid var(--border-subtle); box-shadow: 0 4px 30px rgba(0,0,0,0.5); }
+    .navbar__brand { font-weight: 600; font-size: 1.125rem; letter-spacing: -0.02em; color: var(--text-primary); }
+    .navbar__links { display: flex; gap: var(--space-xl); list-style: none; }
+    .navbar__links a { font-size: 0.875rem; font-weight: 500; color: var(--text-secondary); transition: color var(--duration-fast); }
     .navbar__links a:hover { color: var(--text-primary); }
 
-    /* ─────────────────────────────────────────
-       HERO IMAGE — change the URL below to swap
-    ───────────────────────────────────────── */
-    :root {
-      --hero-image: url('assets/images/pcb1.jpg'); /* ← swap your image here */
-    }
-
-    /* ── Hero ── */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      padding: var(--space-5xl) var(--space-xl) var(--space-4xl);
-      overflow: hidden;
-    }
-
-    /* Full-bleed background image */
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: var(--hero-image);
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      filter: brightness(0.45) saturate(1.2);
-      z-index: 0;
-      transition: filter 0.6s ease;
-    }
-
-    /* Gradient vignette — fades to black at bottom */
-    .hero::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        to bottom,
-        rgba(0,0,0,0.15) 0%,
-        rgba(0,0,0,0.05) 40%,
-        rgba(0,0,0,0.7)  85%,
-        rgba(0,0,0,1)   100%
-      );
-      z-index: 1;
-      pointer-events: none;
-    }
-
-    .hero__bg {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      z-index: 2;
-    }
-
-    /* Orbs hidden — hero uses image background */
+    .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; padding: var(--space-5xl) var(--space-xl) var(--space-4xl); overflow: hidden; }
+    .hero::before { content: ''; position: absolute; inset: 0; background-image: var(--hero-image); background-size: cover; background-position: center; background-repeat: no-repeat; filter: brightness(0.45) saturate(1.2); z-index: 0; }
+    .hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.05) 40%, rgba(0,0,0,0.7) 85%, rgba(0,0,0,1) 100%); z-index: 1; pointer-events: none; }
+    .hero__bg { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
     .hero__orb { display: none; }
-
-    .hero__content {
-      position: relative;
-      z-index: 10;
-      text-align: center;
-      max-width: 850px;
-      margin: 0 auto;
-    }
-
-    .hero__badge {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--space-sm);
-      padding: 6px 16px;
-      margin-bottom: var(--space-xl);
-      background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: saturate(180%) blur(30px);
-      -webkit-backdrop-filter: saturate(180%) blur(30px);
-      border: 1px solid var(--border-subtle);
-      box-shadow: var(--glass-edge);
-      border-radius: 999px;
-      font-size: 0.8125rem;
-      font-weight: 500;
-      color: #D1D1D6;
-      opacity: 0;
-      animation: fade-up 1s var(--ease-out-expo) 0.2s forwards;
-    }
-
-    .hero__headline {
-      margin-bottom: var(--space-lg);
-      opacity: 0;
-      animation: fade-up 1s var(--ease-out-expo) 0.3s forwards;
-    }
-
-    .hero__subtitle {
-      max-width: 680px;
-      margin: 0 auto var(--space-2xl);
-      opacity: 0;
-      animation: fade-up 1s var(--ease-out-expo) 0.4s forwards;
-    }
-
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: var(--space-xl);
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: var(--text-secondary);
-      transition: color var(--duration-fast);
-      opacity: 0;
-      animation: fade-up 1s var(--ease-out-expo) 0.1s forwards;
-    }
+    .hero__content { position: relative; z-index: 10; text-align: center; max-width: 850px; margin: 0 auto; }
+    .hero__badge { display: inline-flex; align-items: center; gap: var(--space-sm); padding: 6px 16px; margin-bottom: var(--space-xl); background: rgba(255,255,255,0.03); backdrop-filter: saturate(180%) blur(30px); -webkit-backdrop-filter: saturate(180%) blur(30px); border: 1px solid var(--border-subtle); box-shadow: var(--glass-edge); border-radius: 999px; font-size: 0.8125rem; font-weight: 500; color: #D1D1D6; opacity: 0; animation: fade-up 1s var(--ease-out-expo) 0.2s forwards; }
+    .hero__headline { margin-bottom: var(--space-lg); opacity: 0; animation: fade-up 1s var(--ease-out-expo) 0.3s forwards; }
+    .hero__subtitle { max-width: 680px; margin: 0 auto var(--space-2xl); opacity: 0; animation: fade-up 1s var(--ease-out-expo) 0.4s forwards; }
+    .back-link { display: inline-flex; align-items: center; gap: 8px; margin-bottom: var(--space-xl); font-size: 0.875rem; font-weight: 500; color: var(--text-secondary); transition: color var(--duration-fast); opacity: 0; animation: fade-up 1s var(--ease-out-expo) 0.1s forwards; }
     .back-link:hover { color: var(--text-primary); }
-
-    .hero__glass {
-      position: absolute;
-      background: var(--bg-glass);
-      backdrop-filter: saturate(180%) blur(40px);
-      -webkit-backdrop-filter: saturate(180%) blur(40px);
-      border: 1px solid var(--border-subtle);
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), var(--glass-edge);
-      border-radius: 20px;
-      padding: var(--space-lg) var(--space-xl);
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: var(--text-primary);
-      opacity: 0;
-      animation: fade-up 1.2s var(--ease-out-expo) 0.8s forwards;
-      z-index: 10;
-    }
+    .hero__glass { position: absolute; background: var(--bg-glass); backdrop-filter: saturate(180%) blur(40px); -webkit-backdrop-filter: saturate(180%) blur(40px); border: 1px solid var(--border-subtle); box-shadow: 0 30px 60px rgba(0,0,0,0.6), var(--glass-edge); border-radius: 20px; padding: var(--space-lg) var(--space-xl); font-size: 0.875rem; font-weight: 500; color: var(--text-primary); opacity: 0; animation: fade-up 1.2s var(--ease-out-expo) 0.8s forwards; z-index: 10; }
     .hero__glass--1 { top: 30%; left: 8%; transform: rotate(-3deg); }
     .hero__glass--2 { bottom: 25%; right: 10%; transform: rotate(3deg); }
-
     @media (max-width: 1280px) { .hero__glass { display: none; } }
+    @keyframes fade-up { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-    @keyframes fade-up {
-      from { opacity: 0; transform: translateY(30px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+    .section { padding: var(--space-4xl) var(--space-xl); max-width: 1200px; margin: 0 auto; position: relative; z-index: 2; }
+    .section__header { text-align: center; margin-bottom: var(--space-4xl); max-width: 600px; margin-left: auto; margin-right: auto; }
 
-    /* ── Sections ── */
-    .section {
-      padding: var(--space-4xl) var(--space-xl);
-      max-width: 1200px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 2;
-    }
-
-    .section__header {
-      text-align: center;
-      margin-bottom: var(--space-4xl);
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    /* ── Feature rows ── */
-    .feature-row {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: var(--space-3xl);
-      margin-bottom: var(--space-5xl);
-      padding: 0 var(--space-xl);
-    }
-
+    .feature-row { display: flex; flex-direction: column; align-items: center; gap: var(--space-3xl); margin-bottom: var(--space-5xl); padding: 0 var(--space-xl); }
     .feature-image { flex: 1; width: 100%; }
-    .feature-image img {
-      width: 100%;
-      border-radius: 40px;
-      box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-      border: 1px solid var(--border-subtle);
-    }
-
+    .feature-image img { width: 100%; border-radius: 40px; box-shadow: 0 30px 60px rgba(0,0,0,0.5); border: 1px solid var(--border-subtle); }
     .feature-text { flex: 1; max-width: 500px; }
-
-    .feature-label {
-      display: block;
-      color: whitesmoke;
-      font-weight: 600;
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: var(--space-md);
-    }
-
+    .feature-label { display: block; color: whitesmoke; font-weight: 600; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: var(--space-md); }
     @media (min-width: 1024px) {
-      .feature-row {
-        flex-direction: row;
-        justify-content: space-between;
-        gap: var(--space-5xl);
-      }
+      .feature-row { flex-direction: row; justify-content: space-between; gap: var(--space-5xl); }
       .feature-row.row-reverse { flex-direction: row-reverse; }
       .feature-text { text-align: left; }
     }
+    h2.text-gradient { font-size: clamp(2rem, 4vw, 3.5rem); margin-bottom: var(--space-lg); line-height: 1.1; }
 
-    h2.text-gradient {
-      font-size: clamp(2rem, 4vw, 3.5rem);
-      margin-bottom: var(--space-lg);
-      line-height: 1.1;
-    }
+    .reveal { opacity: 0; transform: translateY(48px); transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal.is-visible { opacity: 1; transform: translateY(0); }
 
-    /* ── Scroll Reveal — re-fires every time ── */
-    .reveal {
-      opacity: 0;
-      transform: translateY(48px);
-    }
-    .reveal.is-visible {
-      opacity: 1;
-      transform: translateY(0);
-      transition: opacity 0.85s var(--ease-out-expo),
-                  transform 0.85s var(--ease-out-expo);
-    }
-
-    /* ── Footer ── */
-    .footer {
-      padding: var(--space-2xl) var(--space-xl);
-      border-top: 1px solid var(--border-subtle);
-      background: var(--bg-deep);
-    }
-    .footer__inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: var(--space-md);
-    }
-    .footer__copy, .footer__links a {
-      font-size: 0.875rem;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
+    .footer { padding: var(--space-2xl) var(--space-xl); border-top: 1px solid var(--border-subtle); background: var(--bg-deep); }
+    .footer__inner { max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-md); }
+    .footer__copy, .footer__links a { font-size: 0.875rem; color: var(--text-muted); font-weight: 500; }
     .footer__links { display: flex; gap: var(--space-lg); list-style: none; }
     .footer__links a:hover { color: var(--text-primary); }
 
-    /* ── Hamburger ── */
-    .menu-toggle {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 10px;
-      z-index: 1200;
-      position: relative;
-    }
-    .hamburger {
-      display: block;
-      width: 24px; height: 2px;
-      background: var(--text-primary);
-      position: relative;
-      transition: background 0.3s;
-    }
-    .hamburger::before, .hamburger::after {
-      content: '';
-      position: absolute;
-      width: 24px; height: 2px;
-      background: var(--text-primary);
-      transition: all 0.3s;
-    }
-    .hamburger::before { top: -8px; }
-    .hamburger::after  { bottom: -8px; }
+    .menu-toggle { display: none; background: none; border: none; cursor: pointer; padding: 10px; z-index: 1200; position: relative; }
+    .hamburger { display: block; width: 24px; height: 2px; background: var(--text-primary); position: relative; transition: background 0.3s; }
+    .hamburger::before, .hamburger::after { content: ''; position: absolute; width: 24px; height: 2px; background: var(--text-primary); transition: all 0.3s; }
+    .hamburger::before { top: -8px; } .hamburger::after { bottom: -8px; }
     .menu-toggle.is-active .hamburger { background: transparent; }
     .menu-toggle.is-active .hamburger::before { transform: rotate(45deg); top: 0; }
     .menu-toggle.is-active .hamburger::after  { transform: rotate(-45deg); bottom: 0; }
 
     @media (max-width: 768px) {
-      :root {
-        --space-xl: 1.25rem;
-        --space-2xl: 1.5rem;
-        --space-4xl: 3rem;
-      }
+      :root { --space-xl: 1.25rem; --space-2xl: 1.5rem; --space-4xl: 3rem; }
       .menu-toggle { display: block; }
-      .navbar__links {
-        position: fixed;
-        top: 0; right: -100%;
-        width: 100%; height: 100vh;
-        background: rgba(0, 0, 0, 0.98);
-        backdrop-filter: blur(40px);
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: var(--space-3xl);
-        transition: right 0.5s var(--ease-out-expo);
-        z-index: 1050;
-      }
+      .navbar__links { position: fixed; top: 0; right: -100%; width: 100%; height: 100vh; background: rgba(0,0,0,0.98); backdrop-filter: blur(40px); flex-direction: column; align-items: center; justify-content: center; gap: var(--space-3xl); transition: right 0.5s var(--ease-out-expo); z-index: 1050; }
       .navbar__links.is-open { right: 0; }
       .navbar__links a { font-size: 1.5rem; color: var(--text-primary); }
       .section { padding: var(--space-4xl) var(--space-md); }
     }
   </style>
 </head>
-
 <body>
   <header class="navbar" id="navbar">
     <a href="index.html" class="navbar__brand">DsSoft</a>
     <nav class="navbar__nav">
-      <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu">
-        <span class="hamburger"></span>
-      </button>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu"><span class="hamburger"></span></button>
       <ul class="navbar__links" id="navbar-links">
         <li><a href="index.html#capabilities">What I do</a></li>
         <li><a href="index.html#tiktok">TikTok</a></li>
@@ -445,50 +116,36 @@
 
   <main>
     <section class="hero">
-      <div class="hero__bg">
-        <div class="hero__orb hero__orb--1"></div>
-        <div class="hero__orb hero__orb--2"></div>
-      </div>
-
+      <div class="hero__bg"><div class="hero__orb hero__orb--1"></div><div class="hero__orb hero__orb--2"></div></div>
       <div class="hero__glass hero__glass--1">0603 / QFP64 / BGA</div>
       <div class="hero__glass hero__glass--2">High-Current DFM</div>
-
       <div class="hero__content">
         <a href="index.html" class="back-link">&larr; Back to home</a>
         <div class="hero__badge">Hardware Engineering</div>
         <h1 class="hero__headline text-gradient">PCB design & microsoldering</h1>
-        <p class="hero__subtitle">Production-grade board repair, modification, and custom design. From GPU VRAM
-          replacement to full fabrication pipelines—hardware engineered for scale.</p>
+        <p class="hero__subtitle">Production-grade board repair, modification, and custom design. From GPU VRAM replacement to full fabrication pipelines—hardware engineered for scale.</p>
       </div>
     </section>
 
     <section id="capabilities" class="section">
       <div class="feature-row reveal">
-        <div class="feature-image">
-          <img src="assets/images/pcb1.jpg" alt="Engineering & Restoration">
-        </div>
+        <div class="feature-image"><img src="assets/images/pcb1.jpg" alt="Engineering & Restoration"></div>
         <div class="feature-text">
           <span class="feature-label">01. Engineering & Restoration</span>
           <h2 class="text-gradient">Outperforming the Factory.</h2>
           <p>Every build or rework born from our community trials is engineered to surpass OEM standards. Whether we are architecting entirely new power systems or performing surgical-grade repairs on high-end GPUs, our goal is simple: absolute peak performance that outlasts the original.</p>
         </div>
       </div>
-
       <div class="feature-row row-reverse reveal">
-        <div class="feature-image">
-          <img src="assets/images/pcb5.jpg" alt="Architectural Optimization">
-        </div>
+        <div class="feature-image"><img src="assets/images/pcb5.jpg" alt="Architectural Optimization"></div>
         <div class="feature-text">
           <span class="feature-label">02. Architectural Optimization</span>
           <h2 class="text-gradient">Refining Existing Excellence.</h2>
           <p>Even the best PCB designs have untapped potential. We look beyond the factory spec to identify bottlenecks, swapping critical components and modifying board layouts to push stability and efficiency further than the original designers intended.</p>
         </div>
       </div>
-
       <div class="feature-row reveal">
-        <div class="feature-image">
-          <img src="assets/images/pcb4.jpg" alt="Modular Reliability">
-        </div>
+        <div class="feature-image"><img src="assets/images/pcb4.jpg" alt="Modular Reliability"></div>
         <div class="feature-text">
           <span class="feature-label">03. Modular Reliability</span>
           <h2 class="text-gradient">Redefining Uptime.</h2>
@@ -510,13 +167,8 @@
   </footer>
 
   <script>
-    /* ── Sticky Nav: transparent on load, blur on scroll ── */
     const navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', () => {
-      navbar.classList.toggle('is-solid', window.scrollY > 60);
-    });
-
-    /* ── Hamburger ── */
+    window.addEventListener('scroll', () => { navbar.classList.toggle('is-solid', window.scrollY > 60); }, { passive: true });
     const menuToggle = document.getElementById('menu-toggle');
     const navbarLinks = document.getElementById('navbar-links');
     menuToggle.addEventListener('click', () => {
@@ -525,34 +177,24 @@
       document.body.style.overflow = navbarLinks.classList.contains('is-open') ? 'hidden' : '';
     });
     document.querySelectorAll('.navbar__links a').forEach(link => {
-      link.addEventListener('click', () => {
-        menuToggle.classList.remove('is-active');
-        navbarLinks.classList.remove('is-open');
-        document.body.style.overflow = '';
-      });
+      link.addEventListener('click', () => { menuToggle.classList.remove('is-active'); navbarLinks.classList.remove('is-open'); document.body.style.overflow = ''; });
     });
 
-    /* ── Scroll Reveal: re-fires on scroll down, no flicker under navbar ── */
+    const revealEls = Array.from(document.querySelectorAll('.reveal'));
+    const seen = new WeakSet();
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-        } else {
-          const rect = entry.boundingClientRect;
-          if (rect.top > 0) {
-            // Below viewport — reset so it animates in on next scroll
-            entry.target.classList.remove('is-visible');
-          }
-          // Scrolled off the top — keep visible, no navbar flicker
-        }
+        if (entry.isIntersecting) { entry.target.classList.add('is-visible'); seen.add(entry.target); }
       });
-    }, {
-      threshold: 0.12,
-      rootMargin: '-70px 0px -60px 0px'
-    });
+    }, { threshold: 0, rootMargin: '-64px 0px -10% 0px' });
+    revealEls.forEach(el => revealObserver.observe(el));
 
-    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+    let wasAtTop = window.scrollY < 10;
+    window.addEventListener('scroll', () => {
+      const atTop = window.scrollY < 10;
+      if (atTop && !wasAtTop) { revealEls.forEach(el => { el.classList.remove('is-visible'); seen.delete(el); }); }
+      wasAtTop = atTop;
+    }, { passive: true });
   </script>
 </body>
-
 </html>

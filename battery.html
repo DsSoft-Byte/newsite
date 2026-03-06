@@ -443,7 +443,7 @@
     .reveal {
       opacity: 0;
       transform: translateY(48px);
-      /* NO transition here — transition is applied only when visible so exit is instant */
+      transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .reveal.is-visible {
@@ -740,28 +740,39 @@
     });
 
     /* ── Scroll Reveal ── */
+    const revealEls = Array.from(document.querySelectorAll(".reveal"));
+
+    // Track which elements have ever been seen
+    const seen = new WeakSet();
+
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-        } else {
-          // Only re-arm (remove is-visible) when element exits through the BOTTOM.
-          // If it exits through the top (scrolled past upward), leave it visible
-          // so it doesn't flicker under the navbar.
-          const rect = entry.boundingClientRect;
-          if (rect.top > 0) {
-            // Element is below the viewport — it hasn't been seen yet, reset it
-            entry.target.classList.remove('is-visible');
-          }
-          // If rect.top <= 0 the element scrolled off the top — keep it visible
+          entry.target.classList.add("is-visible");
+          seen.add(entry.target);
         }
+        // Never remove is-visible here — handled by scroll-to-top reset below
       });
     }, {
-      threshold: 0.12,
-      rootMargin: '-70px 0px -60px 0px'
+      threshold: 0,
+      rootMargin: "-64px 0px -10% 0px"
     });
 
-    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+    revealEls.forEach(el => revealObserver.observe(el));
+
+    // Only reset reveals when user scrolls back to the very top
+    let wasAtTop = window.scrollY < 10;
+    window.addEventListener("scroll", () => {
+      const atTop = window.scrollY < 10;
+      if (atTop && !wasAtTop) {
+        // User returned to top — reset everything so animations replay on scroll down
+        revealEls.forEach(el => {
+          el.classList.remove("is-visible");
+          seen.delete(el);
+        });
+      }
+      wasAtTop = atTop;
+    }, { passive: true });
   </script>
 </body>
 
