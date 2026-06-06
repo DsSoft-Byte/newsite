@@ -664,7 +664,8 @@
       -webkit-backdrop-filter: blur(20px) saturate(180%);
       border: 1px solid var(--border-subtle);
       border-radius: 32px;
-      padding: var(--space-2xl);
+      padding: 0;
+      overflow: hidden;
       text-decoration: none;
       transition: all 0.5s var(--ease-out-expo);
       display: flex;
@@ -673,15 +674,32 @@
     }
 
     .glass-tile:hover {
-      background: rgba(255, 255, 255, 0.07);
+      background: rgba(255, 255, 255, 0.06);
       border-color: rgba(255, 255, 255, 0.2);
       transform: translateY(-5px);
     }
 
-    .glass-tile__icon {
-      font-size: 1.5rem;
-      margin-bottom: var(--space-md);
-      opacity: 0.8;
+    .glass-tile__preview {
+      width: 100%;
+      height: 190px;
+      background-size: cover;
+      background-position: center top;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .glass-tile__preview::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.05) 30%, rgba(0,0,0,0.65) 100%);
+    }
+
+    .glass-tile__body {
+      padding: var(--space-xl) var(--space-2xl) var(--space-2xl);
+      display: flex;
+      flex-direction: column;
+      flex: 1;
     }
 
     .glass-tile__title {
@@ -695,13 +713,176 @@
       font-size: 0.95rem;
       color: var(--text-secondary);
       line-height: 1.5;
+      flex: 1;
+    }
+
+    .glass-tile__eyebrow {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: var(--space-sm);
+    }
+
+    .glass-tile__cta {
+      display: inline-block;
+      margin-top: var(--space-lg);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      transition: color var(--duration-fast);
+    }
+
+    .glass-tile:hover .glass-tile__cta {
+      color: var(--text-primary);
+    }
+
+    /* ── Product card ── */
+    .products-section {
+      padding: 0 var(--space-xl) var(--space-5xl);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .products-section__header {
+      text-align: center;
+      margin-bottom: var(--space-3xl);
+    }
+
+    .product-card {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2xl);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: 28px;
+      padding: var(--space-2xl);
+      text-decoration: none;
+      transition: all 0.5s var(--ease-out-expo);
+    }
+
+    .product-card:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.18);
+      transform: translateY(-3px);
+    }
+
+    .product-card__icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 18px;
+      overflow: hidden;
+      flex-shrink: 0;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .product-card__icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .product-card__body { flex: 1; min-width: 0; }
+
+    .product-card__eyebrow {
+      font-size: 0.68rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .product-card__name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.03em;
+      margin-bottom: var(--space-sm);
+    }
+
+    .product-card__desc {
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      margin-bottom: var(--space-md);
+    }
+
+    .product-card__tags { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .product-tag {
+      display: inline-block;
+      padding: 4px 11px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+
+    .product-card__action { flex-shrink: 0; }
+
+    .product-card__visit {
+      display: inline-flex;
+      align-items: center;
+      padding: 12px 22px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid var(--border-subtle);
+      border-radius: 999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      white-space: nowrap;
+      transition: all 0.3s var(--ease-out-expo);
+    }
+
+    .product-card:hover .product-card__visit {
+      background: rgba(255, 255, 255, 0.13);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .product-card__platforms {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      margin-top: var(--space-md);
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .platform-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .platform-pill svg {
+      width: 11px;
+      height: 11px;
+      fill: currentColor;
+      flex-shrink: 0;
+      opacity: 0.7;
     }
 
     @media (max-width: 768px) {
-      .glass-tile {
-        padding: var(--space-xl);
-        border-radius: 24px;
-      }
+      .glass-tile { border-radius: 24px; }
+      .glass-tile__body { padding: var(--space-lg) var(--space-xl) var(--space-xl); }
+      .product-card { flex-direction: column; align-items: flex-start; gap: var(--space-lg); }
+      .product-card__action { align-self: stretch; }
+      .product-card__visit { width: 100%; justify-content: center; }
     }
 
     /* ── CTA Panel ── */
@@ -1066,23 +1247,71 @@
       </div>
       <div class="secondary-grid">
         <a href="hackintosh.html" class="glass-tile reveal">
-          <div class="glass-tile__icon">🖥️</div>
-          <h4 class="glass-tile__title">Hackintosh Systems</h4>
-          <p class="glass-tile__desc">Custom EFI architecture and kernel driver (Kext) development for macOS x86
-            hardware.</p>
+          <div class="glass-tile__preview" style="background-image: url('assets/images/windowonly.png');"></div>
+          <div class="glass-tile__body">
+            <div class="glass-tile__eyebrow">OpenCore · AMD · macOS</div>
+            <h4 class="glass-tile__title">Hackintosh Engineering</h4>
+            <p class="glass-tile__desc">AMD Ryzen 5950X and RX 6750 XT running native macOS — custom EFI from scratch, ACPI hot-patches, and kexts built for a daily-driver machine. Benchmark scores that beat stock Apple hardware at the same price.</p>
+            <span class="glass-tile__cta">View build &rarr;</span>
+          </div>
         </a>
         <a href="embedded-tooling.html" class="glass-tile reveal reveal--stagger-1">
-          <div class="glass-tile__icon">🛠️</div>
-          <h4 class="glass-tile__title">Custom Tooling</h4>
-          <p class="glass-tile__desc">Tools for all things Apple, iCloud lock removal, jtag probe and iBoot patching.</p>
-        </a>
-        <a href="embedded-systems.html" class="glass-tile reveal reveal--stagger-2">
-          <div class="glass-tile__icon">🐇</div>
-          <h4 class="glass-tile__title">Firmware Optimization</h4>
-          <p class="glass-tile__desc">Coreboot modifications, EFI password removal on T2 macs via firmware patches.
-          </p>
+          <div class="glass-tile__preview" style="background-image: url('assets/images/proto2.jpg'); background-position: center;"></div>
+          <div class="glass-tile__body">
+            <div class="glass-tile__eyebrow">iOS Security Research · Open Source</div>
+            <h4 class="glass-tile__title">iOS Security Tooling</h4>
+            <p class="glass-tile__desc">Three open-source tools for low-level iOS access: 64-bit iBoot patcher, Astris probe patcher, and an SSH ramdisk for iPhone 15 Plus. Built for researchers — public on GitHub.</p>
+            <span class="glass-tile__cta">View repos &rarr;</span>
+          </div>
         </a>
       </div>
+    </section>
+
+    <section class="products-section">
+      <div class="products-section__header reveal">
+        <h2 class="text-gradient">Active Products</h2>
+      </div>
+      <a href="https://iosbridge.com" target="_blank" class="product-card reveal">
+        <div class="product-card__icon">
+          <img src="assets/images/Icon.png" alt="iOSBridge">
+        </div>
+        <div class="product-card__body">
+          <div class="product-card__eyebrow">FOSS · Free Forever · Cross-platform</div>
+          <div class="product-card__name">iOSBridge</div>
+          <p class="product-card__desc">The open-source alternative to 3uTools. Full iDevice management — backups, file access, app sideloading, and iCloud lock removal — with no subscription, no telemetry, and no nonsense. Built because the existing tools weren't good enough.</p>
+          <div class="product-card__tags">
+            <span class="product-tag">3uTools Alternative</span>
+            <span class="product-tag">iCloud Unlock</span>
+            <span class="product-tag">iDevice Management</span>
+            <span class="product-tag">Open Source</span>
+          </div>
+          <div class="product-card__platforms">
+            <span class="platform-pill">
+              <svg viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+              macOS ARM
+            </span>
+            <span class="platform-pill">
+              <svg viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+              macOS Intel
+            </span>
+            <span class="platform-pill">
+              <svg viewBox="0 0 24 24"><path d="M3 12V6.75L9 5.43V11.91L3 12M20 3V11.75L11 11.91V5.06L20 3M3 13L9 13.09V19.9L3 18.75V13M20 13.25V22L11 20.94V13.09L20 13.25Z"/></svg>
+              Windows
+            </span>
+            <span class="platform-pill">
+              <svg viewBox="0 0 24 24"><path d="M20 19H4V5H20V19M20 3H4C2.9 3 2 3.9 2 5V19A2 2 0 004 21H20A2 2 0 0022 19V5C22 3.9 21.1 3 20 3M7 7L5.5 8.5L7 10L5.5 11.5L7 13L3.5 9.5L7 6V7M11.5 15L13 13H9L11.5 15Z"/></svg>
+              Linux AppImage
+            </span>
+            <span class="platform-pill">
+              <svg viewBox="0 0 24 24"><path d="M20 19H4V5H20V19M20 3H4C2.9 3 2 3.9 2 5V19A2 2 0 004 21H20A2 2 0 0022 19V5C22 3.9 21.1 3 20 3M7 7L5.5 8.5L7 10L5.5 11.5L7 13L3.5 9.5L7 6V7M11.5 15L13 13H9L11.5 15Z"/></svg>
+              Linux .deb
+            </span>
+          </div>
+        </div>
+        <div class="product-card__action">
+          <span class="product-card__visit">iosbridge.com &rarr;</span>
+        </div>
+      </a>
     </section>
 
     <section id="tiktok" class="cta-section">
